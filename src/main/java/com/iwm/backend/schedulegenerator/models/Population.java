@@ -16,9 +16,7 @@ public class Population {
     private final int MINIMUM_HOURS_PER_SHIFT;
     private final int MAXIMUM_HOURS_PER_SHIFT ;
     private final int POPULATION_SIZE ;
-    private final Map<String,Map<Integer,Integer>> demand;
-    private final List<Employee> employees;
-    Map<Employee,Double> totalHoursInWeek;
+
 
 
 
@@ -35,8 +33,6 @@ public class Population {
         this.MINIMUM_HOURS_PER_SHIFT = MINIMUM_HOURS_PER_SHIFT;
         this.MAXIMUM_HOURS_PER_SHIFT = MAXIMUM_HOURS_PER_SHIFT;
         this.POPULATION_SIZE = POPULATION_SIZE;
-        this.demand = DemandReader.getDemand();
-        this.employees = EmloyeesReader.readEmployees();
         this.generatePopulation();
     }
 
@@ -63,23 +59,35 @@ public class Population {
      */
     private Schedule generateRandomScheule() {
         Schedule schedule = new Schedule();
-        List<Employee> schEmployees = new ArrayList<>(employees);
-        totalHoursInWeek = new HashMap<>();
+
+        List<Employee> schEmployees = EmloyeesReader.readEmployees();
+        Map<String,Map<Integer,Integer>> demand = DemandReader.getDemand();
 
 
         String[] shiftType = {"opening","midday","evening","closing"};
 
         // Generate shifts for each day on the demand list
-        // TODO : Adjust the code tho consider demand when generating initial schedule.
         for(String date: demand.keySet()) {
+
             for (String type: shiftType) {
                 for (int i = 0; i < MINIMUM_EMPLOYEES_PER_SHIFT; i++) {
-                    Shift shift = generateRandomShift(schEmployees,type,date);
+                    try{
+                        Shift shift = generateRandomShift(schEmployees,type,date);
+                        schedule.addShift(shift);
+                    }catch(Exception e){
 
-                    // Add shifts to the current schedule.
-                    schedule.addShift(shift);
+                    }
                 }
             }
+        }
+
+        for (String date: schedule.getEmpDateMap().keySet()) {
+            System.out.println(date);
+            for (Shift shift : schedule.getEmpDateMap().get(date)) {
+                System.out.println(shift);
+            }
+
+            System.out.println("\n");
         }
 
         return schedule;
@@ -89,12 +97,12 @@ public class Population {
 
     /**
      * This function generates a random Shift.
-     * @param empList  List of employees
+     * @param schEmpList  List of Employee objects belong to current schedule.
      * @param type Type of the shift {opening, midday, evening , closing}
      * @param date Date of the shift
      * @return A Shift object with given data.
      */
-    private Shift generateRandomShift(List<Employee> empList,String type, String date) {
+    private Shift generateRandomShift(List<Employee> schEmpList,String type, String date) {
         Random random = new Random();
         int startTimeInMinutes;
         int endTimeInMinutes;
@@ -106,48 +114,43 @@ public class Population {
                 endTimeInMinutes = getEndTime(startTimeInMinutes);
                 break;
             case "midday":
-                startTimeInMinutes = random.nextInt(10,14)*60;
+                startTimeInMinutes = random.nextInt(10,14)*60+15*random.nextInt(0,3);
                 endTimeInMinutes = getEndTime(startTimeInMinutes);
                 break;
             case "evening":
-                startTimeInMinutes = random.nextInt(14,16)*60;
+                startTimeInMinutes = random.nextInt(14,16)*60+15*random.nextInt(0,3);
                 endTimeInMinutes = getEndTime(startTimeInMinutes);
                 break;
 
             case "closing":
-                startTimeInMinutes = random.nextInt(16,19)*60;
+                startTimeInMinutes = random.nextInt(16,19)*60 + 15*random.nextInt(0,3);
                 endTimeInMinutes = 23*60;
                 break;
             default:
                 throw new RuntimeException("Something went wrong");
         }
 
-        // determine an employee
-
-        Collections.shuffle(empList);
-        Employee employee=null;
-
-        // Checks if there is a suitable employee.
-        while (true){
-            for (Employee emp: empList) {
-                double totalShiftHours = (startTimeInMinutes-endTimeInMinutes)/60.0;
 
 
-                if(emp.getMaxWeeklyHours() > totalHoursInWeek.getOrDefault(employee,0.0)+totalShiftHours) {
-                    employee = emp;
-                    totalHoursInWeek.put(employee,totalHoursInWeek.getOrDefault(employee,0.0)+totalShiftHours);
-                    break;
-                }
+        Collections.shuffle(schEmpList);
+        Employee selectedEmployee=null;
+        double shiftLength = (endTimeInMinutes-startTimeInMinutes)/60.0;
+
+        for(Employee emp :  schEmpList){
+            if (emp.isAvailable(date,shiftLength)){
+                selectedEmployee = emp;
+                selectedEmployee.getCurrentWorkingDays().add(date);
+                selectedEmployee.setTotalWorkedHours(selectedEmployee.getTotalWorkedHours()+shiftLength);
+                break;
             }
-
-            if(employee==null){
-                throw new RuntimeException("No employee found");
-            }
-
-            break;
         }
 
-        return new Shift(date,startTimeInMinutes,endTimeInMinutes, employee,type);
+        if (selectedEmployee == null){
+            throw new RuntimeException("The selected employee is null");
+        }
+
+        return new Shift(date,startTimeInMinutes,endTimeInMinutes,selectedEmployee,type);
+
     }
 
 
@@ -161,7 +164,7 @@ public class Population {
 
         // Get a random end time considering maximum and minimum working hours.
         int endTimeInMinutes = random.nextInt(MINIMUM_HOURS_PER_SHIFT,
-                MAXIMUM_HOURS_PER_SHIFT)*60;
+                MAXIMUM_HOURS_PER_SHIFT)*60 + 15*random.nextInt(0,3);
         return  startTime + endTimeInMinutes;
     }
 

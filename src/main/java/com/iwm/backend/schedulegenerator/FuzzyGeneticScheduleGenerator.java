@@ -1,5 +1,6 @@
 package com.iwm.backend.schedulegenerator;
 
+import com.iwm.backend.schedulegenerator.configurations.FGAConfigs;
 import com.iwm.backend.schedulegenerator.models.Employee;
 import com.iwm.backend.schedulegenerator.models.Population;
 import com.iwm.backend.schedulegenerator.models.Schedule;
@@ -15,12 +16,12 @@ import java.util.*;
  */
 public class FuzzyGeneticScheduleGenerator{
 
-    private final int NUM_ITERATIONS;
-    private double MUTATION_RATE;
     private final List<Employee> employees = EmloyeesReader.readEmployees();
+    private FGAConfigs fgaConfigs;
+    private double MUTATION_RATE;
 
-    public FuzzyGeneticScheduleGenerator(int numIterations){
-        NUM_ITERATIONS = numIterations;
+    public FuzzyGeneticScheduleGenerator(FGAConfigs fgaConfigs){
+        this.fgaConfigs = fgaConfigs;
     }
 
     /**
@@ -34,7 +35,7 @@ public class FuzzyGeneticScheduleGenerator{
                 3,
                 4,
                 8,
-                500);
+                fgaConfigs.getPopulationSize());
 
         // 2.Calculate fitness of each schedule in the population
         for(Schedule schedule : population.getPopulation()){
@@ -42,24 +43,20 @@ public class FuzzyGeneticScheduleGenerator{
         }
 
         // Genetic Algorithm
-        for (int i = 0; i < NUM_ITERATIONS; i++) {
+        for (int i = 0; i < fgaConfigs.getNumberOfIterations(); i++) {
 
             // 3. Adjusting hyper parameters
             adjustFuzzyParameters(population);
 
             // 4. Selecting parents using tournament selection and applying crossover
             Schedule parent1 = tournamentSelection(population,20);
-
             Schedule parent2 = tournamentSelection(population,20);
-
             List<Schedule> offspringSchedules = crossover(parent1,parent2);
 
-            // 5. Mutate offspring
+            // 5. Mutating offspring
             for(Schedule schedule : offspringSchedules){
                 mutate(schedule,employees,MUTATION_RATE);
-
             }
-
 
             // 6. Calculating fitness scores.
             for(Schedule schedule : offspringSchedules){
@@ -72,22 +69,34 @@ public class FuzzyGeneticScheduleGenerator{
         return getBestSolution(population.getPopulation());
     }
 
+    /**
+     * Calculates the best schedule in the population
+     * @param population A list of schedules
+     * @return The best schedule
+     */
     private Schedule getBestSolution(List<Schedule> population) {
         return Collections.max(population, Comparator.comparingDouble(Schedule::getFitnessScore));
     }
 
 
+    /**
+     * Determines best population after combining the new offspring solutions
+     *
+     *
+     *
+     * @param oldPopulation Existing population
+     * @param offspring New schedules generated
+     * @return The best population
+     */
     private List<Schedule> selectSurvivors(List<Schedule> oldPopulation, List<Schedule> offspring) {
-        // Sort both populations based on fitness (higher fitness is better)
+        // Sorting both populations based on fitness
         oldPopulation.sort(Comparator.comparingDouble(s -> -s.getFitnessScore()));
         offspring.sort(Comparator.comparingDouble(s -> -s.getFitnessScore()));
 
         List<Schedule> newPopulation = new ArrayList<>();
 
-        // Keep top 'eliteCount' schedules from the old population
+        // Keeping top schedules from the old population
         newPopulation.addAll(oldPopulation.subList(0, oldPopulation.size()));
-
-        // Fill remaining slots with best offspring
         newPopulation.addAll(offspring);
 
         if (newPopulation.size() != oldPopulation.size()) {
@@ -96,23 +105,28 @@ public class FuzzyGeneticScheduleGenerator{
         return newPopulation;
     }
 
-
+    /**
+     * Performs mutations by swapping employees between shifts
+     * @param schedule A randomly selected schedule
+     * @param employees A list of employees
+     * @param mutationRate Mutation rate
+     */
     private void mutate(Schedule schedule, List<Employee> employees, double mutationRate) {
         Random rand = new Random();
 
         if (rand.nextDouble() < mutationRate) {
 
-            // Select a random shift to mutate
+            // Selecting a random shift to mutate
             int index = rand.nextInt(schedule.getShifts().size());
             Shift shiftToMutate = schedule.getShifts().get(index);
 
-            // Select a new employee for the shift
+            // Selecting a new employee for the shift
             Employee newEmployee;
             do {
                 newEmployee = employees.get(rand.nextInt(employees.size()));
-            } while (newEmployee.getId()==(shiftToMutate.getEmployee().getId())); // Avoid assigning the same employee
+            } while (newEmployee.getId()==(shiftToMutate.getEmployee().getId())); // Avoiding assignments on same emp
 
-            // Assign the new employee
+            // Assigning the new employe
             shiftToMutate.setEmployee(newEmployee);
         }
     }
@@ -145,7 +159,7 @@ public class FuzzyGeneticScheduleGenerator{
         Random rand = new Random();
         List<Schedule> tournament = new ArrayList<>();
 
-        // Randomly select `tournamentSize` schedules
+        // Randomly selecting `tournamentSize` schedules
         for (int i = 0; i < tournamentSize; i++) {
             Schedule randomSchedule = population.getPopulation().get(rand.nextInt(population.getPopulation().size()));
             tournament.add(randomSchedule);
@@ -160,16 +174,14 @@ public class FuzzyGeneticScheduleGenerator{
         double diversity = calculateDiversity(population);
         double fitnessVariance = calculateFitnessVariance(population);
 
-        double CROSSOVER_RATE;
+
         if (diversity < 0.05 && fitnessVariance < 0.1) {
-            MUTATION_RATE = 0.2; // Increase mutation to avoid stagnation
-            CROSSOVER_RATE = 0.6;
+            MUTATION_RATE = 0.2;
+
         } else if (diversity > 0.3 && fitnessVariance > 0.2) {
             MUTATION_RATE = 0.05;
-            CROSSOVER_RATE = 0.9; // Encourage exploitation
         } else {
-            MUTATION_RATE = 0.1; // Maintain balanced rates
-            CROSSOVER_RATE = 0.7;
+            MUTATION_RATE = 0.1;
         }
     }
 
@@ -207,38 +219,43 @@ public class FuzzyGeneticScheduleGenerator{
         double deviation = 0;
         Map<Employee,Double> totalWeeklyHours = getTotalWeeklyHours(schedule);
         for (Employee employee : totalWeeklyHours.keySet()) {
-            Math.abs(totalWeeklyHours.get(employee)-employee.getWeeklyHoursPreference());
+            Math.abs(totalWeeklyHours.get(employee)-employee.getHoursPreference());
         }
         return deviation;
     }
 
     private int getTotalViolation(Schedule schedule){
         int violation = 0;
-        Map<String,Map<String,Integer>>  map= new HashMap<>();
+        Map<Employee,Map<String,Integer>>  dateEmployeeMap= new HashMap<>();
         Map<Employee,Double> totalWeeklyHours = getTotalWeeklyHours(schedule);
 
 
-        // Checking for more than one shift a day violations;
-        for(Shift shift : schedule.getShifts()) {
-            if(!map.containsKey(shift.getEmployee().getName())) {
-                HashMap<String,Integer> tempMap = new HashMap<>();
-                tempMap.put(shift.getDate(), 1);
-                map.put(shift.getEmployee().getName(),tempMap);
+        // Adding dates count by employee to the map
+        for (Shift shift : schedule.getShifts()) {
+            Employee employee = shift.getEmployee();
+
+            // Adds the employee and date count to the map if doesn't contain already
+            if(!dateEmployeeMap.containsKey(employee)){
+                Map<String,Integer> employeeWeeklyHours=new HashMap<>();
+                employeeWeeklyHours.put(shift.getDate(),1);
+                dateEmployeeMap.put(employee,employeeWeeklyHours);
+            }else{
+                dateEmployeeMap.get(employee).compute(shift.getDate(), (k, count) -> count + 1);
             }
         }
 
-        // Calculating violation penalties for same day shifts
-        for (Map.Entry<String,Map<String,Integer>> entry : map.entrySet()) {
-            for (String date : entry.getValue().keySet()) {
-                if (entry.getValue().get(date)>1) {
-                    violation+=500;
+        // Compute violations
+        for(Employee employee : dateEmployeeMap.keySet()){
+            for (String date : dateEmployeeMap.get(employee).keySet()) {
+                if(dateEmployeeMap.get(employee).get(date)>1){
+                    violation+=1000;
                 }
             }
         }
 
 
         for (Employee employee : totalWeeklyHours.keySet()) {
-            if (totalWeeklyHours.get(employee)>employee.getMaxWeeklyHours()) {
+            if (totalWeeklyHours.get(employee)>employee.getMaxHoursPerWeek()) {
                 violation+=5000;
             }
         }
@@ -266,12 +283,4 @@ public class FuzzyGeneticScheduleGenerator{
         return totalWeeklyHours;
     }
 
-
-    /*
-    public static void main(String[] args) {
-        FuzzyGeneticScheduleGenerator fuzzyGeneticScheduleGenerator = new FuzzyGeneticScheduleGenerator(100);
-        for(Shift shift : fuzzyGeneticScheduleGenerator.genSchedule().getShifts()){
-            System.out.println(shift.toString());
-        }
-    }*/
 }

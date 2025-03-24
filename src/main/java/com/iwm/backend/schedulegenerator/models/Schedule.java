@@ -1,5 +1,6 @@
 package com.iwm.backend.schedulegenerator.models;
 
+import javax.management.monitor.StringMonitor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,25 +9,23 @@ import java.util.Map;
 public class Schedule {
 
     private List<Shift> shifts = new ArrayList<>();
-    private Map<String, List<Shift>> shiftTypeMap = new HashMap<>();
-
+    private Map<String,List<Shift>> empDateMap= new HashMap<>();
 
     private double fitnessScore;
 
     public void addShift(Shift shift) {
-        this.shifts.add(shift);
-        if(shiftTypeMap.get(shift.getType())==null){
-            shiftTypeMap.put(shift.getType(),new ArrayList<>());
-            shiftTypeMap.get(shift.getType()).add(shift);
-        }else{
-            shiftTypeMap.get(shift.getType()).add(shift);
+        if(!empDateMap.containsKey(shift.getDate())){
+            List<Shift> shiftList= new ArrayList<>();
+            shiftList.add(shift);
+            empDateMap.put(shift.getDate(),shiftList);
+        }else {
+            empDateMap.get(shift.getDate()).add(shift);
         }
+        this.shifts.add(shift);
     }
-
     public List<Shift> getShifts() {
         return shifts;
     }
-
 
     public double getFitnessScore() {
         return fitnessScore;
@@ -36,8 +35,8 @@ public class Schedule {
         this.fitnessScore = fitnessScore;
     }
 
-    public Map<String, List<Shift>> getShiftTypeMap() {
-        return shiftTypeMap;
+    public Map<String, List<Shift>> getEmpDateMap() {
+        return empDateMap;
     }
 
     @Override
