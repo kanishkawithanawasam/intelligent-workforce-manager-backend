@@ -82,6 +82,10 @@ public class Employee{
         return totalWorkedHours;
     }
 
+    /**
+     * Set total worked duration in hours
+     * @param totalWorkedHours Worked duration in hours during the week.
+     */
     public void setTotalWorkedHours(double totalWorkedHours) {
         this.totalWorkedHours = totalWorkedHours;
     }

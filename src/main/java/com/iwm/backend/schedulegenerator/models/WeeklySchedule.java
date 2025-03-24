@@ -1,12 +1,11 @@
 package com.iwm.backend.schedulegenerator.models;
 
-import javax.management.monitor.StringMonitor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Schedule {
+public class WeeklySchedule {
 
     private List<Shift> shifts = new ArrayList<>();
     private Map<String,List<Shift>> empDateMap= new HashMap<>();

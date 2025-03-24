@@ -1,6 +1,5 @@
 package com.iwm.backend.models;
 
-import com.iwm.backend.schedulegenerator.models.Schedule;
 import org.springframework.stereotype.Component;
 
 

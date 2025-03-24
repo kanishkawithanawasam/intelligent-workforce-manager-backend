@@ -41,6 +41,10 @@ public class Shift {
                 employee.getName(), date, startTimeInMinutes/60.0, endTimeInMinutes/60.0);
     }
 
+    /**
+     *
+     * @return The shift duration in hours.
+     */
     public double getShiftDuration() {
         return shiftDuration;
     }

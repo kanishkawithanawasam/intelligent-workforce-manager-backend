@@ -11,7 +11,7 @@ import java.util.*;
  */
 public class Population {
 
-    List<Schedule> population = new ArrayList<>();
+    List<WeeklySchedule> population = new ArrayList<>();
     private final int MINIMUM_EMPLOYEES_PER_SHIFT ; // Defines the minimum number of people working at a given time.
     private final int MINIMUM_HOURS_PER_SHIFT;
     private final int MAXIMUM_HOURS_PER_SHIFT ;
@@ -36,7 +36,7 @@ public class Population {
         this.generatePopulation();
     }
 
-    public List<Schedule> getPopulation() {
+    public List<WeeklySchedule> getPopulation() {
         return population;
     }
 
@@ -57,8 +57,8 @@ public class Population {
      * This function generates a random schedule.
      * @return A schedule generated randomly.
      */
-    private Schedule generateRandomScheule() {
-        Schedule schedule = new Schedule();
+    private WeeklySchedule generateRandomScheule() {
+        WeeklySchedule weeklySchedule = new WeeklySchedule();
 
         List<Employee> schEmployees = EmloyeesReader.readEmployees();
         Map<String,Map<Integer,Integer>> demand = DemandReader.getDemand();
@@ -71,16 +71,13 @@ public class Population {
 
             for (String type: shiftType) {
                 for (int i = 0; i < MINIMUM_EMPLOYEES_PER_SHIFT; i++) {
-                    try{
-                        Shift shift = generateRandomShift(schEmployees,type,date);
-                        schedule.addShift(shift);
-                    }catch(Exception e){
-
-                    }
+                    Shift shift = generateRandomShift(schEmployees,type,date);
+                    weeklySchedule.addShift(shift);
                 }
             }
         }
 
+        /*
         for (String date: schedule.getEmpDateMap().keySet()) {
             System.out.println(date);
             for (Shift shift : schedule.getEmpDateMap().get(date)) {
@@ -88,9 +85,9 @@ public class Population {
             }
 
             System.out.println("\n");
-        }
+        }*/
 
-        return schedule;
+        return weeklySchedule;
 
     }
 
@@ -134,6 +131,8 @@ public class Population {
 
         Collections.shuffle(schEmpList);
         Employee selectedEmployee=null;
+
+        // Calculate the shift length in hours.
         double shiftLength = (endTimeInMinutes-startTimeInMinutes)/60.0;
 
         for(Employee emp :  schEmpList){
@@ -168,7 +167,7 @@ public class Population {
         return  startTime + endTimeInMinutes;
     }
 
-    public void setPopulation(List<Schedule> population) {
+    public void setPopulation(List<WeeklySchedule> population) {
         this.population = population;
     }
 }

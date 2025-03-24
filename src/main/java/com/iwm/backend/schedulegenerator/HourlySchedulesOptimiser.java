@@ -1,44 +1,41 @@
 package com.iwm.backend.schedulegenerator;
 
-import com.iwm.backend.schedulegenerator.configurations.FGAConfigs;
+
+import com.iwm.backend.schedulegenerator.models.DaySchedule;
+import com.iwm.backend.schedulegenerator.models.HourlyDemand;
 import com.iwm.backend.schedulegenerator.models.Shift;
+import com.iwm.backend.schedulegenerator.models.WeeklySchedule;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
+/**
+ * Handles optimisation of the current schedule according to the live demand.
+ * @author kanishka withanawasam
+ * @version 1.0
+ */
 public class HourlySchedulesOptimiser {
 
-    private List<Shift> todaySchedule = new ArrayList<>();
-    private int[] hourlyDemand = new int[]{0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 4, 4, 4, 4, 3, 3, 4, 4, 4, 4, 3, 3};
 
-    public List<Shift> getTodaySchedule() {
-        return todaySchedule;
+    private HourlyDemand hourlyDemand;
+    private DaySchedule daySchedule;
+    private List<Integer[]> dayBinaryRepresentation;
+
+    /**
+     *
+     * @param hourlyDemand Hourly demand for the next two hours.
+     * @param weeklySchedule Schedule of the week.
+     */
+    public HourlySchedulesOptimiser(HourlyDemand hourlyDemand, WeeklySchedule weeklySchedule) {
+        this.hourlyDemand = hourlyDemand;
+        daySchedule = new DaySchedule(weeklySchedule, hourlyDemand.getDate());
     }
 
-    public static void main(String[] args) {
-        // Setting configurations
-        FGAConfigs fgaConfigs = new FGAConfigs();
-        fgaConfigs.setNumberOfIterations(100);
-        fgaConfigs.setPopulationSize(100);
+    private List<Integer[]> getDayBinaryRepresentation() {
 
-        // Creating a new schedule generator
-        FuzzyGeneticScheduleGenerator generator = new FuzzyGeneticScheduleGenerator(fgaConfigs);
-        HourlySchedulesOptimiser optimiser = new HourlySchedulesOptimiser();
+        for(Shift shift : daySchedule.getShifts()) {
 
-        // Generating shifts
-        List<Shift> shifts = generator.genSchedule().getShifts();
-
-        for (Shift shift : shifts) {
-            if(Objects.equals(shift.getDate(), "2025-03-22")){
-                optimiser.todaySchedule.add(shift);
-            }
         }
 
-        for (Shift shift : optimiser.getTodaySchedule()) {
-            System.out.println(shift);
-        }
-
+        return dayBinaryRepresentation;
     }
-
 }
