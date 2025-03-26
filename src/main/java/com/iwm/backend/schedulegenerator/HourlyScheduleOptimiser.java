@@ -2,7 +2,6 @@ package com.iwm.backend.schedulegenerator;
 
 import com.iwm.backend.schedulegenerator.configurations.HSOConfigs;
 import com.iwm.backend.schedulegenerator.models.*;
-import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -31,16 +30,49 @@ public class HourlyScheduleOptimiser{
 
     private double getFitnessScore(RealTimeSchedule realTimeSchedule) {
 
-        return 0.0;
+        return 1/(getTotalViolationsPenalty(realTimeSchedule)+
+                getTotalDeviationsPenalty(realTimeSchedule));
     }
 
-    private int getTotalViolations(List<Shift> shifts) {
+    /**
+     * Calculates a penalty for deviations from preferences. Currently, deviations are calculated by
+     * totalDeviationPenalty = | Total worked hours - Preferred working hours |.
+     * @param realTimeSchedule The schedule for the demand period.
+     * @return Penalty for total deviations.
+     */
+    private double getTotalDeviationsPenalty(RealTimeSchedule realTimeSchedule) {
         Map<Employee,Double> weeklyWorkedHours = new HashMap<>();
-        for (Shift shift : shifts) {
+
+        for (Shift shift : realTimeSchedule.getShifts()) {
             weeklyWorkedHours.put(
                     shift.getEmployee(),
                     weeklyWorkedHours.getOrDefault(shift.getEmployee(), 0.0)+
-                            shift.getShiftDuration()*60);
+                            shift.getShiftDuration());
+        }
+        double totalDeviationsPenalty = 0;
+        for(Employee employee: weeklyWorkedHours.keySet()) {
+            totalDeviationsPenalty +=
+                     Math.abs(weeklyWorkedHours.get(employee)-employee.getHoursPreference());
+        }
+
+        return totalDeviationsPenalty;
+    }
+
+
+    /**
+     * Calculates a penalty based on how a particular shift violates given constraints. Currently, the function
+     * adds a penalty of 10 for each set of shifts that exceeds an employee's maximum working hours.
+     * @param realTimeSchedule The adjustable schedule during the demand period.
+     * @return A penalty for total violations.
+     */
+    private double getTotalViolationsPenalty(RealTimeSchedule realTimeSchedule) {
+        Map<Employee,Double> weeklyWorkedHours = new HashMap<>();
+
+        for (Shift shift : realTimeSchedule.getShifts()) {
+            weeklyWorkedHours.put(
+                    shift.getEmployee(),
+                    weeklyWorkedHours.getOrDefault(shift.getEmployee(), 0.0)+
+                            shift.getShiftDuration());
         }
 
         int totalViolations = 0;
@@ -49,6 +81,8 @@ public class HourlyScheduleOptimiser{
                 totalViolations+=10;
             }
         }
+
+        return totalViolations;
     }
 
 
