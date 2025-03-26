@@ -3,6 +3,7 @@ package com.iwm.backend.schedulegenerator.models;
 import com.iwm.backend.trial.DemandReader;
 import com.iwm.backend.trial.EmloyeesReader;
 
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -60,32 +61,24 @@ public class Population {
     private WeeklySchedule generateRandomScheule() {
         WeeklySchedule weeklySchedule = new WeeklySchedule();
 
-        List<Employee> schEmployees = EmloyeesReader.readEmployees();
-        Map<String,Map<Integer,Integer>> demand = DemandReader.getDemand();
-
+        List<Employee> schEmployees = EmloyeesReader.readEmployees(); // Gives a list of employees
+        Map<LocalDate,Map<Integer,Integer>> demand = DemandReader.getDemand(); // Represents the hourly demand
+        Map<Employee, Double>  emloyeeHoursMap = new HashMap<>(); // Keeps a record of weekly hours
+        Map<Employee, List<LocalDate>> employeeDateMap = new HashMap<>();
 
         String[] shiftType = {"opening","midday","evening","closing"};
 
         // Generate shifts for each day on the demand list
-        for(String date: demand.keySet()) {
+        for(LocalDate date: demand.keySet()) {
 
             for (String type: shiftType) {
                 for (int i = 0; i < MINIMUM_EMPLOYEES_PER_SHIFT; i++) {
-                    Shift shift = generateRandomShift(schEmployees,type,date);
+                    Shift shift = generateRandomShift(schEmployees,type,date,emloyeeHoursMap,employeeDateMap);
                     weeklySchedule.addShift(shift);
                 }
             }
         }
 
-        /*
-        for (String date: schedule.getEmpDateMap().keySet()) {
-            System.out.println(date);
-            for (Shift shift : schedule.getEmpDateMap().get(date)) {
-                System.out.println(shift);
-            }
-
-            System.out.println("\n");
-        }*/
 
         return weeklySchedule;
 
@@ -99,8 +92,11 @@ public class Population {
      * @param date Date of the shift
      * @return A Shift object with given data.
      */
-    private Shift generateRandomShift(List<Employee> schEmpList,String type, String date) {
+    private Shift generateRandomShift(List<Employee> schEmpList, String type,
+                                      LocalDate date, Map<Employee, Double> employeeHoursMap,
+                                      Map<Employee, List<LocalDate>> employeeDateMap) {
         Random random = new Random();
+
         int startTimeInMinutes;
         int endTimeInMinutes;
 
@@ -111,16 +107,16 @@ public class Population {
                 endTimeInMinutes = getEndTime(startTimeInMinutes);
                 break;
             case "midday":
-                startTimeInMinutes = random.nextInt(10,14)*60+15*random.nextInt(0,3);
+                startTimeInMinutes = random.nextInt(10,14)*60-15*random.nextInt(0,3);
                 endTimeInMinutes = getEndTime(startTimeInMinutes);
                 break;
             case "evening":
-                startTimeInMinutes = random.nextInt(14,16)*60+15*random.nextInt(0,3);
+                startTimeInMinutes = random.nextInt(14,16)*60-15*random.nextInt(0,3);
                 endTimeInMinutes = getEndTime(startTimeInMinutes);
                 break;
 
             case "closing":
-                startTimeInMinutes = random.nextInt(16,19)*60 + 15*random.nextInt(0,3);
+                startTimeInMinutes = random.nextInt(16,19)*60 - 15*random.nextInt(0,3);
                 endTimeInMinutes = 23*60;
                 break;
             default:
@@ -132,14 +128,12 @@ public class Population {
         Collections.shuffle(schEmpList);
         Employee selectedEmployee=null;
 
-        // Calculate the shift length in hours.
-        double shiftLength = (endTimeInMinutes-startTimeInMinutes)/60.0;
-
         for(Employee emp :  schEmpList){
-            if (emp.isAvailable(date,shiftLength)){
+            if (!employeeDateMap.getOrDefault(emp,new ArrayList<>()).contains(date)) {
                 selectedEmployee = emp;
-                selectedEmployee.getCurrentWorkingDays().add(date);
-                selectedEmployee.setTotalWorkedHours(selectedEmployee.getTotalWorkedHours()+shiftLength);
+                List<LocalDate> employeeDateList = employeeDateMap.getOrDefault(emp,new ArrayList<>());
+                employeeDateList.add(date);
+                employeeDateMap.put(emp,employeeDateMap.getOrDefault(emp,employeeDateList));
                 break;
             }
         }

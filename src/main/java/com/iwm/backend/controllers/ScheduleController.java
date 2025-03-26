@@ -46,8 +46,6 @@ public class ScheduleController {
      */
     private FuzzyGeneticScheduleGenerator getSchedulesGenerator() {
         FGAConfigs fgaConfigs = new FGAConfigs();
-        fgaConfigs.setNumberOfIterations(200);
-        fgaConfigs.setPopulationSize(500);
         return new FuzzyGeneticScheduleGenerator(fgaConfigs);
     }
 

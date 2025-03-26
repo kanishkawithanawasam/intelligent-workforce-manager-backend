@@ -5,18 +5,20 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class DemandReader {
-    public static Map<String,Map<Integer,Integer>> getDemand(){
+    public static Map<LocalDate,Map<Integer,Integer>> getDemand(){
         String csvFile = DemandReader.class.getResource("/data/demand_schedule.csv").getPath(); // Path to the CSV file
         csvFile = URLDecoder.decode(csvFile, StandardCharsets.UTF_8);
         String line;
         String csvSplitBy = ","; // CSV delimiter
 
         // Map to store demand schedule: Date -> (Hour -> Demand)
-        Map<String, Map<Integer, Integer>> demand = new HashMap<>();
+        Map<LocalDate, Map<Integer, Integer>> demand = new HashMap<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
             // Read the header line and ignore it
@@ -27,7 +29,9 @@ public class DemandReader {
                 String[] data = line.split(csvSplitBy);
 
                 // Extract values from the CSV row
-                String date = data[0];
+                String[] dateSplit = data[0].split("-");
+                LocalDate date = LocalDate.of(Integer.parseInt(dateSplit[0]),
+                        Integer.parseInt(dateSplit[1]), Integer.parseInt(dateSplit[2])) ;
                 int hour = Integer.parseInt(data[1]);
                 int demandValue = Integer.parseInt(data[2]);
 

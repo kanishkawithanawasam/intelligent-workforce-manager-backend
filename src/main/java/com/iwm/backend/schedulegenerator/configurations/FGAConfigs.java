@@ -7,22 +7,14 @@ package com.iwm.backend.schedulegenerator.configurations;
  */
 public class FGAConfigs {
 
-    private int numberOfIterations;
-    private int populationSize;
+    private final int numberOfIterations = 50000;
+    private final int populationSize = 20;
 
     public int getNumberOfIterations() {
         return numberOfIterations;
     }
 
-    public void setNumberOfIterations(int numberOfIterations) {
-        this.numberOfIterations = numberOfIterations;
-    }
-
     public int getPopulationSize() {
         return populationSize;
-    }
-
-    public void setPopulationSize(int populationSize) {
-        this.populationSize = populationSize;
     }
 }

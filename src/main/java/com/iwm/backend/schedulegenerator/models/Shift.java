@@ -1,15 +1,17 @@
 package com.iwm.backend.schedulegenerator.models;
 
-public class Shift {
+import java.time.LocalDate;
 
-    private final int startTimeInMinutes;
-    private final int endTimeInMinutes;
+public class Shift implements Cloneable{
+
+    private int startTimeInMinutes;
+    private int endTimeInMinutes;
     private Employee employee;
-    private final String date;
+    private final LocalDate date;
     private final String type;
     private final double shiftDuration;
 
-    public Shift(String date, int startTimeInMinutes, int endTimeInMinutes,
+    public Shift(LocalDate date, int startTimeInMinutes, int endTimeInMinutes,
                  Employee employee, String type) {
         this.date = date;
         this.endTimeInMinutes = endTimeInMinutes;
@@ -19,7 +21,16 @@ public class Shift {
         shiftDuration = (endTimeInMinutes - startTimeInMinutes) / 60.0;
     }
 
-    public String getDate() {
+    public Shift(Shift shift) {
+        this.date = shift.getDate();
+        this.endTimeInMinutes = shift.getEndTimeInMinutes();
+        this.startTimeInMinutes = shift.getStartTimeInMinutes();
+        this.employee = shift.getEmployee();
+        this.type = shift.getType();
+        this.shiftDuration = shift.getShiftDuration();
+    }
+
+    public LocalDate getDate() {
         return date;
     }
 
@@ -49,11 +60,36 @@ public class Shift {
         return shiftDuration;
     }
 
+    public int getStartTimeInMinutes() {
+        return startTimeInMinutes;
+    }
+
+    public void setStartTimeInMinutes(int startTimeInMinutes) {
+        this.startTimeInMinutes = startTimeInMinutes;
+    }
+
+    public int getEndTimeInMinutes() {
+        return endTimeInMinutes;
+    }
+
+    public void setEndTimeInMinutes(int endTimeInMinutes) {
+        this.endTimeInMinutes = endTimeInMinutes;
+    }
+
     public String getStartTime() {
         return String.format("%02d:%02d", startTimeInMinutes/60, startTimeInMinutes%60);
     }
 
     public String getEndTime() {
         return String.format("%02d:%02d", endTimeInMinutes/60, endTimeInMinutes%60);
+    }
+
+    @Override
+    public Shift clone() {
+        try {
+            return (Shift) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

@@ -1,36 +1,28 @@
 package com.iwm.backend.schedulegenerator.models;
 
-import java.util.List;
+import java.util.Map;
 
 public class HourlyDemand {
 
-    private String date;
+    private int startTimeInMinutes;
 
-    private int currentHour;
+    private int endTimeInMinutes;
 
-    private List<Integer> demandNext2Hours;
+    private Map<Integer,Integer> hourlyDemand;
 
-    public String getDate() {
-        return date;
+    public int getStartTimeInMinutes() {
+        return startTimeInMinutes;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setStartTime(int startTimeInMinutes) {
+        this.startTimeInMinutes = startTimeInMinutes;
     }
 
-    public int getCurrentHour() {
-        return currentHour;
+    public int getEndTimeInMinutes() {
+        return endTimeInMinutes;
     }
 
-    public void setCurrentHour(int currentHour) {
-        this.currentHour = currentHour;
-    }
-
-    public List<Integer> getDemandNext2Hours() {
-        return demandNext2Hours;
-    }
-
-    public void setDemandNext2Hours(List<Integer> demandNext2Hours) {
-        this.demandNext2Hours = demandNext2Hours;
+    public void setEndTime(int endTimeInMinutes) {
+        this.endTimeInMinutes = endTimeInMinutes;
     }
 }

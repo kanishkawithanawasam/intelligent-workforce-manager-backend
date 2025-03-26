@@ -5,8 +5,10 @@ import com.iwm.backend.schedulegenerator.models.Employee;
 import com.iwm.backend.schedulegenerator.models.Population;
 import com.iwm.backend.schedulegenerator.models.WeeklySchedule;
 import com.iwm.backend.schedulegenerator.models.Shift;
+import com.iwm.backend.schedulegenerator.util.GeneticCalculationsUtility;
 import com.iwm.backend.trial.EmloyeesReader;
 
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -38,11 +40,18 @@ public class FuzzyGeneticScheduleGenerator{
                 fgaConfigs.getPopulationSize());
 
         // 2.Calculate fitness of each schedule in the population
+        double bestAccOnPopulation = 0;
         for(WeeklySchedule weeklySchedule : population.getPopulation()){
             weeklySchedule.setFitnessScore(this.getFitnessScore(weeklySchedule));
+            if (weeklySchedule.getFitnessScore() > bestAccOnPopulation){
+                bestAccOnPopulation=weeklySchedule.getFitnessScore();
+            }
         }
 
+        System.out.println("Best Accuracy On Population: " + bestAccOnPopulation);
+
         // Genetic Algorithm
+        double accuracy = 0;
         for (int i = 0; i < fgaConfigs.getNumberOfIterations(); i++) {
 
             // 3. Adjusting hyper parameters
@@ -62,13 +71,17 @@ public class FuzzyGeneticScheduleGenerator{
             // 6. Calculating fitness scores.
             for(WeeklySchedule weeklySchedule : offspringWeeklySchedules){
                 weeklySchedule.setFitnessScore(this.getFitnessScore(weeklySchedule));
-                //System.out.println(schedule.getFitnessScore());
+                if (weeklySchedule.getFitnessScore() > accuracy){
+                    accuracy=weeklySchedule.getFitnessScore();
+                }
             }
 
             population.setPopulation(selectSurvivors(population.getPopulation(), offspringWeeklySchedules));
         }
 
-        return getBestSolution(population.getPopulation());
+        System.out.println("Best Accuracy after Genetic Mutations: " + accuracy);
+
+        return calculateAndConfigure(population.getPopulation());
     }
 
     /**
@@ -76,8 +89,10 @@ public class FuzzyGeneticScheduleGenerator{
      * @param population A list of schedules
      * @return The best schedule
      */
-    private WeeklySchedule getBestSolution(List<WeeklySchedule> population) {
-        return Collections.max(population, Comparator.comparingDouble(WeeklySchedule::getFitnessScore));
+    private WeeklySchedule calculateAndConfigure(List<WeeklySchedule> population) {
+        WeeklySchedule ws = Collections.max(population, Comparator.comparingDouble(WeeklySchedule::getFitnessScore));
+        //System.out.println(ws.getFitnessScore());
+        return ws;
     }
 
 
@@ -123,13 +138,15 @@ public class FuzzyGeneticScheduleGenerator{
             int index = rand.nextInt(weeklySchedule.getShifts().size());
             Shift shiftToMutate = weeklySchedule.getShifts().get(index);
 
-            // Selecting a new employee for the shift
-            Employee newEmployee;
+            LocalDate date = shiftToMutate.getDate();
+            Employee newEmployee=null;
             do {
                 newEmployee = employees.get(rand.nextInt(employees.size()));
-            } while (newEmployee.getId()==(shiftToMutate.getEmployee().getId())); // Avoiding assignments on same emp
-
-            // Assigning the new employe
+            } while (
+                    newEmployee.getId() == shiftToMutate.getEmployee().getId() ||
+                            weeklySchedule.getEmpDateMap().get(date).contains(newEmployee)
+            );
+            // Assigning the new employee
             shiftToMutate.setEmployee(newEmployee);
         }
     }
@@ -145,6 +162,7 @@ public class FuzzyGeneticScheduleGenerator{
         // First part from Parent1, second part from Parent2
         WeeklySchedule offspring1 = new WeeklySchedule();
         WeeklySchedule offspring2 = new WeeklySchedule();
+
         for (int i = 0; i < crossoverIndex; i++) {
             offspring1.addShift(parent1.getShifts().get(i));
             offspring2.addShift(parent2.getShifts().get(i));
@@ -223,12 +241,11 @@ public class FuzzyGeneticScheduleGenerator{
 
     private double getTotalDeviation(WeeklySchedule weeklySchedule){
         double deviation = 0;
-        Map<Employee,Double> totalWeeklyHours = getTotalWeeklyHours(weeklySchedule);
+        Map<Employee,Double> totalWeeklyHours = GeneticCalculationsUtility
+                .countTotalHours(weeklySchedule.getShifts());
         for (Employee employee : totalWeeklyHours.keySet()) {
             deviation+=Math.abs(totalWeeklyHours.get(employee)-employee.getHoursPreference());
         }
-
-        //System.out.println("Deviations: "+deviation);
         return deviation;
     }
 
@@ -237,13 +254,13 @@ public class FuzzyGeneticScheduleGenerator{
         int violation = 0;
 
         // Adding dates count by employee to the map
-        Map<Employee,Map<String,Integer>> dateEmployeeMap = new HashMap<>();
+        Map<Employee, HashMap<LocalDate, Integer>> dateEmployeeMap = new HashMap<>();
         for (Shift shift : weeklySchedule.getShifts()) {
             Employee employee = shift.getEmployee();
 
             // Adds the employee and date count to the map if doesn't contain already
             if(!dateEmployeeMap.containsKey(employee)){
-                HashMap<String, Integer> tempMap = new HashMap<>();
+                HashMap<LocalDate, Integer> tempMap = new HashMap<>();
                 tempMap.put(shift.getDate(), 1);
                 dateEmployeeMap.put(employee, tempMap);
             }else{
@@ -255,41 +272,23 @@ public class FuzzyGeneticScheduleGenerator{
 
         // Compute violations
         for(Employee employee : dateEmployeeMap.keySet()){
-            for (String date : dateEmployeeMap.get(employee).keySet()) {
+            for (LocalDate date : dateEmployeeMap.get(employee).keySet()) {
                 if(dateEmployeeMap.get(employee).get(date)>1){
-                    violation+=10;
+                    violation+=5000;
                 }
             }
         }
 
-        Map<Employee,Double> totalWeeklyHours = getTotalWeeklyHours(weeklySchedule);
+
+        Map<Employee,Double> totalWeeklyHours = GeneticCalculationsUtility.
+                countTotalHours(weeklySchedule.getShifts());
         for (Employee employee : totalWeeklyHours.keySet()) {
-            //System.out.println("Weekly Hours Max: "+employee.getMaxHoursPerWeek());
-            //System.out.println("Weekly Hours Worked: "+totalWeeklyHours.get(employee));
             if (totalWeeklyHours.get(employee)>employee.getMaxHoursPerWeek()) {
-                violation+=100;
+                violation+=500;
             }
         }
 
-        //System.out.println("Violations: "+violation);
         return violation;
-    }
-
-
-    /**
-     * Calculates total hours an employee worked
-     * @param weeklySchedule The schedule of the week
-     * @return Mapping of the employee and number of hours they worked during the week.
-     */
-    private Map<Employee,Double> getTotalWeeklyHours(WeeklySchedule weeklySchedule){
-        Map<Employee,Double> totalWeeklyHours= new HashMap<>();
-        for (Shift shift : weeklySchedule.getShifts()) {
-            totalWeeklyHours.put(
-                    shift.getEmployee(),
-                    totalWeeklyHours.getOrDefault(shift.getEmployee(),0.0)+shift.getShiftDuration()
-            );
-        }
-        return totalWeeklyHours;
     }
 
 }

@@ -3,11 +3,12 @@ package com.iwm.backend.models;
 import com.iwm.backend.schedulegenerator.models.WeeklySchedule;
 import com.iwm.backend.schedulegenerator.models.Shift;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class ScheduleTransferObject {
 
-    private Map<String,List<Shift>> shifts = new HashMap<>();
+    private Map<LocalDate, List<Shift>> shifts = new HashMap<>();
 
     public ScheduleTransferObject(WeeklySchedule weeklySchedule) {
         for (Shift shift : weeklySchedule.getShifts()) {
@@ -23,7 +24,7 @@ public class ScheduleTransferObject {
     }
 
 
-    public Map<String, List<Shift>> getShifts() {
+    public Map<LocalDate, List<Shift>> getShifts() {
         return shifts;
     }
 }
