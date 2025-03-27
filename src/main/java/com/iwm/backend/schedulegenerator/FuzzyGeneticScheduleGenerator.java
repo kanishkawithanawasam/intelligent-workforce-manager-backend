@@ -5,7 +5,7 @@ import com.iwm.backend.schedulegenerator.models.Employee;
 import com.iwm.backend.schedulegenerator.models.Population;
 import com.iwm.backend.schedulegenerator.models.WeeklySchedule;
 import com.iwm.backend.schedulegenerator.models.Shift;
-import com.iwm.backend.schedulegenerator.util.GeneticCalculationsUtility;
+import com.iwm.backend.schedulegenerator.util.CalculationsUtility;
 import com.iwm.backend.trial.EmloyeesReader;
 
 import java.time.LocalDate;
@@ -241,7 +241,7 @@ public class FuzzyGeneticScheduleGenerator{
 
     private double getTotalDeviation(WeeklySchedule weeklySchedule){
         double deviation = 0;
-        Map<Employee,Double> totalWeeklyHours = GeneticCalculationsUtility
+        Map<Employee,Double> totalWeeklyHours = CalculationsUtility
                 .countTotalHours(weeklySchedule.getShifts());
         for (Employee employee : totalWeeklyHours.keySet()) {
             deviation+=Math.abs(totalWeeklyHours.get(employee)-employee.getHoursPreference());
@@ -280,7 +280,7 @@ public class FuzzyGeneticScheduleGenerator{
         }
 
 
-        Map<Employee,Double> totalWeeklyHours = GeneticCalculationsUtility.
+        Map<Employee,Double> totalWeeklyHours = CalculationsUtility.
                 countTotalHours(weeklySchedule.getShifts());
         for (Employee employee : totalWeeklyHours.keySet()) {
             if (totalWeeklyHours.get(employee)>employee.getMaxHoursPerWeek()) {
