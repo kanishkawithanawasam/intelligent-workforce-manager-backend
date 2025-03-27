@@ -6,21 +6,58 @@ import com.iwm.backend.schedulegenerator.util.CalculationsUtility;
 
 import java.util.*;
 
+
+/**
+ * Optimizes employee shift schedules in real-time to satisfy hourly demand
+ * while minimizing constraint violations and deviations from preferences.
+ *
+ * <p>The {@code HourlyScheduleOptimiser} uses a meta heuristic optimization technique
+ * (such as Simulated Annealing) to adjust shift start/end times for a specific demand
+ * window. It ensures that weekly working hour limits are respected and that employee
+ * preferences are taken into account.</p>
+ *
+ * <p>It works with a given weekly schedule, demand instance, and configuration
+ * parameters provided via {@link HSOConfigs}.</p>
+ */
 public class HourlyScheduleOptimiser{
 
     private final HSOConfigs configs;                           // HSOConfigurations.
     private final WeeklySchedule weeklySchedule;                // Schedule of the week.
     private final HourlyDemand hourlyDemand;                    // Hourly demand for a particular period.
     private final Map<Employee,Double> totalHoursInWeek;        // Total Hours in the week.
-    private Map<Employee, Double> hoursInOrgRTSchedule;   // Hours of employees in org realtime schedule.
+    private Map<Employee, Double> orgRTScheduleHours;         // Hours of employees in org realtime schedule.
 
+
+    /**
+     * Constructs a new {@code HourlyScheduleOptimiser} instance.
+     *
+     * @param configs        the optimization configuration (temperature, cooling rate, etc.)
+     * @param schedule       the complete weekly schedule containing all shifts
+     * @param hourlyDemand   the specific hourly demand window to optimize for
+     */
     public HourlyScheduleOptimiser(HSOConfigs configs, WeeklySchedule schedule, HourlyDemand hourlyDemand) {
         this.configs = configs;
         this.weeklySchedule = schedule;
         this.hourlyDemand = hourlyDemand;
+
+        // Precompute total hours each employee has already worked this week.
         this.totalHoursInWeek = CalculationsUtility.countTotalHours(weeklySchedule.getShifts());
     }
 
+    /**
+     * Optimizes a real-time shift schedule using the Simulated Annealing algorithm.
+     *
+     * <p>This method initializes a starting schedule with shifts that begin or end during the current
+     * hourly demand period. It then iteratively mutates the schedule to explore neighboring solutions
+     * and attempts to find a schedule with the highest possible fitness score while gradually reducing
+     * the temperature.</p>
+     *
+     * <p>The fitness score balances constraint violations (like exceeding max weekly hours) and
+     * preference deviations (like mismatch with preferred hours). Simulated Annealing is used to
+     * probabilistically accept worse solutions to escape local optima during early iterations.</p>
+     *
+     * @return the best real-time schedule found through the optimization process
+     */
     public RealTimeSchedule getOptimisedRealTimeSchedule() {
 
 
@@ -45,8 +82,11 @@ public class HourlyScheduleOptimiser{
         }
 
         // Calculate each employee hours in selected schedule before any mutations.
-        hoursInOrgRTSchedule = CalculationsUtility.countTotalHours(currentSolution.getShifts());
+        orgRTScheduleHours = CalculationsUtility.countTotalHours(currentSolution.getShifts());
 
+        for (Employee employee : orgRTScheduleHours.keySet()) {
+            System.out.println(employee.getName() + ": "+orgRTScheduleHours.get(employee));
+        }
 
         // Simulated annealing loop.
         while (T>minT) {
@@ -88,14 +128,31 @@ public class HourlyScheduleOptimiser{
     }
 
 
+    /**
+     * Calculates the fitness score of a given real-time schedule.
+     *
+     * <p>The fitness score is defined as the ratio of total rewards to total penalties.
+     * In this implementation, the reward is fixed at 1, and penalties are the sum of:
+     * <ul>
+     *   <li>Violation penalties – for exceeding weekly working hour constraints</li>
+     *   <li>Deviation penalties – for deviating from preferred working hours</li>
+     * </ul>
+     *
+     * <p>A lower penalty results in a higher fitness score. If the total penalty is zero,
+     * the method returns {@code Double.MAX_VALUE} to indicate a perfect schedule.</p>
+     *
+     * @param realTimeSchedule the schedule for which the fitness score is to be calculated
+     * @return the fitness score as a double; higher values indicate better fitness
+     */
     private double calculateFitnessScore(RealTimeSchedule realTimeSchedule) {
 
         double totalRewards = 1;
         double totalPenalties = getTotalViolationsPenalty(realTimeSchedule)+
                 getTotalDeviationsPenalty(realTimeSchedule);
 
-        return totalRewards/totalPenalties;
+        return totalRewards/(totalPenalties+1);
     }
+
 
     /**
      * Calculates the total deviation penalty based on how far each employee's scheduled hours
@@ -113,22 +170,19 @@ public class HourlyScheduleOptimiser{
      * @return the total deviation penalty across all employees
      */
     private double getTotalDeviationsPenalty(RealTimeSchedule realTimeSchedule) {
-        Map<Employee,Double> weeklyWorkedHours = new HashMap<>();
 
-        // Aggregate shift durations for each employee
-        for (Shift shift : realTimeSchedule.getShifts()) {
-            weeklyWorkedHours.put(
-                    shift.getEmployee(),
-                    weeklyWorkedHours.getOrDefault(shift.getEmployee(), 0.0)+
-                            shift.getShiftDuration());
-        }
+        // Map of employee and hours in updated RealTimeSchedule.
+        Map<Employee,Double> newRTScheduleHoursMap = CalculationsUtility.countTotalHours(realTimeSchedule.getShifts());
 
         double totalDeviationsPenalty = 0;
 
         // Calculate the absolute deviation from each employee's preferred hours
-        for(Employee employee: weeklyWorkedHours.keySet()) {
+        for(Employee employee: newRTScheduleHoursMap.keySet()) {
+
+            double realTimeSchedulesDelta = newRTScheduleHoursMap.get(employee)- orgRTScheduleHours.get(employee);
+
             totalDeviationsPenalty +=
-                     Math.abs(weeklyWorkedHours.get(employee)-employee.getHoursPreference());
+                     Math.abs(realTimeSchedulesDelta+totalHoursInWeek.get(employee));
         }
 
         return totalDeviationsPenalty;
@@ -156,32 +210,27 @@ public class HourlyScheduleOptimiser{
      */
     private double getTotalViolationsPenalty(RealTimeSchedule newRealTimeSchedule) {
 
-        // Total hours of each employee in realtime schedule.
-        Map<Employee,Double> newRTScheduleHoursMap = new HashMap<>();
+        double totalViolationPenalty = 0.00;
 
-        double violationPenalty = 0.00;
+        //TODO add daily hours violations
 
-        // Update the record of total hours of each employee in realtime schedule.
-        for (Shift shift : newRealTimeSchedule.getShifts()) {
-            newRTScheduleHoursMap.put(
-                    shift.getEmployee(),
-                    newRTScheduleHoursMap.getOrDefault(shift.getEmployee(), 0.0)+
-                            shift.getShiftDuration()
-            );
-        }
+
+        // Total hours of each employee in realtime(RT) schedule.
+        Map<Employee,Double> newRTScheduleHoursMap =
+                CalculationsUtility.countTotalHours(newRealTimeSchedule.getShifts());
 
         // Calculate weekly hours violations penalty for each employee in RT schedule
         for (Employee employee : newRTScheduleHoursMap.keySet()) {
             double orgWeeklyWorkedHours = totalHoursInWeek.get(employee);
-            double newRTScheduleDelta = hoursInOrgRTSchedule.get(employee)-newRTScheduleHoursMap.get(employee);
+            double newRTScheduleDelta = orgRTScheduleHours.get(employee)-newRTScheduleHoursMap.get(employee);
             double projectedWeeklyHours = newRTScheduleDelta+orgWeeklyWorkedHours;
 
             if (projectedWeeklyHours > employee.getMaxHoursPerWeek()) {
-                violationPenalty+=10;
+                totalViolationPenalty+=configs.getVIOLATIONS_PENALTY();
             }
         }
 
-        return violationPenalty;
+        return totalViolationPenalty;
     }
 
 
@@ -229,7 +278,7 @@ public class HourlyScheduleOptimiser{
      *
      * <p>This method randomly adjusts the start or end times of shifts that either start or end within
      * the specified hourly demand period. The goal of this mutation is to explore neighboring solutions
-     * by slightly modifying the timing of shifts, which is useful for metaheuristic algorithms such as
+     * by slightly modifying the timing of shifts, which is useful for meta heuristic algorithms such as
      * Simulated Annealing or Genetic Algorithms.</p>
      *
      * <p>The time adjustment is done in 15-minute intervals, and constrained within the bounds of
