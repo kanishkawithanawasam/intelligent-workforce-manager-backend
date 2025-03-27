@@ -9,8 +9,8 @@ import java.util.Map;
 public class WeeklySchedule {
 
     private final List<Shift> shifts = new ArrayList<>();
-    private final Map<LocalDate, List<Shift>> shiftDateMap = new HashMap<LocalDate, List<Shift>>();
-    private final Map<LocalDate, List<Employee>> empDateMap= new HashMap<LocalDate, List<Employee>>();
+    private final Map<LocalDate, List<Shift>> shiftDateMap = new HashMap<>();
+    private final Map<LocalDate, List<Employee>> empDateMap= new HashMap<>();
 
     private double fitnessScore;
 
@@ -52,10 +52,6 @@ public class WeeklySchedule {
         this.fitnessScore = fitnessScore;
     }
 
-    // Used for JSON only
-    public Map<LocalDate, List<Shift>> getShiftDateMap() {
-        return shiftDateMap;
-    }
 
     @Override
     public String toString() {

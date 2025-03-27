@@ -1,5 +1,6 @@
 package com.iwm.backend.schedulegenerator.models;
 
+import com.iwm.backend.schedulegenerator.configurations.FGAConfigs;
 import com.iwm.backend.trial.DemandReader;
 import com.iwm.backend.trial.EmloyeesReader;
 
@@ -26,14 +27,12 @@ public class Population {
      * @param MINIMUM_EMPLOYEES_PER_SHIFT Minimum Employees required at any given time
      * @param MINIMUM_HOURS_PER_SHIFT Minimum hours an employee can work in a given shift
      * @param MAXIMUM_HOURS_PER_SHIFT Maximum hours an employee can work in a given shift
-     * @param POPULATION_SIZE Population / Shift pool size
      */
-    public Population(int MINIMUM_EMPLOYEES_PER_SHIFT, int MINIMUM_HOURS_PER_SHIFT, int MAXIMUM_HOURS_PER_SHIFT,
-                      int POPULATION_SIZE) {
+    public Population(int MINIMUM_EMPLOYEES_PER_SHIFT, int MINIMUM_HOURS_PER_SHIFT, int MAXIMUM_HOURS_PER_SHIFT) {
         this.MINIMUM_EMPLOYEES_PER_SHIFT = MINIMUM_EMPLOYEES_PER_SHIFT;
         this.MINIMUM_HOURS_PER_SHIFT = MINIMUM_HOURS_PER_SHIFT;
         this.MAXIMUM_HOURS_PER_SHIFT = MAXIMUM_HOURS_PER_SHIFT;
-        this.POPULATION_SIZE = POPULATION_SIZE;
+        this.POPULATION_SIZE = FGAConfigs.POPULATION_SIZE;
         this.generatePopulation();
     }
 
@@ -50,7 +49,7 @@ public class Population {
         //      1. Generate a random Schedule for the week
         //      2. Add it to the population
         for(int i=1;i<=POPULATION_SIZE;i++){
-            population.add(generateRandomScheule());
+            population.add(generateRandomSchedule());
         }
     }
 
@@ -58,12 +57,11 @@ public class Population {
      * This function generates a random schedule.
      * @return A schedule generated randomly.
      */
-    private WeeklySchedule generateRandomScheule() {
+    private WeeklySchedule generateRandomSchedule() {
         WeeklySchedule weeklySchedule = new WeeklySchedule();
 
         List<Employee> schEmployees = EmloyeesReader.readEmployees(); // Gives a list of employees
         Map<LocalDate,Map<Integer,Integer>> demand = DemandReader.getDemand(); // Represents the hourly demand
-        Map<Employee, Double>  emloyeeHoursMap = new HashMap<>(); // Keeps a record of weekly hours
         Map<Employee, List<LocalDate>> employeeDateMap = new HashMap<>();
 
         String[] shiftType = {"opening","midday","evening","closing"};
@@ -73,7 +71,7 @@ public class Population {
 
             for (String type: shiftType) {
                 for (int i = 0; i < MINIMUM_EMPLOYEES_PER_SHIFT; i++) {
-                    Shift shift = generateRandomShift(schEmployees,type,date,emloyeeHoursMap,employeeDateMap);
+                    Shift shift = generateRandomShift(schEmployees,type,date,employeeDateMap);
                     weeklySchedule.addShift(shift);
                 }
             }
@@ -93,7 +91,7 @@ public class Population {
      * @return A Shift object with given data.
      */
     private Shift generateRandomShift(List<Employee> schEmpList, String type,
-                                      LocalDate date, Map<Employee, Double> employeeHoursMap,
+                                      LocalDate date,
                                       Map<Employee, List<LocalDate>> employeeDateMap) {
         Random random = new Random();
 
@@ -142,7 +140,7 @@ public class Population {
             throw new RuntimeException("The selected employee is null");
         }
 
-        return new Shift(date,startTimeInMinutes,endTimeInMinutes,selectedEmployee,type);
+        return new Shift(date,startTimeInMinutes,endTimeInMinutes,selectedEmployee);
 
     }
 

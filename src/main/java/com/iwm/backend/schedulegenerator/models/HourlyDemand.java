@@ -1,6 +1,7 @@
 package com.iwm.backend.schedulegenerator.models;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Map;
 
 public class HourlyDemand {
@@ -11,13 +12,13 @@ public class HourlyDemand {
 
     private int endTimeInMinutes;
 
-    private Map<Integer,Integer> hourlyDemand;
+    private final Map<Integer,Integer> hourlyDemand = new HashMap<>();
 
     public int getStartTimeInMinutes() {
         return startTimeInMinutes;
     }
 
-    public void setStartTime(int startTimeInMinutes) {
+    public void setStartTimeInMinutes(int startTimeInMinutes) {
         this.startTimeInMinutes = startTimeInMinutes;
     }
 
@@ -25,7 +26,7 @@ public class HourlyDemand {
         return endTimeInMinutes;
     }
 
-    public void setEndTime(int endTimeInMinutes) {
+    public void setEndTimeInMinutes(int endTimeInMinutes) {
         this.endTimeInMinutes = endTimeInMinutes;
     }
 
@@ -35,5 +36,9 @@ public class HourlyDemand {
 
     public LocalDate getDate() {
         return date;
+    }
+
+    public Map<Integer,Integer> getHourlyDemandMap() {
+        return hourlyDemand;
     }
 }

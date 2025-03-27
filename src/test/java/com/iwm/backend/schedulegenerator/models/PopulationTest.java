@@ -18,7 +18,7 @@ class PopulationTest {
 
     boolean verifyPopulation() {
         Population population =  new Population(3,
-                4,8,10);
+                4,8);
 
         Map<Employee, Map<LocalDate, Integer>> empDateMap = new HashMap<>();
         for (WeeklySchedule weeklySchedule : population.getPopulation()){

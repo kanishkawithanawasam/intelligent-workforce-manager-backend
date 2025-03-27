@@ -21,7 +21,6 @@ import java.util.*;
  */
 public class HourlyScheduleOptimiser{
 
-    private final HSOConfigs configs;                           // HSOConfigurations.
     private final WeeklySchedule weeklySchedule;                // Schedule of the week.
     private final HourlyDemand hourlyDemand;                    // Hourly demand for a particular period.
     private final Map<Employee,Double> totalHoursInWeek;        // Total Hours in the week.
@@ -31,12 +30,10 @@ public class HourlyScheduleOptimiser{
     /**
      * Constructs a new {@code HourlyScheduleOptimiser} instance.
      *
-     * @param configs        the optimization configuration (temperature, cooling rate, etc.)
      * @param schedule       the complete weekly schedule containing all shifts
      * @param hourlyDemand   the specific hourly demand window to optimize for
      */
-    public HourlyScheduleOptimiser(HSOConfigs configs, WeeklySchedule schedule, HourlyDemand hourlyDemand) {
-        this.configs = configs;
+    public HourlyScheduleOptimiser( WeeklySchedule schedule, HourlyDemand hourlyDemand) {
         this.weeklySchedule = schedule;
         this.hourlyDemand = hourlyDemand;
 
@@ -66,9 +63,9 @@ public class HourlyScheduleOptimiser{
         // Variable initialisation
         RealTimeSchedule currentSolution = new RealTimeSchedule();  // Current Solution
         RealTimeSchedule bestSolution = null;                       // Best Solution
-        double T = configs.getINITIAL_TEMPERATURE();             // Initial Temperature
-        final double minT = configs.getMINIMUM_TEMPERATURE();    // Minimum Temperature
-        double coolingRate = configs.getCOOLING_RATE();          // Cooling rate
+        double T = HSOConfigs.INITIAL_TEMPERATURE;             // Initial Temperature
+        final double minT = HSOConfigs.MINIMUM_TEMPERATURE;    // Minimum Temperature
+        double coolingRate = HSOConfigs.COOLING_RATE;          // Cooling rate
         RealTimeSchedule newSolution;                               // Candidate solution in each iteration
         double deltaFitness;                                        // Fitness difference or delta fitness.
         Random random = new Random();
@@ -84,9 +81,6 @@ public class HourlyScheduleOptimiser{
         // Calculate each employee hours in selected schedule before any mutations.
         orgRTScheduleHours = CalculationsUtility.countTotalHours(currentSolution.getShifts());
 
-        for (Employee employee : orgRTScheduleHours.keySet()) {
-            System.out.println(employee.getName() + ": "+orgRTScheduleHours.get(employee));
-        }
 
         // Simulated annealing loop.
         while (T>minT) {
@@ -226,7 +220,7 @@ public class HourlyScheduleOptimiser{
             double projectedWeeklyHours = newRTScheduleDelta+orgWeeklyWorkedHours;
 
             if (projectedWeeklyHours > employee.getMaxHoursPerWeek()) {
-                totalViolationPenalty+=configs.getVIOLATIONS_PENALTY();
+                totalViolationPenalty+=HSOConfigs.VIOLATIONS_PENALTY_HOURS;
             }
         }
 

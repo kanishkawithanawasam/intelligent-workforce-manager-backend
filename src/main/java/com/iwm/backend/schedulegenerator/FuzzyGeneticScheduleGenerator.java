@@ -36,12 +36,8 @@ import java.util.*;
 public class FuzzyGeneticScheduleGenerator{
 
     private final List<Employee> employees = EmloyeesReader.readEmployees();
-    private final FGAConfigs fgaConfigs;
     private double MUTATION_RATE;
 
-    public FuzzyGeneticScheduleGenerator(FGAConfigs fgaConfigs){
-        this.fgaConfigs = fgaConfigs;
-    }
 
     /**
      * Runs the genetic algorithm to generate the optimal weekly schedule.
@@ -62,8 +58,7 @@ public class FuzzyGeneticScheduleGenerator{
         Population population = new Population(
                 3,
                 4,
-                8,
-                fgaConfigs.getPOPULATION_SIZE());
+                8);
 
         // Calculates fitness of each schedule in the population.
         double bestAccOnPopulation = 0;
@@ -76,7 +71,7 @@ public class FuzzyGeneticScheduleGenerator{
 
         // Runs the genetic algorithm for the configured number of iterations.
         double accuracy = 0;
-        for (int i = 0; i < fgaConfigs.getNUMBER_OF_ITERATIONS(); i++) {
+        for (int i = 0; i < FGAConfigs.NUMBER_OF_ITERATIONS; i++) {
 
             // Adapts mutation rate based on population diversity & fitness variance.
             adjustFuzzyParameters(population);
@@ -261,7 +256,7 @@ public class FuzzyGeneticScheduleGenerator{
         List<WeeklySchedule> tournament = new ArrayList<>();
 
         // Randomly selects `tournamentSize` schedules
-        for (int i = 0; i < fgaConfigs.getTOURNAMENT_SIZE(); i++) {
+        for (int i = 0; i < FGAConfigs.TOURNAMENT_SIZE; i++) {
             WeeklySchedule randomWeeklySchedule = population.getPopulation().get(rand.nextInt(population.getPopulation().size()));
             tournament.add(randomWeeklySchedule);
         }
@@ -466,7 +461,7 @@ public class FuzzyGeneticScheduleGenerator{
         for(Employee employee : dateEmployeeMap.keySet()){
             for (LocalDate date : dateEmployeeMap.get(employee).keySet()) {
                 if(dateEmployeeMap.get(employee).get(date)>1){
-                    violation+=fgaConfigs.getDAILY_HOURS_VIOLATION_TOURNAMENT();
+                    violation+=FGAConfigs.DAILY_HOURS_VIOLATION_TOURNAMENT;
                 }
             }
         }
@@ -475,7 +470,7 @@ public class FuzzyGeneticScheduleGenerator{
         Map<Employee,Double> totalWeeklyHours = CalculationsUtility.countTotalHours(weeklySchedule.getShifts());
         for (Employee employee : totalWeeklyHours.keySet()) {
             if (totalWeeklyHours.get(employee)>employee.getMaxHoursPerWeek()) {
-                violation+=fgaConfigs.getWEEKLY_HOURS_VIOLATION_PENALTY();
+                violation+=FGAConfigs.WEEKLY_HOURS_VIOLATION_PENALTY;
             }
         }
 
