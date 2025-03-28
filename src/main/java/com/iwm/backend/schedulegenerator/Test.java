@@ -18,7 +18,8 @@ public class Test {
 
         HourlyDemand demand = new HourlyDemand();
         demand.setDate(LocalDate.of(2025,3,21));
-        demand.setStartTimeInMinutes(13*60);
+        demand.setStartTimeInMinutes(demandMap.firstKey()*60);
+        demand.setEndTimeInMinutes(demandMap.lastKey()*60);
         demand.setEndTimeInMinutes(15*60);
 
         for(Shift shift : weeklySchedule.getShifts()) {
