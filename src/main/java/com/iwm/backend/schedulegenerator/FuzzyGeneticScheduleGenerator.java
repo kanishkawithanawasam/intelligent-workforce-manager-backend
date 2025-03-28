@@ -12,14 +12,14 @@ import java.time.LocalDate;
 import java.util.*;
 
 /**
- * Implements a Fuzzy Genetic Algorithm (FGA) for generating optimized employee schedules.
+ * Implements a Fuzzy Genetic Algorithm (FGA) for generating optimised employee schedules.
  *
  * <p>This class combines the traditional Genetic Algorithm (GA) framework with fuzzy logic
  * to dynamically adjust hyperparameters such as mutation rate—based on population diversity
  * and fitness variance. It supports end-to-end evolution processes including:</p>
  *
  * <ul>
- *     <li>Population initialization</li>
+ *     <li>Population initialisation</li>
  *     <li>Fitness evaluation</li>
  *     <li>Selection (tournament-based)</li>
  *     <li>Crossover (single-point)</li>
@@ -42,7 +42,7 @@ public class FuzzyGeneticScheduleGenerator{
     /**
      * Runs the genetic algorithm to generate the optimal weekly schedule.
      *
-     * <p>This method initializes a population of schedules and evolves it over a number
+     * <p>This method initialises a population of schedules and evolves it over a number
      * of iterations using selection, crossover, and mutation. The fitness of each schedule
      * is evaluated using a custom fitness function that balances cost, constraint violations,
      * and employee preference deviations.</p>
@@ -333,7 +333,7 @@ public class FuzzyGeneticScheduleGenerator{
      * A higher value implies greater variation in schedule quality (fitness),
      * whereas a lower value may signal convergence (possibly premature).</p>
      *
-     * @param population the population of weekly schedules to analyze
+     * @param population the population of weekly schedules to analyse
      * @return the standard deviation of fitness scores in the population
      */
     private double calculateFitnessVariance(Population population) {
