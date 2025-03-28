@@ -15,12 +15,16 @@ public class Test {
         TreeMap<Integer,Integer> demandMap = new TreeMap<>();
         demandMap.put(13,0);
         demandMap.put(15,0);
+        LocalDate date  = LocalDate.of(2025,3,21);
 
-        HourlyDemand demand = new HourlyDemand();
-        demand.setDate(LocalDate.of(2025,3,21));
+
+        HourlyDemand demand = new HourlyDemand(date,demandMap);
+
+        /*
+        demand.setDate();
         demand.setStartTimeInMinutes(demandMap.firstKey()*60);
         demand.setEndTimeInMinutes(demandMap.lastKey()*60);
-        demand.setEndTimeInMinutes(15*60);
+        demand.setEndTimeInMinutes(15*60);*/
 
         for(Shift shift : weeklySchedule.getShifts()) {
             if(shift.getDate().equals(demand.getDate())) {
