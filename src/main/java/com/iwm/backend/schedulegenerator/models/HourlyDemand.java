@@ -8,13 +8,13 @@ import java.util.TreeMap;
 
 public class HourlyDemand {
 
-    private LocalDate date;
+    private final LocalDate date;
 
-    private int startTimeInMinutes;
+    private final int startTimeInMinutes;
 
-    private int endTimeInMinutes;
+    private final int endTimeInMinutes;
 
-    private TreeMap<Integer,Integer> hourlyDemand;
+    private final TreeMap<Integer,Integer> hourlyDemand;
 
     public HourlyDemand(LocalDate date,TreeMap<Integer,Integer> hourlyDemand) {
         this.date = date;
