@@ -39,5 +39,13 @@ public class HSOConfigs {
      * of weekly maximum hours. Higher values will lower the fitness rapidly with respect to number of violations
      * while lower values will slower the fitness downfall rate caused by such violations.</p>
      */
-    public static final double VIOLATIONS_PENALTY_HOURS = 10;
+    public static final double VIOLATIONS_PENALTY_WEEKLY_HOURS = 10;
+
+
+    public static final double DAILY_MAX_HOURS = 8;
+
+    public static final double DAILY_MIN_HOURS = 4;
+
+    public static final double VIOLATIONS_PENALTY_DAYILY_HOURS = 10;
+
 }
