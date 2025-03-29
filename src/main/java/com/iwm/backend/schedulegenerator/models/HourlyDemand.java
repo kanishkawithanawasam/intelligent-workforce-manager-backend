@@ -26,7 +26,7 @@ public class HourlyDemand {
 
         // Convert hours into minutes
         startTimeInMinutes = hourlyDemand.firstKey()*60;
-        endTimeInMinutes = hourlyDemand.lastKey()*60;
+        endTimeInMinutes = (hourlyDemand.lastKey()+1)*60;
     }
 
 
@@ -43,7 +43,7 @@ public class HourlyDemand {
         return date;
     }
 
-    public Map<Integer,Integer> getHourlyDemandMap() {
+    public TreeMap<Integer,Integer> getHourlyDemandMap() {
         return hourlyDemand;
     }
 }
