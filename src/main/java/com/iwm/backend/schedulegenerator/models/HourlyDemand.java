@@ -1,44 +1,49 @@
 package com.iwm.backend.schedulegenerator.models;
 
+import com.iwm.backend.schedulegenerator.exceptions.DemandNotFoundException;
+
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class HourlyDemand {
 
-    private LocalDate date;
+    private final LocalDate date;
 
-    private int startTimeInMinutes;
+    private final int startTimeInMinutes;
 
-    private int endTimeInMinutes;
+    private final int endTimeInMinutes;
 
-    private final Map<Integer,Integer> hourlyDemand = new HashMap<>();
+    private final TreeMap<Integer,Integer> hourlyDemand;
+
+    public HourlyDemand(LocalDate date,TreeMap<Integer,Integer> hourlyDemand) {
+        this.date = date;
+        this.hourlyDemand = hourlyDemand;
+
+        if(hourlyDemand.size()<2) {
+            throw new DemandNotFoundException();
+        }
+
+        // Convert hours into minutes
+        startTimeInMinutes = hourlyDemand.firstKey()*60;
+        endTimeInMinutes = (hourlyDemand.lastKey()+1)*60;
+    }
+
 
     public int getStartTimeInMinutes() {
         return startTimeInMinutes;
     }
 
-    public void setStartTimeInMinutes(int startTimeInMinutes) {
-        this.startTimeInMinutes = startTimeInMinutes;
-    }
 
     public int getEndTimeInMinutes() {
         return endTimeInMinutes;
-    }
-
-    public void setEndTimeInMinutes(int endTimeInMinutes) {
-        this.endTimeInMinutes = endTimeInMinutes;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
     }
 
     public LocalDate getDate() {
         return date;
     }
 
-    public Map<Integer,Integer> getHourlyDemandMap() {
+    public TreeMap<Integer,Integer> getHourlyDemandMap() {
         return hourlyDemand;
     }
 }

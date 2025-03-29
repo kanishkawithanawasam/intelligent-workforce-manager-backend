@@ -1,6 +1,8 @@
 package com.iwm.backend.schedulegenerator;
 
 import com.iwm.backend.schedulegenerator.configurations.HSOConfigs;
+import com.iwm.backend.schedulegenerator.exceptions.DemandNotFoundException;
+import com.iwm.backend.schedulegenerator.exceptions.InvalidDemandMapException;
 import com.iwm.backend.schedulegenerator.models.*;
 import com.iwm.backend.schedulegenerator.util.CalculationsUtility;
 
@@ -24,7 +26,7 @@ public class HourlyScheduleOptimiser{
     private final WeeklySchedule weeklySchedule;                // Schedule of the week.
     private final HourlyDemand hourlyDemand;                    // Hourly demand for a particular period.
     private final Map<Employee,Double> totalHoursInWeek;        // Total Hours in the week.
-    private Map<Employee, Double> orgRTScheduleHours;         // Hours of employees in org realtime schedule.
+    private Map<Employee, Double> orgRTScheduleHours;           // Hours of employees in org realtime schedule.
 
 
     /**
@@ -63,9 +65,9 @@ public class HourlyScheduleOptimiser{
         // Variable initialisation
         RealTimeSchedule currentSolution = new RealTimeSchedule();  // Current Solution
         RealTimeSchedule bestSolution = null;                       // Best Solution
-        double T = HSOConfigs.INITIAL_TEMPERATURE;             // Initial Temperature
-        final double minT = HSOConfigs.MINIMUM_TEMPERATURE;    // Minimum Temperature
-        double coolingRate = HSOConfigs.COOLING_RATE;          // Cooling rate
+        double T = HSOConfigs.INITIAL_TEMPERATURE;                  // Initial Temperature
+        final double minT = HSOConfigs.MINIMUM_TEMPERATURE;         // Minimum Temperature
+        double coolingRate = HSOConfigs.COOLING_RATE;               // Cooling rate
         RealTimeSchedule newSolution;                               // Candidate solution in each iteration
         double deltaFitness;                                        // Fitness difference or delta fitness.
         Random random = new Random();
@@ -140,7 +142,7 @@ public class HourlyScheduleOptimiser{
      */
     private double calculateFitnessScore(RealTimeSchedule realTimeSchedule) {
 
-        double totalRewards = 1;
+        double totalRewards = demandSatisfactionScore(realTimeSchedule);
         double totalPenalties = getTotalViolationsPenalty(realTimeSchedule)+
                 getTotalDeviationsPenalty(realTimeSchedule);
 
@@ -183,6 +185,74 @@ public class HourlyScheduleOptimiser{
     }
 
 
+    private double demandSatisfactionScore(RealTimeSchedule realTimeSchedule) {
+
+        TreeMap<Integer,Integer> _15MinWinEmpMap = new TreeMap<>();
+        TreeMap<Integer,Integer> _15minWinDmdMap = new TreeMap<>();
+
+        // Verify hourly demand is consistent
+        List<Integer> demandKeyList= new ArrayList<>(hourlyDemand.getHourlyDemandMap().keySet());
+        if (demandKeyList.size()<2){throw new DemandNotFoundException();}
+        int demandKey = demandKeyList.get(0);
+        for (int i = 1; i < demandKeyList.size(); i++) {
+            if(demandKey!=demandKeyList.get(i)-1) {
+                throw new InvalidDemandMapException();
+            }
+        }
+
+
+        //  Initialise demand map for each 15 minutes.
+        for (int i = hourlyDemand.getStartTimeInMinutes(); i < hourlyDemand.getEndTimeInMinutes(); i+=15) {
+            _15minWinDmdMap.put(i, hourlyDemand.getHourlyDemandMap().get(i/60));
+        }
+
+
+        // Initialise the employees count in each 15 minutes
+        for (int i = hourlyDemand.getStartTimeInMinutes(); i < hourlyDemand.getEndTimeInMinutes(); i+=15) {
+            _15MinWinEmpMap.put(i,0);
+        }
+
+        // Update the employees count
+        for (Shift shift : realTimeSchedule.getShifts()) {
+            int counter;
+            switch (shiftStartOrEndInDmdPeriod(shift)){
+
+                case -1:
+                    counter = hourlyDemand.getStartTimeInMinutes();
+                    while (counter<shift.getEndTimeInMinutes()){
+                        if (_15MinWinEmpMap.containsKey(counter)) {
+                            _15MinWinEmpMap.put(counter,_15MinWinEmpMap.get(counter)+1);
+                        }
+                        counter+=15;
+                    }
+                    break;
+
+                case 1:
+                    counter = shift.getStartTimeInMinutes();
+                    while (counter<hourlyDemand.getEndTimeInMinutes()){
+                        if (_15MinWinEmpMap.containsKey(counter)) {
+                            _15MinWinEmpMap.put(counter,_15MinWinEmpMap.get(counter)+1);
+                        }
+                        counter+=15;
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        int demandSatisfactionScore = 0;
+
+        for(int timeSlot :  _15minWinDmdMap.keySet()) {
+            demandSatisfactionScore += _15minWinDmdMap.get(timeSlot) -
+                    (_15minWinDmdMap.get(timeSlot)-_15MinWinEmpMap.get(timeSlot));
+        }
+
+        return demandSatisfactionScore;
+    }
+
+
     /**
      * Calculates the total violation penalty incurred when updating a real-time schedule,
      * based on weekly hour constraints for each employee.
@@ -206,7 +276,13 @@ public class HourlyScheduleOptimiser{
 
         double totalViolationPenalty = 0.00;
 
-        //TODO add daily hours violations
+        // Calculate daily hours violations penalty.
+        for (Shift shift : newRealTimeSchedule.getShifts()) {
+            if(shift.getShiftLengthInMinutes()/60.0 < HSOConfigs.DAILY_MIN_HOURS ||
+                shift.getShiftLengthInMinutes()/60.0 > HSOConfigs.DAILY_MAX_HOURS) {
+                totalViolationPenalty += HSOConfigs.VIOLATIONS_PENALTY_DAYILY_HOURS;
+            }
+        }
 
 
         // Total hours of each employee in realtime(RT) schedule.
@@ -220,7 +296,7 @@ public class HourlyScheduleOptimiser{
             double projectedWeeklyHours = newRTScheduleDelta+orgWeeklyWorkedHours;
 
             if (projectedWeeklyHours > employee.getMaxHoursPerWeek()) {
-                totalViolationPenalty+=HSOConfigs.VIOLATIONS_PENALTY_HOURS;
+                totalViolationPenalty+=HSOConfigs.VIOLATIONS_PENALTY_WEEKLY_HOURS;
             }
         }
 
@@ -314,4 +390,5 @@ public class HourlyScheduleOptimiser{
         }
         return tempSchedule;
     }
+
 }

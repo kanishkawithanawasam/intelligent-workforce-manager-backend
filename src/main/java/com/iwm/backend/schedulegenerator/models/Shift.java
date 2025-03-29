@@ -45,6 +45,9 @@ public class Shift implements Cloneable{
         this.endTimeInMinutes = endTimeInMinutes;
     }
 
+    public int getShiftLengthInMinutes() {
+        return endTimeInMinutes - startTimeInMinutes;
+    }
 
     @Override
     public String toString() {
