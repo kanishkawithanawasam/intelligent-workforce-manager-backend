@@ -18,6 +18,11 @@ public class Shift implements Cloneable{
     @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
+    @ManyToOne
+    @JoinColumn(name = "weekly_schedule_id", nullable = false)
+    private WeeklySchedule weeklySchedule;
+
+
     private LocalDate date;
 
 

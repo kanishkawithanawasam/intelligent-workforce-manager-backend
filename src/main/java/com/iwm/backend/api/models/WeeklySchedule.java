@@ -1,15 +1,29 @@
 package com.iwm.backend.api.models;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Entity
 public class WeeklySchedule {
 
-    private final List<Shift> shifts = new ArrayList<>();
+    @Id
+    @Column(name = "weekly_schedule_id")
+    private long id;
+
+    @OneToMany
+    private List<Shift> shifts = new ArrayList<>();
+
+    public WeeklySchedule() {}
+
+
+    @Transient
     private final Map<LocalDate, List<Shift>> shiftDateMap = new HashMap<>();
+    @Transient
     private final Map<LocalDate, List<Employee>> empDateMap= new HashMap<>();
 
     private double fitnessScore;
@@ -52,6 +66,9 @@ public class WeeklySchedule {
         this.fitnessScore = fitnessScore;
     }
 
+    public long getId() {
+        return id;
+    }
 
     @Override
     public String toString() {
