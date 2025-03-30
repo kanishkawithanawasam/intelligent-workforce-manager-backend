@@ -1,13 +1,26 @@
-package com.iwm.backend.schedulegenerator.models;
+package com.iwm.backend.api.models;
+
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
+@Entity
 public class Shift implements Cloneable{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
 
     private int startTimeInMinutes;
     private int endTimeInMinutes;
+
+    @ManyToOne
+    @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
-    private final LocalDate date;
+
+    private LocalDate date;
+
+
     public Shift(LocalDate date, int startTimeInMinutes, int endTimeInMinutes,
                  Employee employee) {
         this.date = date;
@@ -15,6 +28,8 @@ public class Shift implements Cloneable{
         this.startTimeInMinutes = startTimeInMinutes;
         this.employee = employee;
     }
+
+    public Shift() {}
 
     public LocalDate getDate() {
         return date;

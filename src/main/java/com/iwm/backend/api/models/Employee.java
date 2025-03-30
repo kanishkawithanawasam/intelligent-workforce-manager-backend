@@ -1,19 +1,44 @@
-package com.iwm.backend.schedulegenerator.models;
+package com.iwm.backend.api.models;
 
+
+import jakarta.persistence.*;
+
+import java.util.List;
 
 /**
  * Represents an employee in the system.
  * @author kanishka withanawasam
  * @version 1.0
  */
-public class Employee{
-    private final int id;
-    private String name;
-    private String role;
-    private double hoursPreference;
-    private final double maxHoursPerWeek;
-    private final double cost;
 
+@Entity
+public class Employee{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "emp_id")
+    private long id;
+
+    @Column(name = "emp_name")
+    private String name;
+
+    @Column(name = "emp_role")
+    private String role;
+
+    @Column(name = "emp_weekly_hours_preference")
+    private double hoursPreference;
+
+    @Column(name = "emp_weekly_hours_limit")
+    private double maxHoursPerWeek;
+
+    @Column(name = "emp_hourly_cost")
+    private double cost;
+
+    @OneToMany(mappedBy = "employee")
+    private List<Shift> shifts;
+
+    public Employee(){
+    }
 
     /**
      *
@@ -23,7 +48,7 @@ public class Employee{
      * @param hoursPreference Number of hours the employee would like to work.
      * @param maxHoursPerWeek The maximum number of hours employee is allowed to work.
      */
-    public Employee(int id, String name, String role, double hoursPreference, double maxHoursPerWeek, double cost) {
+    public Employee(long id, String name, String role, double hoursPreference, double maxHoursPerWeek, double cost) {
         this.id = id;
         this.name = name;
         this.role = role;
@@ -32,7 +57,7 @@ public class Employee{
         this.cost=cost;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -67,6 +92,9 @@ public class Employee{
     public double getCost() {
         return cost;
     }
+
+
+
 
     @Override
     public String toString() {

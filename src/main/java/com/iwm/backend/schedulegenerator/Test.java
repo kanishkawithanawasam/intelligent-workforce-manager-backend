@@ -1,5 +1,7 @@
 package com.iwm.backend.schedulegenerator;
 
+import com.iwm.backend.api.models.Shift;
+import com.iwm.backend.api.models.WeeklySchedule;
 import com.iwm.backend.schedulegenerator.models.*;
 
 import java.time.LocalDate;
@@ -13,8 +15,8 @@ public class Test {
         WeeklySchedule weeklySchedule = generator.genSchedule();
 
         TreeMap<Integer,Integer> demandMap = new TreeMap<>();
-        demandMap.put(13,0);
-        demandMap.put(15,0);
+        demandMap.put(13,4);
+        demandMap.put(14,4);
         LocalDate date  = LocalDate.of(2025,3,21);
 
 

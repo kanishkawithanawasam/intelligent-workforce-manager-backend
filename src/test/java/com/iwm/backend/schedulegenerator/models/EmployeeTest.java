@@ -1,5 +1,6 @@
 package com.iwm.backend.schedulegenerator.models;
 
+import com.iwm.backend.api.models.Employee;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

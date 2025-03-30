@@ -1,6 +1,6 @@
 package com.iwm.backend.trial;
 
-import com.iwm.backend.schedulegenerator.models.Employee;
+import com.iwm.backend.api.models.Employee;
 
 import java.io.*;
 import java.util.ArrayList;

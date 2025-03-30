@@ -1,4 +1,4 @@
-package com.iwm.backend.schedulegenerator.models;
+package com.iwm.backend.api.models;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
