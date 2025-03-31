@@ -1,6 +1,5 @@
-package com.iwm.backend.api.controllers;
+package com.iwm.backend.api.models;
 
-import com.iwm.backend.schedulegenerator.models.WeeklySchedule;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -32,5 +31,5 @@ public class ShiftEM {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedule_id", nullable = false,
             foreignKey = @ForeignKey(name = "fk_shift_schedule"))
-    private WeeklySchedule weeklySchedule;
+    private WeeklyScheduleEM weeklySchedule;
 }

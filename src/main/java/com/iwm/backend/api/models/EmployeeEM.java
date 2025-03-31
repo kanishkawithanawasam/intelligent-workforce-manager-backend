@@ -1,8 +1,10 @@
-package com.iwm.backend.api.controllers;
+package com.iwm.backend.api.models;
 
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "employee")
@@ -30,4 +32,7 @@ public class EmployeeEM {
 
     @Column(name = "contact_number")
     private String contact;
+
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    private List<ShiftEM> shifts = new ArrayList<>();
 }
