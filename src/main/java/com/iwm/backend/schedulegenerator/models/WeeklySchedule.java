@@ -1,8 +1,4 @@
-package com.iwm.backend.api.models;
-
-import com.iwm.backend.schedulegenerator.models.Employee;
-import com.iwm.backend.schedulegenerator.models.Shift;
-import jakarta.persistence.*;
+package com.iwm.backend.schedulegenerator.models;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

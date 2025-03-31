@@ -1,7 +1,5 @@
 package com.iwm.backend.schedulegenerator.models;
 
-import com.iwm.backend.api.models.WeeklySchedule;
-
 import java.time.LocalDate;
 
 public class Shift implements Cloneable{

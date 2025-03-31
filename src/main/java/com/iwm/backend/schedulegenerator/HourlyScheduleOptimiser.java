@@ -2,7 +2,7 @@ package com.iwm.backend.schedulegenerator;
 
 import com.iwm.backend.schedulegenerator.models.Employee;
 import com.iwm.backend.schedulegenerator.models.Shift;
-import com.iwm.backend.api.models.WeeklySchedule;
+import com.iwm.backend.schedulegenerator.models.WeeklySchedule;
 import com.iwm.backend.schedulegenerator.configurations.HSOConfigs;
 import com.iwm.backend.schedulegenerator.exceptions.DemandNotFoundException;
 import com.iwm.backend.schedulegenerator.exceptions.InvalidDemandMapException;
