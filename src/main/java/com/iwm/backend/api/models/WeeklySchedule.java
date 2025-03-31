@@ -1,5 +1,6 @@
 package com.iwm.backend.api.models;
 
+import com.iwm.backend.schedulegenerator.models.Employee;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;

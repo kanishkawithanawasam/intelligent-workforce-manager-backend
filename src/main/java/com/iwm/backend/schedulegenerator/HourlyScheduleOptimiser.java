@@ -1,6 +1,6 @@
 package com.iwm.backend.schedulegenerator;
 
-import com.iwm.backend.api.models.Employee;
+import com.iwm.backend.schedulegenerator.models.Employee;
 import com.iwm.backend.api.models.Shift;
 import com.iwm.backend.api.models.WeeklySchedule;
 import com.iwm.backend.schedulegenerator.configurations.HSOConfigs;

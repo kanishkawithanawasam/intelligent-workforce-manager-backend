@@ -1,7 +1,7 @@
 package com.iwm.backend.schedulegenerator;
 
 import com.iwm.backend.schedulegenerator.configurations.FGAConfigs;
-import com.iwm.backend.api.models.Employee;
+import com.iwm.backend.schedulegenerator.models.Employee;
 import com.iwm.backend.schedulegenerator.models.Population;
 import com.iwm.backend.api.models.WeeklySchedule;
 import com.iwm.backend.api.models.Shift;

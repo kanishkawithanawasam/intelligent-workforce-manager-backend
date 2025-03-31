@@ -1,7 +1,7 @@
-package com.iwm.backend.api.models;
+package com.iwm.backend.schedulegenerator.models;
 
 
-import jakarta.persistence.*;
+import com.iwm.backend.api.models.Shift;
 
 import java.util.List;
 
