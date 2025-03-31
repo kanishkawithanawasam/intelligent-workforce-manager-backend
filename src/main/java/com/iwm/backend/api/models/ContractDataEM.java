@@ -17,5 +17,7 @@ public class ContractDataEM {
     private double maxHoursPerWeek;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employee_id", nullable = false,
+            foreignKey = @ForeignKey(name = "fk_contract_employee"))
     private EmployeeEM employees;
 }
