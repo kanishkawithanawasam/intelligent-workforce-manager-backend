@@ -1,6 +1,5 @@
 package com.iwm.backend.schedulegenerator.models;
 
-import com.iwm.backend.api.models.Shift;
 import com.iwm.backend.api.models.WeeklySchedule;
 import com.iwm.backend.schedulegenerator.configurations.FGAConfigs;
 import com.iwm.backend.trial.DemandReader;

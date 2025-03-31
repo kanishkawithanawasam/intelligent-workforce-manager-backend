@@ -1,7 +1,5 @@
 package com.iwm.backend.schedulegenerator.models;
 
-import com.iwm.backend.api.models.Shift;
-
 import java.util.ArrayList;
 import java.util.List;
 

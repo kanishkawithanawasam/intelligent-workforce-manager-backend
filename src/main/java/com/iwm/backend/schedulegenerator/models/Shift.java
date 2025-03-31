@@ -1,6 +1,6 @@
-package com.iwm.backend.api.models;
+package com.iwm.backend.schedulegenerator.models;
 
-import com.iwm.backend.schedulegenerator.models.Employee;
+import com.iwm.backend.api.models.WeeklySchedule;
 
 import java.time.LocalDate;
 

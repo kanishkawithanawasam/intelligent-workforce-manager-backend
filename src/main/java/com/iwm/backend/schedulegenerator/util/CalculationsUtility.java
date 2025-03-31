@@ -1,7 +1,7 @@
 package com.iwm.backend.schedulegenerator.util;
 
 import com.iwm.backend.schedulegenerator.models.Employee;
-import com.iwm.backend.api.models.Shift;
+import com.iwm.backend.schedulegenerator.models.Shift;
 
 import java.util.HashMap;
 import java.util.List;

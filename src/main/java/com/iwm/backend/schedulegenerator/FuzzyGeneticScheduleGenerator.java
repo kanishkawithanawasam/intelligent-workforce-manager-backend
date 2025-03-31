@@ -4,7 +4,7 @@ import com.iwm.backend.schedulegenerator.configurations.FGAConfigs;
 import com.iwm.backend.schedulegenerator.models.Employee;
 import com.iwm.backend.schedulegenerator.models.Population;
 import com.iwm.backend.api.models.WeeklySchedule;
-import com.iwm.backend.api.models.Shift;
+import com.iwm.backend.schedulegenerator.models.Shift;
 import com.iwm.backend.schedulegenerator.util.CalculationsUtility;
 import com.iwm.backend.trial.EmloyeesReader;
 
