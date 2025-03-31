@@ -35,4 +35,9 @@ public class EmployeeEM {
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<ShiftEM> shifts = new ArrayList<>();
+
+    @OneToMany()
+    @JoinColumn(name = "employee_id", nullable = false,
+    foreignKey = @ForeignKey(name = "fk_contract_employee"))
+    private List<ContractDataEM> contractData;
 }
