@@ -10,31 +10,20 @@ import java.util.List;
  * @author kanishka withanawasam
  * @version 1.0
  */
-
-@Entity
 public class Employee{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "emp_id")
     private long id;
 
-    @Column(name = "emp_name")
     private String name;
 
-    @Column(name = "emp_role")
     private String role;
 
-    @Column(name = "emp_weekly_hours_preference")
     private double hoursPreference;
 
-    @Column(name = "emp_weekly_hours_limit")
     private double maxHoursPerWeek;
 
-    @Column(name = "emp_hourly_cost")
     private double cost;
 
-    @OneToMany(mappedBy = "employee")
     private List<Shift> shifts;
 
     public Employee(){
