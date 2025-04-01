@@ -1,6 +1,5 @@
 package com.iwm.backend.schedulegenerator.models;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iwm.backend.schedulegenerator.configurations.BusinessConfigs;
 import com.iwm.backend.schedulegenerator.configurations.FGAConfigs;
@@ -99,32 +98,27 @@ public class Population {
                                       Map<Employee, List<LocalDate>> employeeDateMap) {
         Random random = new Random();
 
-        int startTimeInMinutes;
-        int endTimeInMinutes;
-
         // Determine start and end time of the shifts depending on the type
-        switch (type) {
-            case "opening":
-                startTimeInMinutes = 8*60;
-                endTimeInMinutes = getEndTime(startTimeInMinutes);
-                break;
-            case "midday":
-                startTimeInMinutes = random.nextInt(10,14)*60-15*random.nextInt(0,3);
-                endTimeInMinutes = getEndTime(startTimeInMinutes);
-                break;
-            case "evening":
-                startTimeInMinutes = random.nextInt(14,16)*60-15*random.nextInt(0,3);
-                endTimeInMinutes = getEndTime(startTimeInMinutes);
-                break;
-
-            case "closing":
-                startTimeInMinutes = random.nextInt(16,19)*60 - 15*random.nextInt(0,3);
-                endTimeInMinutes = 23*60;
-                break;
-            default:
-                throw new RuntimeException("Something went wrong");
-        }
-
+        int startTimeInMinutes;
+        int endTimeInMinutes = switch (type) {
+            case "opening" -> {
+                startTimeInMinutes = 8 * 60;
+                yield getEndTime(startTimeInMinutes);
+            }
+            case "midday" -> {
+                startTimeInMinutes = random.nextInt(10, 14) * 60 - 15 * random.nextInt(0, 3);
+                yield getEndTime(startTimeInMinutes);
+            }
+            case "evening" -> {
+                startTimeInMinutes = random.nextInt(14, 16) * 60 - 15 * random.nextInt(0, 3);
+                yield getEndTime(startTimeInMinutes);
+            }
+            case "closing" -> {
+                startTimeInMinutes = random.nextInt(16, 19) * 60 - 15 * random.nextInt(0, 3);
+                yield 23 * 60;
+            }
+            default -> throw new RuntimeException("Something went wrong");
+        };
 
 
         Collections.shuffle(schEmpList);
