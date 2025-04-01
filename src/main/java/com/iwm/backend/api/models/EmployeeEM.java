@@ -1,13 +1,16 @@
 package com.iwm.backend.api.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 @Entity
-@Table(name = "employee")
+@Table(name = "Employee")
 public class EmployeeEM {
 
     @Id
@@ -34,11 +37,14 @@ public class EmployeeEM {
     private String contact;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<ShiftEM> shifts = new ArrayList<>();
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<ContractDataEM> contractData;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<EmployeePreferencesEM> preferences;
 }

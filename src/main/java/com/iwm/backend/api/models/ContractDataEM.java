@@ -1,13 +1,18 @@
 package com.iwm.backend.api.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
-@Table(name = "contract_data")
+@Table(name = "Contract_data")
 public class ContractDataEM {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private long id;
 
     @Column(name = "hourly_rate")
@@ -19,5 +24,6 @@ public class ContractDataEM {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id", nullable = false,
             foreignKey = @ForeignKey(name = "fk_contract_employee"))
-    private EmployeeEM employees;
+    @JsonBackReference
+    private EmployeeEM employee;
 }

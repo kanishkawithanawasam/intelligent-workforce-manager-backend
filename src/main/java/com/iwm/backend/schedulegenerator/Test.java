@@ -1,5 +1,6 @@
 package com.iwm.backend.schedulegenerator;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.iwm.backend.schedulegenerator.models.Shift;
 import com.iwm.backend.schedulegenerator.models.WeeklySchedule;
 import com.iwm.backend.schedulegenerator.models.*;
@@ -10,10 +11,16 @@ import java.util.TreeMap;
 
 public class Test {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JsonProcessingException {
         FuzzyGeneticScheduleGenerator generator = new FuzzyGeneticScheduleGenerator();
-        WeeklySchedule weeklySchedule = generator.genSchedule();
-
+        WeeklySchedule weeklySchedule = null;
+        try {
+            weeklySchedule = generator.genSchedule();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
         TreeMap<Integer,Integer> demandMap = new TreeMap<>();
         demandMap.put(13,4);
         demandMap.put(14,4);
@@ -22,11 +29,6 @@ public class Test {
 
         HourlyDemand demand = new HourlyDemand(date,demandMap);
 
-        /*
-        demand.setDate();
-        demand.setStartTimeInMinutes(demandMap.firstKey()*60);
-        demand.setEndTimeInMinutes(demandMap.lastKey()*60);
-        demand.setEndTimeInMinutes(15*60);*/
 
         for(Shift shift : weeklySchedule.getShifts()) {
             if(shift.getDate().equals(demand.getDate())) {

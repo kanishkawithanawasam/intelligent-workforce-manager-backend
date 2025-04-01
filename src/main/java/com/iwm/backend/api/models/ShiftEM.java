@@ -1,12 +1,15 @@
 package com.iwm.backend.api.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+@Data
 @Entity
-@Table(name = "shift")
+@Table(name = "Shift")
 public class ShiftEM {
 
     @Id
@@ -26,10 +29,12 @@ public class ShiftEM {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id", nullable = false,
             foreignKey = @ForeignKey(name = "fk_shift_employee"))
+    @JsonBackReference
     private EmployeeEM employee;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedule_id", nullable = false,
             foreignKey = @ForeignKey(name = "fk_shift_schedule"))
+    @JsonBackReference
     private WeeklyScheduleEM weeklySchedule;
 }
