@@ -1,0 +1,11 @@
+{
+  "opening_hours" :{
+    "open_at": 8,
+    "close_at": 23
+  },
+  "employee_hours_limits": {
+    "minimum_hours": 4,
+    "maximum_hours": 8
+  },
+  "minimum_employees_per_shift" : 3
+}

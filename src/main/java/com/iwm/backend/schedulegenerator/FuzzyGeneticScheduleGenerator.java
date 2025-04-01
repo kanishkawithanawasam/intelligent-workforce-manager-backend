@@ -1,5 +1,6 @@
 package com.iwm.backend.schedulegenerator;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.iwm.backend.schedulegenerator.configurations.FGAConfigs;
 import com.iwm.backend.schedulegenerator.models.Employee;
 import com.iwm.backend.schedulegenerator.models.Population;
@@ -8,6 +9,7 @@ import com.iwm.backend.schedulegenerator.models.Shift;
 import com.iwm.backend.schedulegenerator.util.CalculationsUtility;
 import com.iwm.backend.trial.EmloyeesReader;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -52,13 +54,10 @@ public class FuzzyGeneticScheduleGenerator{
      *
      * @return the most optimal schedule found after evolution
      */
-    public WeeklySchedule genSchedule(){
+    public WeeklySchedule genSchedule() throws IOException {
 
         // Generates the initial population
-        Population population = new Population(
-                3,
-                4,
-                8);
+        Population population = new Population();
 
         // Calculates fitness of each schedule in the population.
         double bestAccOnPopulation = 0;

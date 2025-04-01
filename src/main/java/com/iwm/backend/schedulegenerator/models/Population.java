@@ -1,9 +1,13 @@
 package com.iwm.backend.schedulegenerator.models;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.iwm.backend.schedulegenerator.configurations.BusinessConfigs;
 import com.iwm.backend.schedulegenerator.configurations.FGAConfigs;
 import com.iwm.backend.trial.DemandReader;
 import com.iwm.backend.trial.EmloyeesReader;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -21,17 +25,16 @@ public class Population {
 
 
 
+    public Population() throws IOException {
 
-    /**
-     * Generates a population / Pool of random shifts
-     * @param MINIMUM_EMPLOYEES_PER_SHIFT Minimum Employees required at any given time
-     * @param MINIMUM_HOURS_PER_SHIFT Minimum hours an employee can work in a given shift
-     * @param MAXIMUM_HOURS_PER_SHIFT Maximum hours an employee can work in a given shift
-     */
-    public Population(int MINIMUM_EMPLOYEES_PER_SHIFT, int MINIMUM_HOURS_PER_SHIFT, int MAXIMUM_HOURS_PER_SHIFT) {
-        this.MINIMUM_EMPLOYEES_PER_SHIFT = MINIMUM_EMPLOYEES_PER_SHIFT;
-        this.MINIMUM_HOURS_PER_SHIFT = MINIMUM_HOURS_PER_SHIFT;
-        this.MAXIMUM_HOURS_PER_SHIFT = MAXIMUM_HOURS_PER_SHIFT;
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        InputStream inputStream = getClass().getResourceAsStream("/BusinessConfigs.json");
+        BusinessConfigs businessConfigs = objectMapper.readValue( inputStream, BusinessConfigs.class);
+
+        this.MINIMUM_EMPLOYEES_PER_SHIFT = businessConfigs.minimum_employees_per_shift;
+        this.MINIMUM_HOURS_PER_SHIFT = businessConfigs.employee_hours_limits.minimum_hours;
+        this.MAXIMUM_HOURS_PER_SHIFT = businessConfigs.employee_hours_limits.maximum_hours;
         this.POPULATION_SIZE = FGAConfigs.POPULATION_SIZE;
         this.generatePopulation();
     }
@@ -95,32 +98,27 @@ public class Population {
                                       Map<Employee, List<LocalDate>> employeeDateMap) {
         Random random = new Random();
 
-        int startTimeInMinutes;
-        int endTimeInMinutes;
-
         // Determine start and end time of the shifts depending on the type
-        switch (type) {
-            case "opening":
-                startTimeInMinutes = 8*60;
-                endTimeInMinutes = getEndTime(startTimeInMinutes);
-                break;
-            case "midday":
-                startTimeInMinutes = random.nextInt(10,14)*60-15*random.nextInt(0,3);
-                endTimeInMinutes = getEndTime(startTimeInMinutes);
-                break;
-            case "evening":
-                startTimeInMinutes = random.nextInt(14,16)*60-15*random.nextInt(0,3);
-                endTimeInMinutes = getEndTime(startTimeInMinutes);
-                break;
-
-            case "closing":
-                startTimeInMinutes = random.nextInt(16,19)*60 - 15*random.nextInt(0,3);
-                endTimeInMinutes = 23*60;
-                break;
-            default:
-                throw new RuntimeException("Something went wrong");
-        }
-
+        int startTimeInMinutes;
+        int endTimeInMinutes = switch (type) {
+            case "opening" -> {
+                startTimeInMinutes = 8 * 60;
+                yield getEndTime(startTimeInMinutes);
+            }
+            case "midday" -> {
+                startTimeInMinutes = random.nextInt(10, 14) * 60 - 15 * random.nextInt(0, 3);
+                yield getEndTime(startTimeInMinutes);
+            }
+            case "evening" -> {
+                startTimeInMinutes = random.nextInt(14, 16) * 60 - 15 * random.nextInt(0, 3);
+                yield getEndTime(startTimeInMinutes);
+            }
+            case "closing" -> {
+                startTimeInMinutes = random.nextInt(16, 19) * 60 - 15 * random.nextInt(0, 3);
+                yield 23 * 60;
+            }
+            default -> throw new RuntimeException("Something went wrong");
+        };
 
 
         Collections.shuffle(schEmpList);

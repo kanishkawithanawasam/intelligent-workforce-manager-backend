@@ -4,10 +4,18 @@ import java.time.LocalDate;
 
 public class Shift implements Cloneable{
 
+    private long id;
+
     private int startTimeInMinutes;
+
     private int endTimeInMinutes;
+
     private Employee employee;
-    private final LocalDate date;
+
+    private WeeklySchedule weeklySchedule;
+
+    private LocalDate date;
+
     public Shift(LocalDate date, int startTimeInMinutes, int endTimeInMinutes,
                  Employee employee) {
         this.date = date;
@@ -15,6 +23,8 @@ public class Shift implements Cloneable{
         this.startTimeInMinutes = startTimeInMinutes;
         this.employee = employee;
     }
+
+    public Shift() {}
 
     public LocalDate getDate() {
         return date;
