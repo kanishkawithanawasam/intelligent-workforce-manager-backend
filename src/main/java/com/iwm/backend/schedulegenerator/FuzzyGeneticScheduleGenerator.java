@@ -7,8 +7,6 @@ import com.iwm.backend.schedulegenerator.models.Population;
 import com.iwm.backend.schedulegenerator.models.WeeklySchedule;
 import com.iwm.backend.schedulegenerator.models.Shift;
 import com.iwm.backend.schedulegenerator.util.CalculationsUtility;
-import com.iwm.backend.trial.EmloyeesReader;
-
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
@@ -37,9 +35,14 @@ import java.util.*;
  */
 public class FuzzyGeneticScheduleGenerator{
 
-    private final List<Employee> employees = EmloyeesReader.readEmployees();
+    private final List<Employee> employees;
+    private final Map<LocalDate,Map<Integer,Integer>> demand;
     private double MUTATION_RATE;
 
+    public FuzzyGeneticScheduleGenerator(List<Employee> employees,Map<LocalDate,Map<Integer,Integer>> demand) {
+        this.employees = employees;
+        this.demand = demand;
+    }
 
     /**
      * Runs the genetic algorithm to generate the optimal weekly schedule.
@@ -57,7 +60,7 @@ public class FuzzyGeneticScheduleGenerator{
     public WeeklySchedule genSchedule() throws IOException {
 
         // Generates the initial population
-        Population population = new Population();
+        Population population = new Population(employees, demand);
 
         // Calculates fitness of each schedule in the population.
         double bestAccOnPopulation = 0;
