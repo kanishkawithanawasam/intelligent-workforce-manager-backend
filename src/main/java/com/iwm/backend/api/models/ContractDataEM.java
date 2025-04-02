@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 
 @Data
 @Entity
@@ -20,6 +21,10 @@ public class ContractDataEM {
 
     @Column(name = "max_hours")
     private double maxHoursPerWeek;
+
+    @Column
+    @Getter
+    private String role;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id", nullable = false,
