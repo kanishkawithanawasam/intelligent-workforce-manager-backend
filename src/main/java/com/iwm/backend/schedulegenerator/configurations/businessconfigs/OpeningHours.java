@@ -1,4 +1,4 @@
-package com.iwm.backend.schedulegenerator.configurations;
+package com.iwm.backend.schedulegenerator.configurations.businessconfigs;
 
 public class OpeningHours {
     public int open_at;
