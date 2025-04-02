@@ -1,19 +1,29 @@
 package com.iwm.backend.schedulegenerator.models;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDate;
 
 public class Shift implements Cloneable{
 
     private long id;
 
+    @Setter
+    @Getter
     private int startTimeInMinutes;
 
+    @Setter
+    @Getter
     private int endTimeInMinutes;
 
+    @Getter
+    @Setter
     private Employee employee;
 
     private WeeklySchedule weeklySchedule;
 
+    @Getter
     private LocalDate date;
 
     public Shift(LocalDate date, int startTimeInMinutes, int endTimeInMinutes,
@@ -26,34 +36,6 @@ public class Shift implements Cloneable{
 
     public Shift() {}
 
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-
-    public int getStartTimeInMinutes() {
-        return startTimeInMinutes;
-    }
-
-    public void setStartTimeInMinutes(int startTimeInMinutes) {
-        this.startTimeInMinutes = startTimeInMinutes;
-    }
-
-    public int getEndTimeInMinutes() {
-        return endTimeInMinutes;
-    }
-
-    public void setEndTimeInMinutes(int endTimeInMinutes) {
-        this.endTimeInMinutes = endTimeInMinutes;
-    }
 
     public int getShiftLengthInMinutes() {
         return endTimeInMinutes - startTimeInMinutes;
