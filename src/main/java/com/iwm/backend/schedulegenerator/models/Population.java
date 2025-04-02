@@ -3,9 +3,6 @@ package com.iwm.backend.schedulegenerator.models;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iwm.backend.schedulegenerator.configurations.BusinessConfigs;
 import com.iwm.backend.schedulegenerator.configurations.FGAConfigs;
-import com.iwm.backend.trial.DemandReader;
-import com.iwm.backend.trial.EmloyeesReader;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
@@ -22,10 +19,11 @@ public class Population {
     private final int MINIMUM_HOURS_PER_SHIFT;
     private final int MAXIMUM_HOURS_PER_SHIFT ;
     private final int POPULATION_SIZE ;
+    private List<Employee> employees;
+    Map<LocalDate,Map<Integer,Integer>> demand;
 
 
-
-    public Population() throws IOException {
+    public Population(List<Employee> employees,Map<LocalDate,Map<Integer,Integer>> demand) throws IOException {
 
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -36,6 +34,10 @@ public class Population {
         this.MINIMUM_HOURS_PER_SHIFT = businessConfigs.employee_hours_limits.minimum_hours;
         this.MAXIMUM_HOURS_PER_SHIFT = businessConfigs.employee_hours_limits.maximum_hours;
         this.POPULATION_SIZE = FGAConfigs.POPULATION_SIZE;
+
+        this.employees = employees;
+        this.demand = demand;
+
         this.generatePopulation();
     }
 
@@ -61,10 +63,8 @@ public class Population {
      * @return A schedule generated randomly.
      */
     private WeeklySchedule generateRandomSchedule() {
-        WeeklySchedule weeklySchedule = new WeeklySchedule();
 
-        List<Employee> schEmployees = EmloyeesReader.readEmployees(); // Gives a list of employees
-        Map<LocalDate,Map<Integer,Integer>> demand = DemandReader.getDemand(); // Represents the hourly demand
+        WeeklySchedule weeklySchedule = new WeeklySchedule();
         Map<Employee, List<LocalDate>> employeeDateMap = new HashMap<>();
 
         String[] shiftType = {"opening","midday","evening","closing"};
@@ -74,7 +74,7 @@ public class Population {
 
             for (String type: shiftType) {
                 for (int i = 0; i < MINIMUM_EMPLOYEES_PER_SHIFT; i++) {
-                    Shift shift = generateRandomShift(schEmployees,type,date,employeeDateMap);
+                    Shift shift = generateRandomShift(type,date,employeeDateMap);
                     weeklySchedule.addShift(shift);
                 }
             }
@@ -88,12 +88,11 @@ public class Population {
 
     /**
      * This function generates a random Shift.
-     * @param schEmpList  List of Employee objects belong to current schedule.
      * @param type Type of the shift {opening, midday, evening , closing}
      * @param date Date of the shift
      * @return A Shift object with given data.
      */
-    private Shift generateRandomShift(List<Employee> schEmpList, String type,
+    private Shift generateRandomShift( String type,
                                       LocalDate date,
                                       Map<Employee, List<LocalDate>> employeeDateMap) {
         Random random = new Random();
@@ -121,10 +120,10 @@ public class Population {
         };
 
 
-        Collections.shuffle(schEmpList);
+        Collections.shuffle(employees);
         Employee selectedEmployee=null;
 
-        for(Employee emp :  schEmpList){
+        for(Employee emp :  employees){
             if (!employeeDateMap.getOrDefault(emp,new ArrayList<>()).contains(date)) {
                 selectedEmployee = emp;
                 List<LocalDate> employeeDateList = employeeDateMap.getOrDefault(emp,new ArrayList<>());
