@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class EmployeeMapper {
+public class EmployeeDomainMapper {
 
-    public Employee toDomain(EmployeeEM em){
+    public static Employee toDomain(EmployeeEM em){
 
         if(em.getContractData().isEmpty()){
             return new Employee();
@@ -33,7 +33,7 @@ public class EmployeeMapper {
         }
     }
 
-    public List<Employee> toDomainList(List<EmployeeEM> employeeEMList){
-        return new ArrayList<>(employeeEMList.stream().map(this::toDomain).toList());
+    public static List<Employee> toDomainList(List<EmployeeEM> employeeEMList){
+        return new ArrayList<>(employeeEMList.stream().map(EmployeeDomainMapper::toDomain).toList());
     }
 }

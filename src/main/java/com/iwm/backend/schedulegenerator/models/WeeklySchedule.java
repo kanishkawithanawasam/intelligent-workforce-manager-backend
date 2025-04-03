@@ -20,7 +20,7 @@ public class WeeklySchedule {
 
     public WeeklySchedule() {}
 
-
+    @Getter
     private final Map<LocalDate, List<Shift>> shiftDateMap = new HashMap<>();
 
     @Getter

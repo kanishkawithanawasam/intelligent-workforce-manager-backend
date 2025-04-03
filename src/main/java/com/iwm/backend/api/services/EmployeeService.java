@@ -1,7 +1,7 @@
 package com.iwm.backend.api.services;
 
 
-import com.iwm.backend.api.mappers.EmployeeMapper;
+import com.iwm.backend.api.mappers.EmployeeDomainMapper;
 import com.iwm.backend.api.repository.EmployeeRepository;
 import com.iwm.backend.schedulegenerator.models.Employee;
 import jakarta.transaction.Transactional;
@@ -13,16 +13,16 @@ import java.util.List;
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-    private final EmployeeMapper employeeMapper;
+    private final EmployeeDomainMapper employeeDomainMapper;
 
-    public EmployeeService(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper) {
+    public EmployeeService(EmployeeRepository employeeRepository, EmployeeDomainMapper employeeDomainMapper) {
         this.employeeRepository = employeeRepository;
-        this.employeeMapper = employeeMapper;
+        this.employeeDomainMapper = employeeDomainMapper;
     }
 
     @Transactional
     public List<Employee> getEmployeesForScheduling(){
-        return employeeMapper.toDomainList(employeeRepository.findAll());
+        return employeeDomainMapper.toDomainList(employeeRepository.findAll());
     }
 
 }

@@ -5,23 +5,17 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
+
+@Setter
+@Getter
 public class Shift implements Cloneable{
 
-    @Setter
-    @Getter
     private int startTimeInMinutes;
 
-    @Setter
-    @Getter
     private int endTimeInMinutes;
 
-    @Getter
-    @Setter
     private Employee employee;
 
-    private WeeklySchedule weeklySchedule;
-
-    @Getter
     private LocalDate date;
 
     public Shift(LocalDate date, int startTimeInMinutes, int endTimeInMinutes,
@@ -31,9 +25,6 @@ public class Shift implements Cloneable{
         this.startTimeInMinutes = startTimeInMinutes;
         this.employee = employee;
     }
-
-    public Shift() {}
-
 
     public int getShiftLengthInMinutes() {
         return endTimeInMinutes - startTimeInMinutes;

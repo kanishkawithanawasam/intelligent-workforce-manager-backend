@@ -1,8 +1,11 @@
 package com.iwm.backend.api.controllers;
 
+import com.iwm.backend.api.dtos.WeeklyScheduleDTO;
+import com.iwm.backend.api.mappers.WeeklyScheduleDTOMapper;
 import com.iwm.backend.api.models.EmployeeEM;
 import com.iwm.backend.api.repository.EmployeeRepository;
 import com.iwm.backend.api.services.EmployeeService;
+import com.iwm.backend.api.services.SchedulerService;
 import com.iwm.backend.schedulegenerator.FuzzyGeneticScheduleGenerator;
 import com.iwm.backend.schedulegenerator.models.Employee;
 import com.iwm.backend.schedulegenerator.models.WeeklySchedule;
@@ -18,21 +21,21 @@ import java.util.List;
 @RestController()
 @RequestMapping("/schedules")
 public class ScheduleController {
+    private final SchedulerService schedulerService;
 
-    private final EmployeeService employeeService;
+    private WeeklySchedule weeklySchedule;
 
-    public ScheduleController(EmployeeService employeeService) {
-        this.employeeService = employeeService;
+    public ScheduleController(SchedulerService schedulerService) {
+        this.schedulerService = schedulerService;
     }
 
     @GetMapping("/generate")
-    public WeeklySchedule getWeeklySchedule() throws IOException {
-        List<Employee> employees = employeeService.getEmployeesForScheduling();
-        for (Employee employee : employees) {
-            System.out.println(employee);
-        }
-        FuzzyGeneticScheduleGenerator fuzzyGeneticScheduleGenerator =
-                new FuzzyGeneticScheduleGenerator(employees, DemandReader.getDemand());
-        return fuzzyGeneticScheduleGenerator.genSchedule();
+    public WeeklyScheduleDTO generateWeeklySchedule() throws IOException {
+        WeeklyScheduleDTO scheduleDTO =
+                WeeklyScheduleDTOMapper.toDTO(schedulerService.generateWeeklySchedule());
+        return scheduleDTO;
     }
+
+
+
 }
