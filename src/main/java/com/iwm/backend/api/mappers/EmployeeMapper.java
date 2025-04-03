@@ -6,6 +6,7 @@ import com.iwm.backend.api.models.EmployeePreferencesEM;
 import com.iwm.backend.schedulegenerator.models.Employee;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -33,6 +34,6 @@ public class EmployeeMapper {
     }
 
     public List<Employee> toDomainList(List<EmployeeEM> employeeEMList){
-        return employeeEMList.stream().map(this::toDomain).toList();
+        return new ArrayList<>(employeeEMList.stream().map(this::toDomain).toList());
     }
 }

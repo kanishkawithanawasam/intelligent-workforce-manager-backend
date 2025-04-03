@@ -7,8 +7,6 @@ import java.time.LocalDate;
 
 public class Shift implements Cloneable{
 
-    private long id;
-
     @Setter
     @Getter
     private int startTimeInMinutes;
