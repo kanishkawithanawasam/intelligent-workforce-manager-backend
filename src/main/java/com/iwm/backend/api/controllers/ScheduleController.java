@@ -23,14 +23,12 @@ public class ScheduleController {
 
     @GetMapping("/generate")
     public WeeklyScheduleDTO generateWeeklySchedule() throws IOException {
-        WeeklyScheduleDTO scheduleDTO =
-                WeeklyScheduleDTOMapper.toDTO(schedulerService.generateWeeklySchedule());
-        return scheduleDTO;
+        return WeeklyScheduleDTOMapper.toDTO(schedulerService.generateWeeklySchedule());
     }
 
     @GetMapping("/getschedule")
     public WeeklyScheduleDTO getWeeklySchedule() throws IOException {
-        return WeeklyScheduleDTOMapper.toDTO(schedulerService.getWeeklySchedule());
+        return WeeklyScheduleDTOMapper.toDTO(schedulerService.getThisWeekSchedule());
     }
 
 }
