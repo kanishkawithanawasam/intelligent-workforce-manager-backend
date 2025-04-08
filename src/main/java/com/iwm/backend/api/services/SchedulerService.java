@@ -14,20 +14,14 @@ import java.util.List;
 
 @Service
 public class SchedulerService {
-
-    private WeeklySchedule weeklySchedule;
-
     private final EmployeeRepository employeeRepository;
 
     public SchedulerService(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
 
-    public WeeklySchedule getWeeklySchedule() throws IOException {
-        if (weeklySchedule == null) {
-            weeklySchedule = this.generateWeeklySchedule();
-        }
-        return weeklySchedule;
+    public WeeklySchedule getThisWeekSchedule() throws IOException {
+        return null;
     }
 
     public WeeklySchedule generateWeeklySchedule() throws IOException {
@@ -35,7 +29,6 @@ public class SchedulerService {
         FuzzyGeneticScheduleGenerator generator =
                 new FuzzyGeneticScheduleGenerator(employees,
                         DemandReader.getDemand());
-        this.weeklySchedule = generator.genSchedule();
-        return this.weeklySchedule;
+        return generator.genSchedule();
     }
 }
