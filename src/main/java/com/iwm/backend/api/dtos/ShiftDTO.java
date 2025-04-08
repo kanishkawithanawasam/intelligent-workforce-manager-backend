@@ -2,7 +2,6 @@ package com.iwm.backend.api.dtos;
 
 import lombok.Data;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
