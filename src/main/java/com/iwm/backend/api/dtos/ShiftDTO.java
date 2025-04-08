@@ -2,6 +2,7 @@ package com.iwm.backend.api.dtos;
 
 import lombok.Data;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -10,16 +11,17 @@ public class ShiftDTO{
 
     private long employeeId;
 
-    private String employeeName;
+    private long shiftId;
 
     private LocalDate date;
+
+    private String employeeName;
 
     private LocalTime startTime;
 
     private LocalTime endTime;
 
-    public ShiftDTO(LocalDate date, LocalTime startTime, LocalTime endTime) {
-        this.date = date;
+    public ShiftDTO( LocalTime startTime, LocalTime endTime) {
         this.startTime = startTime;
         this.endTime = endTime;
     }

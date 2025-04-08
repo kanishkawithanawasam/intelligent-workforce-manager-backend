@@ -4,13 +4,14 @@ package com.iwm.backend.api.dtos;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
+import java.util.TreeMap;
 
 @Data
 public class WeeklyScheduleDTO {
 
-    private Map<LocalDate, List<ShiftDTO>> shifts;
+    private LocalDate scheduleStartDate;
+
+    private TreeMap<ScheduleEmployeeDTO, ShiftDTO> shifts;
 
     private double cost;
 }

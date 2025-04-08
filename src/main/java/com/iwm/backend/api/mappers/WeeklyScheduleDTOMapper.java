@@ -27,7 +27,6 @@ public class WeeklyScheduleDTOMapper {
             }
         }
 
-        dto.setShifts(shiftsMap);
         return dto;
     }
 }

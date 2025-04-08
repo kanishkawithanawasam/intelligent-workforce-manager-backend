@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 
+import java.time.LocalDate;
+
 @Data
 @Entity
 @Table(name = "Contract_data")
@@ -22,9 +24,18 @@ public class ContractDataEM {
     @Column(name = "max_hours")
     private double maxHoursPerWeek;
 
+    @Transient
+    private double contractedHours;
+
     @Column
     @Getter
     private String role;
+
+    @Transient
+    private LocalDate startDate;
+
+    @Transient
+    private LocalDate endDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id", nullable = false,
