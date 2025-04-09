@@ -15,7 +15,8 @@ import java.util.*;
 
 public class WeeklyScheduleDTOMapper {
 
-    public static WeeklyScheduleDTO toDTO(WeeklySchedule weeklySchedule) {
+
+    public static WeeklyScheduleDTO toWeeklyScheduleDTO(WeeklySchedule weeklySchedule) {
 
         WeeklyScheduleDTO dto = new WeeklyScheduleDTO();
         if (weeklySchedule.getShifts() == null) {
