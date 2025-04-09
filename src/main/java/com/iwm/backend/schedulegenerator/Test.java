@@ -1,7 +1,7 @@
 package com.iwm.backend.schedulegenerator;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.iwm.backend.schedulegenerator.models.Shift;
+import com.iwm.backend.schedulegenerator.models.ShiftGO;
 import com.iwm.backend.schedulegenerator.models.WeeklySchedule;
 import com.iwm.backend.schedulegenerator.models.*;
 import com.iwm.backend.trial.DemandReader;
@@ -37,7 +37,7 @@ public class Test {
         HourlyDemand demand = new HourlyDemand(date,demandMap);
 
 
-        for(Shift shift : weeklySchedule.getShifts()) {
+        for(ShiftGO shift : weeklySchedule.getShifts()) {
             if(shift.getDate().equals(demand.getDate())) {
                 System.out.println(shift);
             }
@@ -48,9 +48,9 @@ public class Test {
 
         HourlyScheduleOptimiser optimiser =
                 new HourlyScheduleOptimiser(weeklySchedule, demand);
-        List<Shift> shifts = optimiser.getOptimisedRealTimeSchedule().getShifts();
+        List<ShiftGO> shifts = optimiser.getOptimisedRealTimeSchedule().getShifts();
 
-        for (Shift shift : shifts) {
+        for (ShiftGO shift : shifts) {
             System.out.println(shift);
         }
     }

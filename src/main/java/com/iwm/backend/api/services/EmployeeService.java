@@ -3,7 +3,7 @@ package com.iwm.backend.api.services;
 
 import com.iwm.backend.api.dtos.EmployeeBasicInfoDTO;
 import com.iwm.backend.api.dtos.EmployeeFileDTO;
-import com.iwm.backend.api.mappers.EmployeeDomainMapper;
+import com.iwm.backend.api.dtos.mappers.EmployeeDomainMapper;
 import com.iwm.backend.api.models.ContractDataEM;
 import com.iwm.backend.api.models.EmployeeEM;
 import com.iwm.backend.api.repository.EmployeeRepository;

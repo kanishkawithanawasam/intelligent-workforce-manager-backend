@@ -1,8 +1,9 @@
 package com.iwm.backend.api.services;
 
-
-import com.iwm.backend.api.mappers.EmployeeDomainMapper;
+import com.iwm.backend.api.dtos.mappers.EmployeeDomainMapper;
+import com.iwm.backend.api.models.WeeklyScheduleEM;
 import com.iwm.backend.api.repository.EmployeeRepository;
+import com.iwm.backend.api.repository.WeeklyScheduleRepository;
 import com.iwm.backend.schedulegenerator.FuzzyGeneticScheduleGenerator;
 import com.iwm.backend.schedulegenerator.models.Employee;
 import com.iwm.backend.schedulegenerator.models.WeeklySchedule;
@@ -15,13 +16,15 @@ import java.util.List;
 @Service
 public class SchedulerService {
     private final EmployeeRepository employeeRepository;
+    private final WeeklyScheduleRepository weeklyScheduleRepository;
 
-    public SchedulerService(EmployeeRepository employeeRepository) {
+    public SchedulerService(EmployeeRepository employeeRepository, WeeklyScheduleRepository weeklyScheduleRepository) {
         this.employeeRepository = employeeRepository;
+        this.weeklyScheduleRepository = weeklyScheduleRepository;
     }
 
-    public WeeklySchedule getThisWeekSchedule() throws IOException {
-        return null;
+    public WeeklyScheduleEM getThisWeekSchedule() throws IOException {
+        return weeklyScheduleRepository.findTopByOrderByCreateTimeDesc();
     }
 
     public WeeklySchedule generateWeeklySchedule() throws IOException {
@@ -31,4 +34,11 @@ public class SchedulerService {
                         DemandReader.getDemand());
         return generator.genSchedule();
     }
+
+    public void saveWeeklySchedule(WeeklyScheduleEM weeklyScheduleEM) throws IOException {
+        weeklyScheduleRepository.save(weeklyScheduleEM);
+    }
+
+
+
 }

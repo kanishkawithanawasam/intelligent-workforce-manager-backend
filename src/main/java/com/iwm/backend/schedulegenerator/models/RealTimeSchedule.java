@@ -7,7 +7,7 @@ import java.util.List;
  * Represents a real-time employee shift schedule along with an associated fitness score
  * used in optimisation algorithms such as Simulated Annealing or Genetic Algorithms.
  *
- * <p>The {@code RealTimeSchedule} contains a list of {@link Shift} objects and a fitness
+ * <p>The {@code RealTimeSchedule} contains a list of {@link ShiftGO} objects and a fitness
  * value that reflects how well the schedule satisfies constraints and optimisation goals.</p>
  */
 public class RealTimeSchedule{
@@ -21,7 +21,7 @@ public class RealTimeSchedule{
     /**
      * The list of shifts assigned in this real-time schedule.
      */
-    private final List<Shift> shifts = new ArrayList<>();
+    private final List<ShiftGO> shifts = new ArrayList<>();
 
 
     /**
@@ -46,9 +46,9 @@ public class RealTimeSchedule{
     /**
      * Returns the list of shifts in the real-time schedule.
      *
-     * @return a list of {@link Shift} objects
+     * @return a list of {@link ShiftGO} objects
      */
-    public List<Shift> getShifts() {
+    public List<ShiftGO> getShifts() {
         return shifts;
     }
 

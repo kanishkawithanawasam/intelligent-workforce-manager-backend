@@ -74,7 +74,7 @@ public class Population {
 
             for (String type: shiftType) {
                 for (int i = 0; i < MINIMUM_EMPLOYEES_PER_SHIFT; i++) {
-                    Shift shift = generateRandomShift(type,date,employeeDateMap);
+                    ShiftGO shift = generateRandomShift(type,date,employeeDateMap);
                     weeklySchedule.addShift(shift);
                 }
             }
@@ -87,14 +87,14 @@ public class Population {
 
 
     /**
-     * This function generates a random Shift.
+     * This function generates a random ShiftGO.
      * @param type Type of the shift {opening, midday, evening , closing}
      * @param date Date of the shift
-     * @return A Shift object with given data.
+     * @return A ShiftGO object with given data.
      */
-    private Shift generateRandomShift( String type,
-                                      LocalDate date,
-                                      Map<Employee, List<LocalDate>> employeeDateMap) {
+    private ShiftGO generateRandomShift(String type,
+                                        LocalDate date,
+                                        Map<Employee, List<LocalDate>> employeeDateMap) {
         Random random = new Random();
 
         // Determine start and end time of the shifts depending on the type
@@ -137,7 +137,7 @@ public class Population {
             throw new RuntimeException("The selected employee is null");
         }
 
-        return new Shift(date,startTimeInMinutes,endTimeInMinutes,selectedEmployee);
+        return new ShiftGO(date,startTimeInMinutes,endTimeInMinutes,selectedEmployee);
 
     }
 

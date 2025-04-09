@@ -1,7 +1,7 @@
 package com.iwm.backend.schedulegenerator;
 
 import com.iwm.backend.schedulegenerator.models.Employee;
-import com.iwm.backend.schedulegenerator.models.Shift;
+import com.iwm.backend.schedulegenerator.models.ShiftGO;
 import com.iwm.backend.schedulegenerator.models.WeeklySchedule;
 import com.iwm.backend.schedulegenerator.configurations.HSOConfigs;
 import com.iwm.backend.schedulegenerator.exceptions.DemandNotFoundException;
@@ -76,7 +76,7 @@ public class HourlyScheduleOptimiser{
         Random random = new Random();
 
         // Initialise the current solution by selecting shifts that starts or ends within demand period.
-        for (Shift shift :weeklySchedule.getShifts()) {
+        for (ShiftGO shift :weeklySchedule.getShifts()) {
             if (shift.getDate().equals(hourlyDemand.getDate()) &&
                     (shiftStartOrEndInDmdPeriod(shift) == -1 || shiftStartOrEndInDmdPeriod(shift) == 1)) {
                 currentSolution.getShifts().add(shift);
@@ -216,7 +216,7 @@ public class HourlyScheduleOptimiser{
         }
 
         // Update the employees count
-        for (Shift shift : realTimeSchedule.getShifts()) {
+        for (ShiftGO shift : realTimeSchedule.getShifts()) {
             int counter;
             switch (shiftStartOrEndInDmdPeriod(shift)){
 
@@ -280,7 +280,7 @@ public class HourlyScheduleOptimiser{
         double totalViolationPenalty = 0.00;
 
         // Calculate daily hours violations penalty.
-        for (Shift shift : newRealTimeSchedule.getShifts()) {
+        for (ShiftGO shift : newRealTimeSchedule.getShifts()) {
             if(shift.getShiftLengthInMinutes()/60.0 < HSOConfigs.DAILY_MIN_HOURS ||
                 shift.getShiftLengthInMinutes()/60.0 > HSOConfigs.DAILY_MAX_HOURS) {
                 totalViolationPenalty += HSOConfigs.VIOLATIONS_PENALTY_DAYILY_HOURS;
@@ -327,7 +327,7 @@ public class HourlyScheduleOptimiser{
      * @return an integer code indicating the shift's overlap type:
      *         {@code -1} for end-inside, {@code 1} for start-inside, {@code 0} for no overlap
      */
-    private int shiftStartOrEndInDmdPeriod(Shift shift) {
+    private int shiftStartOrEndInDmdPeriod(ShiftGO shift) {
 
         // Case 1: The shift ends within the demand period
         if(hourlyDemand.getStartTimeInMinutes()< shift.getEndTimeInMinutes() &&
@@ -372,17 +372,17 @@ public class HourlyScheduleOptimiser{
         RealTimeSchedule tempSchedule = new RealTimeSchedule();
 
         // Iterate through each shift in the original schedule
-        for (Shift shift : realTimeSchedule.getShifts()) {
+        for (ShiftGO shift : realTimeSchedule.getShifts()) {
 
             // Clone the shift to avoid modifying the original directly
-            Shift temp = shift.clone();
+            ShiftGO temp = shift.clone();
 
-            // Case 1: Shift ends within the demand window — mutate its end time
+            // Case 1: ShiftGO ends within the demand window — mutate its end time
             if (shiftStartOrEndInDmdPeriod(temp) == -1) {
                 temp.setEndTimeInMinutes(
                         hourlyDemand.getStartTimeInMinutes() + random.nextInt(0, maximumAdjustment) * 15);
             }
-            // Case 2: Shift starts within the demand window — mutate its start time
+            // Case 2: ShiftGO starts within the demand window — mutate its start time
             else if (shiftStartOrEndInDmdPeriod(shift) == 1) {
                 temp.setStartTimeInMinutes(
                         hourlyDemand.getEndTimeInMinutes() - random.nextInt(0, maximumAdjustment) * 15);

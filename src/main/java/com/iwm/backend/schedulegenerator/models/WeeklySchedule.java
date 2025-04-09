@@ -16,12 +16,12 @@ public class WeeklySchedule {
     private long id;
 
     @Getter
-    private List<Shift> shifts = new ArrayList<>();
+    private List<ShiftGO> shifts = new ArrayList<>();
 
     public WeeklySchedule() {}
 
     @Getter
-    private final Map<LocalDate, List<Shift>> shiftDateMap = new HashMap<>();
+    private final Map<LocalDate, List<ShiftGO>> shiftDateMap = new HashMap<>();
 
     @Getter
     private final Map<LocalDate, List<Employee>> empDateMap= new HashMap<>();
@@ -30,7 +30,7 @@ public class WeeklySchedule {
     @Getter
     private double fitnessScore;
 
-    public void addShift(Shift shift) {
+    public void addShift(ShiftGO shift) {
 
         if (!empDateMap.containsKey(shift.getDate())) {
             List<Employee> tempEmpList = new ArrayList<>();
@@ -42,7 +42,7 @@ public class WeeklySchedule {
 
         // Used for JSON bindings
         if(!shiftDateMap.containsKey(shift.getDate())){
-            List<Shift> shiftList= new ArrayList<>();
+            List<ShiftGO> shiftList= new ArrayList<>();
             shiftList.add(shift);
             shiftDateMap.put(shift.getDate(),shiftList);
         }else {
@@ -56,7 +56,7 @@ public class WeeklySchedule {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("Schedule fitnessScore=").append(fitnessScore).append("\n");
-        for (Shift shift : shifts) {
+        for (ShiftGO shift : shifts) {
             builder.append(shift.toString()).append("\n");
         }
         return builder.toString();

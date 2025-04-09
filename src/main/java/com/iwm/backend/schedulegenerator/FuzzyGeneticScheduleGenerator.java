@@ -1,11 +1,10 @@
 package com.iwm.backend.schedulegenerator;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.iwm.backend.schedulegenerator.configurations.FGAConfigs;
 import com.iwm.backend.schedulegenerator.models.Employee;
 import com.iwm.backend.schedulegenerator.models.Population;
+import com.iwm.backend.schedulegenerator.models.ShiftGO;
 import com.iwm.backend.schedulegenerator.models.WeeklySchedule;
-import com.iwm.backend.schedulegenerator.models.Shift;
 import com.iwm.backend.schedulegenerator.util.CalculationsUtility;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -175,7 +174,7 @@ public class FuzzyGeneticScheduleGenerator{
 
             // Selects a random shift to mutate
             int index = rand.nextInt(weeklySchedule.getShifts().size());
-            Shift shiftToMutate = weeklySchedule.getShifts().get(index);
+            ShiftGO shiftToMutate = weeklySchedule.getShifts().get(index);
 
             LocalDate date = shiftToMutate.getDate();
             Employee newEmployee;
@@ -392,7 +391,7 @@ public class FuzzyGeneticScheduleGenerator{
 
         double cost = 0;
 
-        for (Shift shift : weeklySchedule.getShifts()) {
+        for (ShiftGO shift : weeklySchedule.getShifts()) {
             cost+=shift.getEmployee().getCost();
         }
 
@@ -429,7 +428,7 @@ public class FuzzyGeneticScheduleGenerator{
      *
      * <p>Two types of violations are considered:</p>
      * <ul>
-     *     <li><b>Daily Shift Conflict:</b> An employee assigned to more than one shift on the same day (penalty: 5000).</li>
+     *     <li><b>Daily ShiftGO Conflict:</b> An employee assigned to more than one shift on the same day (penalty: 5000).</li>
      *     <li><b>Weekly Hour Limit Exceeded:</b> An employee works more than their allowed weekly hours (penalty: 500).</li>
      * </ul>
      *
@@ -444,7 +443,7 @@ public class FuzzyGeneticScheduleGenerator{
         Map<Employee, HashMap<LocalDate, Integer>> dateEmployeeMap = new HashMap<>();
 
         // Populates the dateEmployeeMap with shift counts per day per employee
-        for (Shift shift : weeklySchedule.getShifts()) {
+        for (ShiftGO shift : weeklySchedule.getShifts()) {
             Employee employee = shift.getEmployee();
 
             // Adds the employee and date count to the map if it doesn't contain already

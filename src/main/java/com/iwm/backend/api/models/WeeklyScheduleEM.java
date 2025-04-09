@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,9 @@ public class WeeklyScheduleEM {
 
     @Column(name = "created_at")
     private LocalDateTime createTime;
+
+    @Column(name = "week_start_date")
+    private LocalDate scheduleStartDate;
 
     @OneToMany(mappedBy = "weeklySchedule", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference

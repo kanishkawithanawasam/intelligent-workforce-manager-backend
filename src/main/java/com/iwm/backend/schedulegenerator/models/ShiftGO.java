@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Setter
 @Getter
-public class Shift implements Cloneable{
+public class ShiftGO implements Cloneable{
 
     private int startTimeInMinutes;
 
@@ -18,8 +18,8 @@ public class Shift implements Cloneable{
 
     private LocalDate date;
 
-    public Shift(LocalDate date, int startTimeInMinutes, int endTimeInMinutes,
-                 Employee employee) {
+    public ShiftGO(LocalDate date, int startTimeInMinutes, int endTimeInMinutes,
+                   Employee employee) {
         this.date = date;
         this.endTimeInMinutes = endTimeInMinutes;
         this.startTimeInMinutes = startTimeInMinutes;
@@ -38,9 +38,9 @@ public class Shift implements Cloneable{
 
 
     @Override
-    public Shift clone() {
+    public ShiftGO clone() {
         try {
-            return (Shift) super.clone();
+            return (ShiftGO) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }

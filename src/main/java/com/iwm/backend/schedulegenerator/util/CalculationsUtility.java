@@ -1,7 +1,7 @@
 package com.iwm.backend.schedulegenerator.util;
 
 import com.iwm.backend.schedulegenerator.models.Employee;
-import com.iwm.backend.schedulegenerator.models.Shift;
+import com.iwm.backend.schedulegenerator.models.ShiftGO;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,9 +24,9 @@ public class CalculationsUtility {
      * @param shifts the list of shifts used to calculate hours worked
      * @return a map of employees to their total hours worked
      */
-    public static Map<Employee,Double> countTotalHours(List<Shift> shifts){
+    public static Map<Employee,Double> countTotalHours(List<ShiftGO> shifts){
         Map<Employee,Double> totalHours = new HashMap<>();
-        for (Shift shift : shifts) {
+        for (ShiftGO shift : shifts) {
             totalHours.put(shift.getEmployee(),
                     totalHours.getOrDefault(
                             shift.getEmployee(),

@@ -22,7 +22,7 @@ public class Employee{
 
     private double cost;
 
-    private List<Shift> shifts;
+    private List<ShiftGO> shifts;
 
     public Employee(){
     }

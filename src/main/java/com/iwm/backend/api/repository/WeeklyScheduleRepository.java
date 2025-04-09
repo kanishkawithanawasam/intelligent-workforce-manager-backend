@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface WeeklyScheduleRepository extends JpaRepository<WeeklyScheduleEM, Long> {
+    WeeklyScheduleEM findTopByOrderByCreateTimeDesc();
 }

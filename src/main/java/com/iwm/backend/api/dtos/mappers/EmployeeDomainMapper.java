@@ -1,4 +1,4 @@
-package com.iwm.backend.api.mappers;
+package com.iwm.backend.api.dtos.mappers;
 
 import com.iwm.backend.api.models.ContractDataEM;
 import com.iwm.backend.api.models.EmployeeEM;
