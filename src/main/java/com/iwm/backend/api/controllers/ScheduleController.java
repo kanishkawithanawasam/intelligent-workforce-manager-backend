@@ -10,13 +10,14 @@ import com.iwm.backend.schedulegenerator.models.WeeklySchedule;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.List;
 
 @RestController()
 @RequestMapping("/schedules")
 public class ScheduleController {
     private final SchedulerService schedulerService;
 
-    private WeeklySchedule weeklySchedule;
 
     public ScheduleController(SchedulerService schedulerService) {
         this.schedulerService = schedulerService;
@@ -24,14 +25,20 @@ public class ScheduleController {
 
 
     @GetMapping("/generate")
-    public WeeklyScheduleDTO generateWeeklySchedule() throws IOException {
-        return WeeklyScheduleDTOMapper.toDTO(schedulerService.generateWeeklySchedule());
+    public WeeklyScheduleDTO generateWeeklySchedule(@RequestBody LocalDate startDate) throws IOException {
+        return  this.schedulerService.generateWeeklySchedule();
+    }
+
+    @GetMapping("/get-available-start-dates")
+    public List<LocalDate> getAvailableDate(){
+        return schedulerService.getWeekStartDates();
     }
 
     @GetMapping("/getschedule")
     public WeeklyScheduleDTO getWeeklySchedule() throws IOException {
 
         WeeklyScheduleDTO scheduleDTO;
+
         try {
             scheduleDTO = WeeklyScheduleDTOMapper.
                     toWeeklyScheduleDTO(schedulerService.getThisWeekSchedule());
@@ -47,8 +54,7 @@ public class ScheduleController {
 
     @PostMapping("/save")
     public void save(@RequestBody WeeklyScheduleDTO weeklyScheduleDTO) throws IOException {
-        schedulerService.saveWeeklySchedule(WeeklyScheduleDTOMapper
-                .toWeeklyScheduleEM(weeklyScheduleDTO));
+        schedulerService.saveWeeklySchedule(weeklyScheduleDTO);
     }
 
 
