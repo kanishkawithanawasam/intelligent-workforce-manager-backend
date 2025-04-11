@@ -1,8 +1,11 @@
 package com.iwm.backend.api.controllers;
 
+import com.iwm.backend.api.dtos.ScheduleRequestDTO;
 import com.iwm.backend.api.dtos.WeeklyScheduleDTO;
 import com.iwm.backend.api.services.SchedulerService;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -21,28 +24,30 @@ public class ScheduleController {
 
 
     @PostMapping("/preview")
-    public WeeklyScheduleDTO previewSchedule(
-            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate)
+    public ResponseEntity<?> previewSchedule(@RequestBody ScheduleRequestDTO scheduleRequestDTO)
             throws IOException {
-        return schedulerService.generateWeeklySchedule(startDate);
+        return ResponseEntity.ok(schedulerService.generateWeeklySchedule(scheduleRequestDTO));
     }
 
-    @GetMapping("/available-dates")
-    public List<LocalDate> getAvailableDate(){
-        return schedulerService.getWeekStartDates();
+    @GetMapping("/available-start-dates")
+    public ResponseEntity<?> getAvailableDate(){
+        List<LocalDate> dates = schedulerService.getWeekStartDates();
+        return ResponseEntity.ok(dates);
     }
 
 
-    @GetMapping("/{startDate}")
-    public WeeklyScheduleDTO getWeekSchedule(
-            @PathVariable("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate)
-            throws IOException {
-        return this.schedulerService.getWeekScheduleFromWeek(startDate);
+    @GetMapping("/by-date")
+    public ResponseEntity<?> getScheduleByStartDate(
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate) {
+        WeeklyScheduleDTO dto= schedulerService.getWeekScheduleFromDate(startDate);
+        return ResponseEntity.ok(dto);
+
     }
 
-    @PutMapping
-    public void save(@RequestBody WeeklyScheduleDTO weeklyScheduleDTO) throws IOException {
+    @PostMapping
+    public ResponseEntity<?> save(@RequestBody WeeklyScheduleDTO weeklyScheduleDTO){
         schedulerService.saveWeeklySchedule(weeklyScheduleDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(weeklyScheduleDTO);
     }
 
 }
