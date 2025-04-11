@@ -28,8 +28,9 @@ public class SchedulerService {
         this.weeklyScheduleRepository = weeklyScheduleRepository;
     }
 
-    public WeeklyScheduleEM getThisWeekSchedule() throws IOException {
-        return weeklyScheduleRepository.findTopByOrderByCreateTimeDesc();
+
+    public WeeklyScheduleDTO getWeekScheduleFromWeek(LocalDate date) throws IOException {
+        return WeeklyScheduleDTOMapper.toWeeklyScheduleDTO(weeklyScheduleRepository.findByScheduleStartDate(date));
     }
 
     public List<LocalDate> getWeekStartDates() {
@@ -55,14 +56,14 @@ public class SchedulerService {
         return weekStartDates;
     }
 
-    public WeeklyScheduleDTO generateWeeklySchedule() throws IOException {
+    public WeeklyScheduleDTO generateWeeklySchedule(LocalDate startDate) throws IOException {
         List<Employee> employees = EmployeeDomainMapper.toDomainList(employeeRepository.findAll());
         FuzzyGeneticScheduleGenerator generator =
                 new FuzzyGeneticScheduleGenerator(employees,
                         DemandReader.getDemand());
         WeeklyScheduleDTO dto = WeeklyScheduleDTOMapper.toWeeklyScheduleDTO(generator.genSchedule());
-        dto.setScheduleStartDate(LocalDate.now());
-        return null;
+        dto.setScheduleStartDate(startDate);
+        return dto;
     }
 
     public void saveWeeklySchedule(WeeklyScheduleDTO weeklyScheduleDTO) throws IOException {
