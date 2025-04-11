@@ -71,8 +71,7 @@ public class WeeklyScheduleDTOMapper {
         WeeklyScheduleDTO weeklyScheduleDTO = new WeeklyScheduleDTO();
         weeklyScheduleDTO.setScheduleStartDate(weeklyScheduleEM.getScheduleStartDate());
         weeklyScheduleDTO.setShifts(ShiftDTOMapper.toShiftDTOList(weeklyScheduleEM.getShifts()));
-        LocalDateTime createdDate =  weeklyScheduleEM.getCreateTime();
-        weeklyScheduleDTO.setScheduleStartDate(LocalDate.from(createdDate));
+        weeklyScheduleDTO.setScheduleStartDate(weeklyScheduleEM.getScheduleStartDate());
         return weeklyScheduleDTO;
     }
 }
