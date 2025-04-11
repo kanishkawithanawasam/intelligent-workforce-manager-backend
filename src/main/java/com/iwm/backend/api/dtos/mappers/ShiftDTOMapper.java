@@ -1,7 +1,6 @@
 package com.iwm.backend.api.dtos.mappers;
 
 import com.iwm.backend.api.dtos.ShiftDTO;
-import com.iwm.backend.api.dtos.mappers.exceptions.ShiftDTOIsNullException;
 import com.iwm.backend.api.models.EmployeeEM;
 import com.iwm.backend.api.models.ShiftEM;
 import com.iwm.backend.schedulegenerator.models.ShiftGO;
@@ -29,11 +28,11 @@ public class ShiftDTOMapper {
     }
 
     public static ShiftEM toShiftEM(ShiftDTO shiftDTO) {
-        ShiftEM shiftEM = new ShiftEM();
-        if (shiftDTO == null) {
-            throw  new ShiftDTOIsNullException();
-        }
 
+        if (shiftDTO == null) {
+            return null;
+        }
+        ShiftEM shiftEM = new ShiftEM();
         shiftEM.setId(shiftDTO.getShiftId());
         shiftEM.setDate(shiftDTO.getDate());
         shiftEM.setStartTime(shiftDTO.getStartTime());
@@ -45,10 +44,12 @@ public class ShiftDTOMapper {
     }
 
     public static ShiftDTO toShiftDTO(ShiftEM shiftEM) {
-        ShiftDTO shiftDTO = new ShiftDTO();
+
         if (shiftEM == null) {
-            throw  new RuntimeException();
+            return null;
         }
+
+        ShiftDTO shiftDTO = new ShiftDTO();
         shiftDTO.setShiftId(shiftEM.getId());
         shiftDTO.setDate(shiftEM.getDate());
         shiftDTO.setStartTime(shiftEM.getStartTime());
