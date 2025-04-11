@@ -1,19 +1,15 @@
 package com.iwm.backend.api.controllers;
 
-import com.iwm.backend.api.controllers.exceptions.ScheduleNotFoundException;
 import com.iwm.backend.api.dtos.WeeklyScheduleDTO;
-import com.iwm.backend.api.dtos.mappers.WeeklyScheduleDTOMapper;
-import com.iwm.backend.api.dtos.mappers.exceptions.WeeklyScheduleEMIsNullException;
-import com.iwm.backend.api.models.WeeklyScheduleEM;
 import com.iwm.backend.api.services.SchedulerService;
-import com.iwm.backend.schedulegenerator.models.WeeklySchedule;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
-@RestController()
+@RestController
 @RequestMapping("/schedules")
 public class ScheduleController {
     private final SchedulerService schedulerService;
@@ -24,39 +20,29 @@ public class ScheduleController {
     }
 
 
-    @GetMapping("/generate")
-    public WeeklyScheduleDTO generateWeeklySchedule(@RequestBody LocalDate startDate) throws IOException {
-        return  this.schedulerService.generateWeeklySchedule();
+    @PostMapping("/preview")
+    public WeeklyScheduleDTO previewSchedule(
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate)
+            throws IOException {
+        return schedulerService.generateWeeklySchedule(startDate);
     }
 
-    @GetMapping("/get-available-start-dates")
+    @GetMapping("/available-dates")
     public List<LocalDate> getAvailableDate(){
         return schedulerService.getWeekStartDates();
     }
 
-    @GetMapping("/getschedule")
-    public WeeklyScheduleDTO getWeeklySchedule() throws IOException {
 
-        WeeklyScheduleDTO scheduleDTO;
-
-        try {
-            scheduleDTO = WeeklyScheduleDTOMapper.
-                    toWeeklyScheduleDTO(schedulerService.getThisWeekSchedule());
-        }catch (Exception e){
-            if(e instanceof WeeklyScheduleEMIsNullException){
-                throw  new ScheduleNotFoundException();
-            }else{
-                throw e;
-            }
-        }
-        return scheduleDTO;
+    @GetMapping("/{startDate}")
+    public WeeklyScheduleDTO getWeekSchedule(
+            @PathVariable("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate)
+            throws IOException {
+        return this.schedulerService.getWeekScheduleFromWeek(startDate);
     }
 
-    @PostMapping("/save")
+    @PutMapping
     public void save(@RequestBody WeeklyScheduleDTO weeklyScheduleDTO) throws IOException {
         schedulerService.saveWeeklySchedule(weeklyScheduleDTO);
     }
-
-
 
 }
