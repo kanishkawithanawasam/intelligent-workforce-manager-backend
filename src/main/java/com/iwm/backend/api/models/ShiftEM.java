@@ -9,7 +9,7 @@ import java.time.LocalTime;
 
 @Data
 @Entity
-@Table(name = "ShiftGO")
+@Table(name = "Shift")
 public class ShiftEM {
 
     @Id
