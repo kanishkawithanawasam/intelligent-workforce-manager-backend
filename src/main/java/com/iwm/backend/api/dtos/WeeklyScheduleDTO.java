@@ -15,4 +15,13 @@ public class WeeklyScheduleDTO {
     private List<ShiftDTO> shifts;
 
     private double cost;
+
+    public WeeklyScheduleDTO(LocalDate scheduleStartDate, List<ShiftDTO> shifts, double cost) {
+        this.scheduleStartDate = scheduleStartDate;
+        this.shifts = shifts;
+        this.cost = cost;
+    }
+
+    public WeeklyScheduleDTO() {
+    }
 }
