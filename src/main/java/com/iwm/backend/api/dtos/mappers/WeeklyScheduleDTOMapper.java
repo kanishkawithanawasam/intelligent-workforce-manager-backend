@@ -4,6 +4,7 @@ import com.iwm.backend.api.dtos.ShiftDTO;
 import com.iwm.backend.api.dtos.WeeklyScheduleDTO;
 import com.iwm.backend.api.models.ShiftEM;
 import com.iwm.backend.api.models.WeeklyScheduleEM;
+import com.iwm.backend.schedulegenerator.models.ShiftGO;
 import com.iwm.backend.schedulegenerator.models.WeeklySchedule;
 
 import java.time.LocalDate;
@@ -15,10 +16,11 @@ public class WeeklyScheduleDTOMapper {
 
     public static WeeklyScheduleDTO toWeeklyScheduleDTO(WeeklySchedule weeklySchedule) {
 
-        WeeklyScheduleDTO dto = new WeeklyScheduleDTO();
         if (weeklySchedule.getShifts() == null) {
             return null;
         }
+
+        WeeklyScheduleDTO dto = new WeeklyScheduleDTO();
         List<ShiftDTO> shiftDTOs = ShiftDTOMapper.toDTO(weeklySchedule.getShifts());
         dto.setScheduleStartDate(LocalDate.now());
         dto.setShifts(shiftDTOs);
@@ -55,6 +57,9 @@ public class WeeklyScheduleDTOMapper {
         WeeklyScheduleDTO weeklyScheduleDTO = new WeeklyScheduleDTO();
         weeklyScheduleDTO.setScheduleStartDate(weeklyScheduleEM.getScheduleStartDate());
         weeklyScheduleDTO.setShifts(ShiftDTOMapper.toShiftDTOList(weeklyScheduleEM.getShifts()));
+        for (ShiftDTO shiftDTO : weeklyScheduleDTO.getShifts()) {
+            shiftDTO.setScheduleId(weeklyScheduleEM.getId());
+        }
         weeklyScheduleDTO.setScheduleStartDate(weeklyScheduleEM.getScheduleStartDate());
         return weeklyScheduleDTO;
     }

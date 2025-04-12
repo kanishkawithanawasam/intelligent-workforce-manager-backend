@@ -3,6 +3,7 @@ package com.iwm.backend.api.dtos.mappers;
 import com.iwm.backend.api.dtos.ShiftDTO;
 import com.iwm.backend.api.models.EmployeeEM;
 import com.iwm.backend.api.models.ShiftEM;
+import com.iwm.backend.api.models.WeeklyScheduleEM;
 import com.iwm.backend.schedulegenerator.models.ShiftGO;
 
 import java.time.LocalTime;
@@ -37,9 +38,16 @@ public class ShiftDTOMapper {
         shiftEM.setDate(shiftDTO.getDate());
         shiftEM.setStartTime(shiftDTO.getStartTime());
         shiftEM.setEndTime(shiftDTO.getEndTime());
+
         EmployeeEM employeeEM = new EmployeeEM();
         employeeEM.setId(shiftDTO.getEmployeeId());
         shiftEM.setEmployee(employeeEM);
+
+        WeeklyScheduleEM weeklyScheduleEM = new WeeklyScheduleEM();
+
+        weeklyScheduleEM.setId(shiftDTO.getScheduleId());
+        shiftEM.setWeeklySchedule(weeklyScheduleEM);
+
         return shiftEM;
     }
 
@@ -50,6 +58,7 @@ public class ShiftDTOMapper {
         }
 
         ShiftDTO shiftDTO = new ShiftDTO();
+        shiftDTO.setScheduleId(shiftEM.getWeeklySchedule().getId());
         shiftDTO.setShiftId(shiftEM.getId());
         shiftDTO.setDate(shiftEM.getDate());
         shiftDTO.setStartTime(shiftEM.getStartTime());
