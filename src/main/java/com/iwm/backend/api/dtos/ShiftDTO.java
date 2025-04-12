@@ -12,6 +12,8 @@ public class ShiftDTO{
 
     private long shiftId;
 
+    private long scheduleId;
+
     private LocalDate date;
 
     private String employeeName;
