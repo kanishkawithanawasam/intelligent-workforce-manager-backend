@@ -32,9 +32,16 @@ public class ShiftController {
         return ResponseEntity.ok(shiftDTOList);
     }
 
-
     @PostMapping
-    public ResponseEntity<?> addShift(@RequestBody ShiftDTO shiftDTO) {
+    public ResponseEntity<?> addOrUpdateShift(@RequestBody ShiftDTO shiftDTO) {
         return ResponseEntity.ok(null);
     }
+    
+    
+    @PostMapping("/save-all")
+    public ResponseEntity<?> saveOrUpdateAllShift(@RequestBody List<ShiftDTO> shiftDTOList) {
+        List<ShiftDTO> dtos = shiftService.saveAllShifts(shiftDTOList);
+        return ResponseEntity.ok(dtos);
+    }
+
 }
