@@ -12,6 +12,8 @@ public class WeeklyScheduleDTO {
 
     private LocalDate scheduleStartDate;
 
+    private long scheduleId;
+
     private List<ShiftDTO> shifts;
 
     private double cost;

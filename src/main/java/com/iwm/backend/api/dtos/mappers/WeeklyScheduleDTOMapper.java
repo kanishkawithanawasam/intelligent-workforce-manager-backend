@@ -40,6 +40,8 @@ public class WeeklyScheduleDTOMapper {
         WeeklyScheduleEM weeklyScheduleEM = new WeeklyScheduleEM();
         weeklyScheduleEM.setShifts(ShiftDTOMapper.toShiftEMList(weeklyScheduleDTO.getShifts()));
         weeklyScheduleEM.setScheduleStartDate(weeklyScheduleDTO.getScheduleStartDate());
+        weeklyScheduleEM.setId(weeklyScheduleDTO.getScheduleId());
+
         for(ShiftEM shiftEM : weeklyScheduleEM.getShifts()) {
             shiftEM.setWeeklySchedule(weeklyScheduleEM);
         }
@@ -61,6 +63,7 @@ public class WeeklyScheduleDTOMapper {
             shiftDTO.setScheduleId(weeklyScheduleEM.getId());
         }
         weeklyScheduleDTO.setScheduleStartDate(weeklyScheduleEM.getScheduleStartDate());
+        weeklyScheduleDTO.setScheduleId(weeklyScheduleEM.getId());
         return weeklyScheduleDTO;
     }
 }
