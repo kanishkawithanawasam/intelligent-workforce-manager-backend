@@ -17,4 +17,17 @@ public class EmployeeDTOMapper {
         dto.setPostalCode(employee.getPostalCode());
         return dto;
     }
+
+    public static EmployeeEM toEmployeeEM(EmployeeDTO dto) {
+        EmployeeEM employee = new EmployeeEM();
+        employee.setId(dto.getId());
+        employee.setFirstName(dto.getFirstName());
+        employee.setLastName(dto.getLastName());
+        employee.setBirthday(dto.getDateOfBirth());
+        employee.setAddress(dto.getAddress());
+        employee.setContact(dto.getContact());
+        employee.setPostalCode(dto.getPostalCode());
+        return employee;
+
+    }
 }
