@@ -20,17 +20,20 @@ public class ContractDataEM {
     @Column(name = "hourly_rate")
     private double hourlyRate;
 
-    @Column(name = "max_hours")
+    @Column(name = "max_hours_per_week")
     private double maxHoursPerWeek;
+
+    @Column(name = "min_hours_per_week")
+    private double minHoursPerWeek;
 
     @Column
     @Getter
     private String role;
 
-    @Transient
+    @Column(name="start_date")
     private LocalDate startDate;
 
-    @Transient
+    @Column(name = "end_date")
     private LocalDate endDate;
 
     @ManyToOne(fetch = FetchType.LAZY)

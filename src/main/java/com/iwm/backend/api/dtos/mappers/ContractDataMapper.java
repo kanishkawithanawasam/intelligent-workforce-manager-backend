@@ -2,6 +2,7 @@ package com.iwm.backend.api.dtos.mappers;
 
 import com.iwm.backend.api.dtos.contractdata.ContractDataDTO;
 import com.iwm.backend.api.models.ContractDataEM;
+import com.iwm.backend.api.models.EmployeeEM;
 
 public class ContractDataMapper {
 
@@ -13,6 +14,30 @@ public class ContractDataMapper {
         dto.setStartDate(contractDataEM.getStartDate());
         dto.setEndDate(contractDataEM.getEndDate());
         dto.setHourlyRate(contractDataEM.getHourlyRate());
+        dto.setMaxHoursPerWeek(contractDataEM.getMaxHoursPerWeek());
+        dto.setMinHoursPerWeek(contractDataEM.getMinHoursPerWeek());
+        dto.setEmployeeId(contractDataEM.getEmployee().getId());
+        dto.setEmployeeName(contractDataEM.getEmployee().getFirstName() + " " +
+                contractDataEM.getEmployee().getLastName());
         return dto;
     }
+
+    public static ContractDataEM toContractDataEM(ContractDataDTO dto) {
+        ContractDataEM contractDataEM=new ContractDataEM();
+        contractDataEM.setId(dto.getContractId());
+        contractDataEM.setRole(dto.getRole());
+        contractDataEM.setStartDate(dto.getStartDate());
+        contractDataEM.setEndDate(dto.getEndDate());
+        contractDataEM.setHourlyRate(dto.getHourlyRate());
+        contractDataEM.setMaxHoursPerWeek(dto.getMaxHoursPerWeek());
+        contractDataEM.setMinHoursPerWeek(dto.getMinHoursPerWeek());
+
+        EmployeeEM employeeEM=new EmployeeEM();
+        employeeEM.setId(dto.getEmployeeId());
+        contractDataEM.setEmployee(employeeEM);
+        return contractDataEM;
+    }
 }
+
+
+

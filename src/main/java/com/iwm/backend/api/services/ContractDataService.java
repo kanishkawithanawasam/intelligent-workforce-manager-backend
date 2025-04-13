@@ -23,4 +23,11 @@ public class ContractDataService {
         return ContractDataMapper.toContractDataDTO(contractDataEM);
     }
 
+
+    @Transactional
+    public ContractDataDTO saveContractData(ContractDataDTO contractDataDTO) {
+        ContractDataEM contractDataEM=ContractDataMapper.toContractDataEM(contractDataDTO);
+        contractDataEM=contractRepository.save(contractDataEM);
+        return ContractDataMapper.toContractDataDTO(contractDataEM);
+    }
 }

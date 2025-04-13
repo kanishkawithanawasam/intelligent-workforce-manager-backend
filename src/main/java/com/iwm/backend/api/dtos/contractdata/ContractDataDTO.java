@@ -12,4 +12,7 @@ public class ContractDataDTO {
     private LocalDate startDate;
     private LocalDate endDate;
     private String role;
+    private double minHoursPerWeek;
+    private String employeeName;
+    private long employeeId;
 }

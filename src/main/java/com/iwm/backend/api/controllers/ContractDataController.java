@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/contract")
+@RequestMapping("/contracts")
 public class ContractDataController {
 
     private final ContractDataService contractDataService;
@@ -21,6 +21,9 @@ public class ContractDataController {
         return ResponseEntity.ok(contractDataService.getLatestContractData(employeeId));
     }
 
-
+    @PostMapping
+    public ResponseEntity<ContractDataDTO> createContractData(@RequestBody ContractDataDTO contractDataDTO) {
+        return ResponseEntity.ok(contractDataService.saveContractData(contractDataDTO));
+    }
 
 }
