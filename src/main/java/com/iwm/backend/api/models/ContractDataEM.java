@@ -1,7 +1,6 @@
 package com.iwm.backend.api.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -19,13 +18,10 @@ public class ContractDataEM {
     private long id;
 
     @Column(name = "hourly_rate")
-    private double horlyRate;
+    private double hourlyRate;
 
     @Column(name = "max_hours")
     private double maxHoursPerWeek;
-
-    @Transient
-    private double contractedHours;
 
     @Column
     @Getter
