@@ -5,7 +5,6 @@ import com.iwm.backend.api.dtos.employee.EmployeeBasicInfoDTO;
 import com.iwm.backend.api.dtos.employee.EmployeeDTO;
 import com.iwm.backend.api.dtos.mappers.EmployeeDTOMapper;
 import com.iwm.backend.api.dtos.mappers.EmployeeDomainMapper;
-import com.iwm.backend.api.models.ContractDataEM;
 import com.iwm.backend.api.models.EmployeeEM;
 import com.iwm.backend.api.repository.EmployeeRepository;
 import com.iwm.backend.schedulegenerator.models.Employee;
@@ -19,16 +18,14 @@ import java.util.List;
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-    private final EmployeeDomainMapper employeeDomainMapper;
 
-    public EmployeeService(EmployeeRepository employeeRepository, EmployeeDomainMapper employeeDomainMapper) {
+    public EmployeeService(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
-        this.employeeDomainMapper = employeeDomainMapper;
     }
 
     @Transactional
     public List<Employee> getEmployeesForScheduling(){
-        return employeeDomainMapper.toDomainList(employeeRepository.findAll());
+        return EmployeeDomainMapper.toDomainList(employeeRepository.findAll());
     }
 
 
@@ -54,6 +51,12 @@ public class EmployeeService {
            return EmployeeDTOMapper.toEmployeeDTO(employeeEM);
         }
         return null;
+    }
+
+    @Transactional
+    public EmployeeDTO saveEmployee(EmployeeDTO dto) {
+        EmployeeEM emp=employeeRepository.save(EmployeeDTOMapper.toEmployeeEM(dto));
+        return EmployeeDTOMapper.toEmployeeDTO(emp);
     }
 
 }
