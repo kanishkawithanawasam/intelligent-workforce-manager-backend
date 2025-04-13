@@ -1,4 +1,4 @@
-package com.iwm.backend.api.dtos;
+package com.iwm.backend.api.dtos.employee;
 
 import lombok.Data;
 
