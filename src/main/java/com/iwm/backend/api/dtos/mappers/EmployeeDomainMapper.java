@@ -28,7 +28,7 @@ public class EmployeeDomainMapper {
                     contractData.getRole(),
                     preferences.getPreferredHours(),
                     contractData.getMaxHoursPerWeek(),
-                    contractData.getHorlyRate()
+                    contractData.getHourlyRate()
             );
         }
     }
