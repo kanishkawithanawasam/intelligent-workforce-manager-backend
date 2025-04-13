@@ -21,7 +21,7 @@ public class EmployeeController{
     @GetMapping("/basic-info")
     public List<EmployeeBasicInfoDTO> getEmployeeBasicInfo() {
         return employeeService.getEmployeesBasicInfo();
-    };
+    }
 
     @GetMapping("/demographics/{id}")
     public ResponseEntity<EmployeeDTO> getEmployeeFile(@PathVariable long id) {
@@ -29,4 +29,10 @@ public class EmployeeController{
         return ResponseEntity.ok().body(dto);
     }
 
+    @PostMapping("/update")
+    public ResponseEntity<EmployeeDTO> updateEmployee(@RequestBody EmployeeDTO dto) {
+        EmployeeDTO savedDto = employeeService.saveEmployee(dto);
+        return ResponseEntity.ok().body(dto);
+
+    }
 }
