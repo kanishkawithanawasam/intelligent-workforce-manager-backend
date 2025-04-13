@@ -1,8 +1,9 @@
 package com.iwm.backend.api.services;
 
 
-import com.iwm.backend.api.dtos.EmployeeBasicInfoDTO;
-import com.iwm.backend.api.dtos.EmployeeFileDTO;
+import com.iwm.backend.api.dtos.employee.EmployeeBasicInfoDTO;
+import com.iwm.backend.api.dtos.employee.EmployeeDTO;
+import com.iwm.backend.api.dtos.mappers.EmployeeDTOMapper;
 import com.iwm.backend.api.dtos.mappers.EmployeeDomainMapper;
 import com.iwm.backend.api.models.ContractDataEM;
 import com.iwm.backend.api.models.EmployeeEM;
@@ -45,27 +46,12 @@ public class EmployeeService {
     }
 
     @Transactional
-    public EmployeeFileDTO getEmployeeFile(long employeeId) {
-        EmployeeFileDTO employeeFileDTO = new EmployeeFileDTO();
+    public EmployeeDTO getEmployee(long employeeId) {
+        EmployeeDTO employeeDTO = new EmployeeDTO();
 
         EmployeeEM employeeEM = employeeRepository.findById(employeeId).orElse(null);
         if (employeeEM != null) {
-            employeeFileDTO.setId(employeeEM.getId());
-            employeeFileDTO.setFirstName(employeeEM.getFirstName());
-            employeeFileDTO.setLastName(employeeEM.getLastName());
-            employeeFileDTO.setAddress(employeeEM.getAddress());
-            employeeFileDTO.setContact(employeeEM.getContact());
-
-            ContractDataEM contractDataEM = employeeEM.getContractData()
-                    .get(employeeEM.getContractData().size() - 1);
-            employeeFileDTO.setCurrentRole(contractDataEM.getRole());
-            employeeFileDTO.setStartDate(contractDataEM.getStartDate());
-            employeeFileDTO.setEndDate(contractDataEM.getEndDate());
-            employeeFileDTO.setHourlyRate(contractDataEM.getHorlyRate());
-            employeeFileDTO.setMaxHoursPerWeek(contractDataEM.getMaxHoursPerWeek());
-            employeeFileDTO.setContractedHours(contractDataEM.getContractedHours());
-
-            return employeeFileDTO;
+           return EmployeeDTOMapper.toEmployeeDTO(employeeEM);
         }
         return null;
     }
