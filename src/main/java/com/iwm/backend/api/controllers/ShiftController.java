@@ -34,7 +34,8 @@ public class ShiftController {
 
     @PostMapping
     public ResponseEntity<?> addOrUpdateShift(@RequestBody ShiftDTO shiftDTO) {
-        return ResponseEntity.ok(null);
+        ShiftDTO dto = shiftService.saveShift(shiftDTO);
+        return ResponseEntity.ok(dto);
     }
     
     
