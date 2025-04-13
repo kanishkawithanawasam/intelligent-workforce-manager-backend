@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ContractRepository extends JpaRepository<ContractDataEM,Long> {
+
+
+    ContractDataEM findLatestContractDataByEmployeeId(Long employeeId);
 }
