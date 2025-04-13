@@ -1,7 +1,6 @@
 package com.iwm.backend.api.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -19,22 +18,22 @@ public class ContractDataEM {
     private long id;
 
     @Column(name = "hourly_rate")
-    private double horlyRate;
+    private double hourlyRate;
 
-    @Column(name = "max_hours")
+    @Column(name = "max_hours_per_week")
     private double maxHoursPerWeek;
 
-    @Transient
-    private double contractedHours;
+    @Column(name = "min_hours_per_week")
+    private double minHoursPerWeek;
 
     @Column
     @Getter
     private String role;
 
-    @Transient
+    @Column(name="start_date")
     private LocalDate startDate;
 
-    @Transient
+    @Column(name = "end_date")
     private LocalDate endDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
