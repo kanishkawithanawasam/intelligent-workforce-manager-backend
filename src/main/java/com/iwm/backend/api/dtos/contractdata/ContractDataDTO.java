@@ -11,6 +11,5 @@ public class ContractDataDTO {
     private double maxHoursPerWeek;
     private LocalDate startDate;
     private LocalDate endDate;
-    private String contractType;
-
+    private String role;
 }
