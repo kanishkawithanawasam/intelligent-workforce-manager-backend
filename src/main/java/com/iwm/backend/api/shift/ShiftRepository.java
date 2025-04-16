@@ -1,8 +1,5 @@
-package com.iwm.backend.api.repository;
+package com.iwm.backend.api.shift;
 
-import com.iwm.backend.api.dtos.ShiftDTO;
-import com.iwm.backend.api.models.ShiftEM;
-import com.iwm.backend.api.models.WeeklyScheduleEM;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

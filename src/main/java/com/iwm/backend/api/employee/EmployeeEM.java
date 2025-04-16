@@ -3,7 +3,7 @@ package com.iwm.backend.api.employee;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.iwm.backend.api.contract.ContractDataEM;
 import com.iwm.backend.api.models.EmployeePreferencesEM;
-import com.iwm.backend.api.models.ShiftEM;
+import com.iwm.backend.api.shift.ShiftEM;
 import jakarta.persistence.*;
 import lombok.Data;
 

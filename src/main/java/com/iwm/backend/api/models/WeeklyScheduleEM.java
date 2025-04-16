@@ -1,6 +1,7 @@
 package com.iwm.backend.api.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.iwm.backend.api.shift.ShiftEM;
 import jakarta.persistence.*;
 import lombok.Data;
 

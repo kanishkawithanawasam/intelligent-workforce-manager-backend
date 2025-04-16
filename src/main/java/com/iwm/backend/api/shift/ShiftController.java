@@ -1,14 +1,12 @@
-package com.iwm.backend.api.controllers;
+package com.iwm.backend.api.shift;
 
 
 import com.iwm.backend.api.dtos.EmployeeScheduleShiftDTO;
 import com.iwm.backend.api.dtos.ShiftDTO;
-import com.iwm.backend.api.services.ShiftService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,8 +21,7 @@ public class ShiftController {
     }
 
     @PostMapping("/find-by-week-and-employee")
-    public ResponseEntity<?> getShiftsByEmployeeAndWeeklySchedule(EmployeeScheduleShiftDTO employeeScheduleShiftDTO)
-            throws IOException {
+    public ResponseEntity<?> getShiftsByEmployeeAndWeeklySchedule(EmployeeScheduleShiftDTO employeeScheduleShiftDTO) {
         List<ShiftDTO> shiftDTOList = shiftService.getWeeklySchedule(employeeScheduleShiftDTO);
         if (shiftDTOList.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ArrayList<>());

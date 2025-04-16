@@ -1,15 +1,10 @@
-package com.iwm.backend.api.services;
+package com.iwm.backend.api.shift;
 
-import com.iwm.backend.api.controllers.ShiftController;
 import com.iwm.backend.api.dtos.EmployeeScheduleShiftDTO;
 import com.iwm.backend.api.dtos.ShiftDTO;
 import com.iwm.backend.api.dtos.mappers.ShiftDTOMapper;
-import com.iwm.backend.api.models.ShiftEM;
-import com.iwm.backend.api.repository.ShiftRepository;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,7 +17,7 @@ public class ShiftService {
     }
 
 
-    public List<ShiftDTO> getWeeklySchedule(EmployeeScheduleShiftDTO requestDTO) throws IOException {
+    public List<ShiftDTO> getWeeklySchedule(EmployeeScheduleShiftDTO requestDTO) {
         List<ShiftEM> shiftEMList = shiftRepository.
                 findByWeeklyScheduleAndEmployee(requestDTO.getScheduleId(),requestDTO.getEmployeeId());
         return ShiftDTOMapper.toShiftDTOList(shiftEMList);
