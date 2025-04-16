@@ -1,8 +1,7 @@
-package com.iwm.backend.api.controllers;
+package com.iwm.backend.api.schedule;
 
 import com.iwm.backend.api.dtos.ScheduleRequestDTO;
 import com.iwm.backend.api.dtos.WeeklyScheduleDTO;
-import com.iwm.backend.api.services.SchedulerService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

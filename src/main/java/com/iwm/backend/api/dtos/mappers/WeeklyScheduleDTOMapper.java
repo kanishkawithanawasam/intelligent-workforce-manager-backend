@@ -3,7 +3,7 @@ package com.iwm.backend.api.dtos.mappers;
 import com.iwm.backend.api.dtos.ShiftDTO;
 import com.iwm.backend.api.dtos.WeeklyScheduleDTO;
 import com.iwm.backend.api.shift.ShiftEM;
-import com.iwm.backend.api.models.WeeklyScheduleEM;
+import com.iwm.backend.api.schedule.WeeklyScheduleEM;
 import com.iwm.backend.schedulegenerator.models.WeeklySchedule;
 
 import java.time.LocalDate;

@@ -1,13 +1,11 @@
-package com.iwm.backend.api.services;
+package com.iwm.backend.api.schedule;
 
 import com.iwm.backend.api.controllers.exceptions.ScheduleNotFoundException;
 import com.iwm.backend.api.dtos.ScheduleRequestDTO;
 import com.iwm.backend.api.dtos.WeeklyScheduleDTO;
 import com.iwm.backend.api.dtos.mappers.EmployeeDomainMapper;
 import com.iwm.backend.api.dtos.mappers.WeeklyScheduleDTOMapper;
-import com.iwm.backend.api.models.WeeklyScheduleEM;
 import com.iwm.backend.api.employee.EmployeeRepository;
-import com.iwm.backend.api.repository.WeeklyScheduleRepository;
 import com.iwm.backend.schedulegenerator.FuzzyGeneticScheduleGenerator;
 import com.iwm.backend.schedulegenerator.models.Employee;
 import com.iwm.backend.schedulegenerator.models.WeeklySchedule;

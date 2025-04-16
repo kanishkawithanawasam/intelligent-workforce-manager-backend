@@ -2,7 +2,7 @@ package com.iwm.backend.api.shift;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.iwm.backend.api.employee.EmployeeEM;
-import com.iwm.backend.api.models.WeeklyScheduleEM;
+import com.iwm.backend.api.schedule.WeeklyScheduleEM;
 import jakarta.persistence.*;
 import lombok.Data;
 

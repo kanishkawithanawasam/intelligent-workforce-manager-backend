@@ -1,4 +1,4 @@
-package com.iwm.backend.api.models;
+package com.iwm.backend.api.schedule;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.iwm.backend.api.shift.ShiftEM;

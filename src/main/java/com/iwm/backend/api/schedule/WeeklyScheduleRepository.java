@@ -1,7 +1,5 @@
-package com.iwm.backend.api.repository;
+package com.iwm.backend.api.schedule;
 
-import com.iwm.backend.api.models.WeeklyScheduleEM;
-import com.iwm.backend.schedulegenerator.models.WeeklySchedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

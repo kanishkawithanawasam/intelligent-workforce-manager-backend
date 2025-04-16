@@ -1,4 +1,4 @@
-package com.iwm.backend.api.services.exceptions;
+package com.iwm.backend.api.schedule;
 
 public class ScheduleNotGeneratedException extends RuntimeException {
     public ScheduleNotGeneratedException() {
