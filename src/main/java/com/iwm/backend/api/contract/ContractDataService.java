@@ -1,25 +1,23 @@
-package com.iwm.backend.api.services;
+package com.iwm.backend.api.contract;
 
 
 import com.iwm.backend.api.dtos.contractdata.ContractDataDTO;
 import com.iwm.backend.api.dtos.mappers.ContractDataMapper;
-import com.iwm.backend.api.models.ContractDataEM;
-import com.iwm.backend.api.repository.ContractRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ContractDataService {
 
-    private final ContractRepository contractRepository;
+    private final ContractDataRepository contractDataRepository;
 
-    public ContractDataService(ContractRepository contractRepository) {
-        this.contractRepository = contractRepository;
+    public ContractDataService(ContractDataRepository contractDataRepository) {
+        this.contractDataRepository = contractDataRepository;
     }
 
     @Transactional
     public ContractDataDTO getLatestContractData(long employeeId) {
-        ContractDataEM contractDataEM=contractRepository.findLatestContractDataByEmployeeId(employeeId);
+        ContractDataEM contractDataEM= contractDataRepository.findLatestContractDataByEmployeeId(employeeId);
         return ContractDataMapper.toContractDataDTO(contractDataEM);
     }
 
@@ -27,7 +25,7 @@ public class ContractDataService {
     @Transactional
     public ContractDataDTO saveContractData(ContractDataDTO contractDataDTO) {
         ContractDataEM contractDataEM=ContractDataMapper.toContractDataEM(contractDataDTO);
-        contractDataEM=contractRepository.save(contractDataEM);
+        contractDataEM= contractDataRepository.save(contractDataEM);
         return ContractDataMapper.toContractDataDTO(contractDataEM);
     }
 }

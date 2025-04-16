@@ -1,6 +1,6 @@
 package com.iwm.backend.api.dtos.mappers;
 
-import com.iwm.backend.api.models.ContractDataEM;
+import com.iwm.backend.api.contract.ContractDataEM;
 import com.iwm.backend.api.employee.EmployeeEM;
 import com.iwm.backend.api.models.EmployeePreferencesEM;
 import com.iwm.backend.schedulegenerator.models.Employee;

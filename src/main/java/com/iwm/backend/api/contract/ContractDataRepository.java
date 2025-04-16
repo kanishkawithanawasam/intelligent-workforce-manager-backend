@@ -1,11 +1,10 @@
-package com.iwm.backend.api.repository;
+package com.iwm.backend.api.contract;
 
-import com.iwm.backend.api.models.ContractDataEM;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ContractRepository extends JpaRepository<ContractDataEM,Long> {
+public interface ContractDataRepository extends JpaRepository<ContractDataEM,Long> {
 
 
     ContractDataEM findLatestContractDataByEmployeeId(Long employeeId);

@@ -1,4 +1,4 @@
-package com.iwm.backend.api.models;
+package com.iwm.backend.api.contract;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.iwm.backend.api.employee.EmployeeEM;

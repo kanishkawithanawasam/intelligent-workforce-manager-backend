@@ -1,8 +1,7 @@
-package com.iwm.backend.api.controllers;
+package com.iwm.backend.api.contract;
 
 
 import com.iwm.backend.api.dtos.contractdata.ContractDataDTO;
-import com.iwm.backend.api.services.ContractDataService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
