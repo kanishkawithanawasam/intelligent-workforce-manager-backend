@@ -1,6 +1,5 @@
-package com.iwm.backend.api.repository;
+package com.iwm.backend.api.employee;
 
-import com.iwm.backend.api.models.EmployeeEM;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

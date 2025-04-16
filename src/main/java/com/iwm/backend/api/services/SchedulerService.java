@@ -6,7 +6,7 @@ import com.iwm.backend.api.dtos.WeeklyScheduleDTO;
 import com.iwm.backend.api.dtos.mappers.EmployeeDomainMapper;
 import com.iwm.backend.api.dtos.mappers.WeeklyScheduleDTOMapper;
 import com.iwm.backend.api.models.WeeklyScheduleEM;
-import com.iwm.backend.api.repository.EmployeeRepository;
+import com.iwm.backend.api.employee.EmployeeRepository;
 import com.iwm.backend.api.repository.WeeklyScheduleRepository;
 import com.iwm.backend.schedulegenerator.FuzzyGeneticScheduleGenerator;
 import com.iwm.backend.schedulegenerator.models.Employee;

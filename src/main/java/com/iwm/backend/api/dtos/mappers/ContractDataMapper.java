@@ -2,7 +2,7 @@ package com.iwm.backend.api.dtos.mappers;
 
 import com.iwm.backend.api.dtos.contractdata.ContractDataDTO;
 import com.iwm.backend.api.models.ContractDataEM;
-import com.iwm.backend.api.models.EmployeeEM;
+import com.iwm.backend.api.employee.EmployeeEM;
 
 public class ContractDataMapper {
 

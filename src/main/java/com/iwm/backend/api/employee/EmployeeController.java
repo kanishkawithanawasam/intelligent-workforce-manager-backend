@@ -1,8 +1,7 @@
-package com.iwm.backend.api.controllers;
+package com.iwm.backend.api.employee;
 
 import com.iwm.backend.api.dtos.employee.EmployeeBasicInfoDTO;
 import com.iwm.backend.api.dtos.employee.EmployeeDTO;
-import com.iwm.backend.api.services.EmployeeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
