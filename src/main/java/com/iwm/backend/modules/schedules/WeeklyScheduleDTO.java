@@ -16,7 +16,7 @@ public class WeeklyScheduleDTO {
 
     private List<ShiftDTO> shifts;
 
-    public WeeklyScheduleDTO(LocalDate scheduleStartDate, List<ShiftDTO> shifts, double cost) {
+    public WeeklyScheduleDTO(LocalDate scheduleStartDate, List<ShiftDTO> shifts) {
         this.scheduleStartDate = scheduleStartDate;
         this.shifts = shifts;
     }

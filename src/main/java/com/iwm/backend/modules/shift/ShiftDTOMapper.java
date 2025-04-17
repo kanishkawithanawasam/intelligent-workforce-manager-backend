@@ -2,7 +2,7 @@ package com.iwm.backend.modules.shift;
 
 import com.iwm.backend.modules.employee.EmployeeEM;
 import com.iwm.backend.modules.schedules.WeeklyScheduleEM;
-import com.iwm.backend.modules.schedule_engine.models.ShiftGO;
+import com.iwm.schedule_engine.models.dots.SchedEngShiftDTO;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ShiftDTOMapper {
 
-    public static ShiftDTO toDTO(ShiftGO shift) {
+    public static ShiftDTO toShiftDTO(SchedEngShiftDTO shift) {
         ShiftDTO dto = new ShiftDTO();
         dto.setStartTime(LocalTime.of(shift.getStartTimeInMinutes()/60,
                 shift.getStartTimeInMinutes()%60));
@@ -22,8 +22,8 @@ public class ShiftDTOMapper {
         return dto;
     }
 
-    public static List<ShiftDTO> toDTO(List<ShiftGO> shifts) {
-        return new ArrayList<>(shifts.stream().map(ShiftDTOMapper::toDTO).toList());
+    public static List<ShiftDTO> toShiftDTO(List<SchedEngShiftDTO> shifts) {
+        return new ArrayList<>(shifts.stream().map(ShiftDTOMapper::toShiftDTO).toList());
     }
 
     public static ShiftEM toShiftEM(ShiftDTO shiftDTO) {

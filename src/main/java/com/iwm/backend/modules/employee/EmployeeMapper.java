@@ -1,5 +1,7 @@
 package com.iwm.backend.modules.employee;
 
+import com.iwm.schedule_engine.models.dots.SchedEngEmpDTO;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,8 +32,8 @@ class EmployeeMapper {
 
     }
 
-     static EmployeeForScheduleEngine toEmployeeForScheduleEngine(EmployeeEM employeeEM) {
-        EmployeeForScheduleEngine employee = new EmployeeForScheduleEngine();
+     static SchedEngEmpDTO toEmployeeForScheduleEngine(EmployeeEM employeeEM) {
+        SchedEngEmpDTO employee = new SchedEngEmpDTO();
         employee.setId(employeeEM.getId());
         employee.setName(employeeEM.getFirstName()+employeeEM.getLastName());
         employee.setMaxHoursPerWeek(employee.getMaxHoursPerWeek());
@@ -39,7 +41,7 @@ class EmployeeMapper {
         return employee;
     }
 
-    static List<EmployeeForScheduleEngine> toEmployeeForScheduleEngineList(List<EmployeeEM> employeeEMs) {
+    static List<SchedEngEmpDTO> toEmployeeForScheduleEngineList(List<EmployeeEM> employeeEMs) {
          return new ArrayList<>(employeeEMs.stream().map(EmployeeMapper::toEmployeeForScheduleEngine).toList());
     }
 }

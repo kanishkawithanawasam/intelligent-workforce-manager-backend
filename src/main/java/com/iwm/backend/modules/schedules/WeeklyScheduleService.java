@@ -1,7 +1,10 @@
 package com.iwm.backend.modules.schedules;
 
-import com.iwm.backend.modules.employee.EmployeeForScheduleEngine;
 import com.iwm.backend.modules.employee.EmployeeService;
+import com.iwm.schedule_engine.engine.FuzzGenSchedGenerator;
+import com.iwm.schedule_engine.models.dots.SchedEngEmpDTO;
+import com.iwm.schedule_engine.models.dots.SchedEngWeklySchedDTO;
+import com.iwm.schedule_engine.trial.DemandReader;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -62,9 +65,11 @@ public class WeeklyScheduleService {
     public WeeklyScheduleDTO generateWeeklySchedule(WeeklyScheduleRequestDTO requestDTO) throws IOException {
 
 
-        List<EmployeeForScheduleEngine> employees = employeeService.generateEmployeeForSchedule();
-        WeeklySchedule schedule =
-                new FuzzyGeneticScheduleGenerator(employees,
+        List<SchedEngEmpDTO> employees = employeeService.generateEmployeeForSchedule();
+
+
+        SchedEngWeklySchedDTO schedule =
+                new FuzzGenSchedGenerator(employees,
                         DemandReader.getDemand()).genSchedule();
 
         if (schedule == null) {
@@ -79,7 +84,7 @@ public class WeeklyScheduleService {
 
 
     public void saveWeeklySchedule(WeeklyScheduleDTO weeklyScheduleDTO){
-        WeeklyScheduleEM saved = weeklyScheduleRepository.save(
+        weeklyScheduleRepository.save(
                 WeeklyScheduleDTOMapper.toWeeklyScheduleEM(weeklyScheduleDTO));
     }
 

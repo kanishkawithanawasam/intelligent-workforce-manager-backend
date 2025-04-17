@@ -3,6 +3,7 @@ package com.iwm.backend.modules.schedules;
 import com.iwm.backend.modules.shift.ShiftDTOMapper;
 import com.iwm.backend.modules.shift.ShiftDTO;
 import com.iwm.backend.modules.shift.ShiftEM;
+import com.iwm.schedule_engine.models.dots.interfaces.IScheduleEngineWeklySchedDTO;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -11,14 +12,14 @@ public class WeeklyScheduleDTOMapper {
 
 
 
-    public static WeeklyScheduleDTO toWeeklyScheduleDTO(WeeklySchedule weeklySchedule) {
+    public static WeeklyScheduleDTO toWeeklyScheduleDTO(IScheduleEngineWeklySchedDTO weeklySchedule) {
 
         if (weeklySchedule.getShifts() == null) {
             return null;
         }
 
         WeeklyScheduleDTO dto = new WeeklyScheduleDTO();
-        List<ShiftDTO> shiftDTOs = ShiftDTOMapper.toDTO(weeklySchedule.getShifts());
+        List<ShiftDTO> shiftDTOs = ShiftDTOMapper.toShiftDTO(weeklySchedule.getShifts());
         dto.setScheduleStartDate(LocalDate.now());
         dto.setShifts(shiftDTOs);
 

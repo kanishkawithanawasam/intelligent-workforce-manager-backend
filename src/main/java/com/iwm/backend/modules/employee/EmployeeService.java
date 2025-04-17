@@ -1,5 +1,6 @@
 package com.iwm.backend.modules.employee;
 
+import com.iwm.schedule_engine.models.dots.SchedEngEmpDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ public class EmployeeService {
     }
 
     @Transactional
-    public List<EmployeeForScheduleEngine> generateEmployeeForSchedule(){
+    public List<SchedEngEmpDTO> generateEmployeeForSchedule(){
         List<EmployeeEM> employees = employeeRepository.findAll();
         return EmployeeMapper.toEmployeeForScheduleEngineList(employees);
     }
