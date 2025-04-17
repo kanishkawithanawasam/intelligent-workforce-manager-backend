@@ -2,8 +2,8 @@ package com.iwm.backend.modules.schedules;
 
 import com.iwm.backend.modules.employee.EmployeeService;
 import com.iwm.schedule_engine.engine.FuzzGenSchedGenerator;
-import com.iwm.schedule_engine.models.dots.SchedEngEmpDTO;
-import com.iwm.schedule_engine.models.dots.SchedEngWeklySchedDTO;
+import com.iwm.schedule_engine.models.dtos.SchedEngEmpDTO;
+import com.iwm.schedule_engine.models.dtos.SchedEngWeklySchedDTO;
 import com.iwm.schedule_engine.trial.DemandReader;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
 package com.iwm.backend.modules.employee;
 
-import com.iwm.schedule_engine.models.dots.SchedEngEmpDTO;
+import com.iwm.schedule_engine.models.dtos.SchedEngEmpDTO;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,7 +2,7 @@ package com.iwm.backend.modules.shift;
 
 import com.iwm.backend.modules.employee.EmployeeEM;
 import com.iwm.backend.modules.schedules.WeeklyScheduleEM;
-import com.iwm.schedule_engine.models.dots.SchedEngShiftDTO;
+import com.iwm.schedule_engine.models.dtos.SchedEngShiftDTO;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
