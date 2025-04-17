@@ -3,7 +3,6 @@ package com.iwm.backend.modules.schedules;
 import com.iwm.backend.modules.shift.ShiftDTOMapper;
 import com.iwm.backend.modules.shift.ShiftDTO;
 import com.iwm.backend.modules.shift.ShiftEM;
-import com.iwm.backend.modules.schedule_engine.models.WeeklySchedule;
 
 import java.time.LocalDate;
 import java.util.*;

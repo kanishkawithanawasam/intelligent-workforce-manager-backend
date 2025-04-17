@@ -1,7 +1,5 @@
 package com.iwm.backend.modules.employee;
 
-
-import com.iwm.backend.modules.schedule_engine.models.Employee;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +16,10 @@ public class EmployeeService {
     }
 
     @Transactional
-    public List<Employee> getEmployeesForScheduling(){
-        return EmployeeDomainMapper.toDomainList(employeeRepository.findAll());
+    public List<EmployeeForScheduleEngine> generateEmployeeForSchedule(){
+        List<EmployeeEM> employees = employeeRepository.findAll();
+        return EmployeeMapper.toEmployeeForScheduleEngineList(employees);
     }
-
 
     @Transactional
     public List<EmployeeBasicInfoDTO> getEmployeesBasicInfo(){
@@ -38,19 +36,17 @@ public class EmployeeService {
 
     @Transactional
     public EmployeeDTO getEmployee(long employeeId) {
-        EmployeeDTO employeeDTO = new EmployeeDTO();
-
         EmployeeEM employeeEM = employeeRepository.findById(employeeId).orElse(null);
         if (employeeEM != null) {
-           return EmployeeDTOMapper.toEmployeeDTO(employeeEM);
+           return EmployeeMapper.toEmployeeDTO(employeeEM);
         }
         return null;
     }
 
     @Transactional
     public EmployeeDTO saveEmployee(EmployeeDTO dto) {
-        EmployeeEM emp=employeeRepository.save(EmployeeDTOMapper.toEmployeeEM(dto));
-        return EmployeeDTOMapper.toEmployeeDTO(emp);
+        EmployeeEM emp=employeeRepository.save(EmployeeMapper.toEmployeeEM(dto));
+        return EmployeeMapper.toEmployeeDTO(emp);
     }
 
 }

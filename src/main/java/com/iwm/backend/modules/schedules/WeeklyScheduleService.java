@@ -1,10 +1,6 @@
 package com.iwm.backend.modules.schedules;
 
-import com.iwm.backend.modules.employee.EmployeeRepository;
-import com.iwm.backend.modules.schedule_engine.engine.FuzzyGeneticScheduleGenerator;
-import com.iwm.backend.modules.schedule_engine.models.Employee;
-import com.iwm.backend.modules.schedule_engine.models.WeeklySchedule;
-import com.iwm.backend.trial.DemandReader;
+import com.iwm.backend.modules.employee.EmployeeForScheduleEngine;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -16,11 +12,9 @@ import java.util.List;
 
 @Service
 public class WeeklyScheduleService {
-    private final EmployeeRepository employeeRepository;
     private final WeeklyScheduleRepository weeklyScheduleRepository;
 
-    public WeeklyScheduleService(EmployeeRepository employeeRepository, WeeklyScheduleRepository weeklyScheduleRepository) {
-        this.employeeRepository = employeeRepository;
+    public WeeklyScheduleService(WeeklyScheduleRepository weeklyScheduleRepository) {
         this.weeklyScheduleRepository = weeklyScheduleRepository;
     }
 
@@ -62,7 +56,9 @@ public class WeeklyScheduleService {
     }
 
     public WeeklyScheduleDTO generateWeeklySchedule(WeeklyScheduleRequestDTO requestDTO) throws IOException {
-        List<Employee> employees = EmployeeDomainMapper.toDomainList(employeeRepository.findAll());
+
+
+        List<EmployeeForScheduleEngine> employees = EmployeeDomainMapper.toDomainList(employeeRepository.findAll());
         WeeklySchedule schedule =
                 new FuzzyGeneticScheduleGenerator(employees,
                         DemandReader.getDemand()).genSchedule();
@@ -75,6 +71,7 @@ public class WeeklyScheduleService {
         dto.setScheduleStartDate(requestDTO.getStartDate());
         return dto;
     }
+
 
 
     public void saveWeeklySchedule(WeeklyScheduleDTO weeklyScheduleDTO){

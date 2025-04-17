@@ -5,15 +5,18 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.3</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <version>3.3.0</version>
+        <relativePath/>
     </parent>
-    <groupId>com.iwm</groupId>
-    <artifactId>Intelligent-workforce-manager</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>Intelligent workforce manager</name>
-    <description>Intelligent workforce manager</description>
+
+    <artifactId>intelligent-workforce-manager-rest-api</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>Intelligent workforce manager rest api</name>
+    <description>This module is responsible for facilitating REST API endpoints</description>
+
+
     <url/>
+
     <licenses>
         <license/>
     </licenses>
@@ -89,6 +92,12 @@
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-jackson</artifactId>
             <version>0.11.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.iwm</groupId>
+            <artifactId>intelligent-workforce-manager-schedule-engine</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
