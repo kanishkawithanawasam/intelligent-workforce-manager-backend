@@ -17,8 +17,8 @@ public class UserEM {
     @Column(unique = true)
     private String email;
     private String password;
-
+    /*
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id")
-    private EmployeeEM employee;
+    private EmployeeEM employee;*/
 }
