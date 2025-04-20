@@ -11,7 +11,6 @@ import lombok.Data;
 public class UserEM {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
     private long id;
 
     @Column(unique = true)

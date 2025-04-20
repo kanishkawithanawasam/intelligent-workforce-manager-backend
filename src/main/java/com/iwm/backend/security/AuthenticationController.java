@@ -33,13 +33,23 @@ public class AuthenticationController {
 
     @PostMapping("/signin")
     public String authenticateUser(@RequestBody UserEM user) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        user.getEmail(),
-                        user.getPassword()
-                ));
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return jwtUtils.createToken(userDetails.getUsername());
+        System.out.println(user.getEmail());
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            user.getEmail(),
+                            user.getPassword()
+                    ));
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            System.out.println(userDetails.getUsername());
+            System.out.println(authentication.isAuthenticated());
+            return jwtUtils.createToken(userDetails.getUsername());
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+       return null;
+
     }
 
     @PostMapping("/signup")
