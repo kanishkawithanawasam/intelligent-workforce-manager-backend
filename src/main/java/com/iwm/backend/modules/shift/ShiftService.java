@@ -2,6 +2,7 @@ package com.iwm.backend.modules.shift;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -28,5 +29,9 @@ public class ShiftService {
     public List<ShiftDTO> saveAllShifts(List<ShiftDTO> shiftDTOList) {
         List<ShiftEM> shiftEMList = ShiftDTOMapper.toShiftEMList(shiftDTOList);
         return ShiftDTOMapper.toShiftDTOList(shiftRepository.saveAll(shiftEMList));
+    }
+
+    public List<ShiftEM> findByDate(LocalDate date) {
+        return shiftRepository.findShiftEMByDate(date);
     }
 }
