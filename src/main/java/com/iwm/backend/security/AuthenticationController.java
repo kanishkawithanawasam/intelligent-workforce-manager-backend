@@ -1,14 +1,20 @@
 package com.iwm.backend.security;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.Duration;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -32,7 +38,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signin")
-    public String authenticateUser(@RequestBody UserEM user) {
+    public ResponseEntity<?> authenticateUser(@RequestBody UserEM user) {
         System.out.println(user.getEmail());
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -41,14 +47,22 @@ public class AuthenticationController {
                             user.getPassword()
                     ));
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            System.out.println(userDetails.getUsername());
-            System.out.println(authentication.isAuthenticated());
-            return jwtUtils.createToken(userDetails.getUsername());
+
+            String token = jwtUtils.createToken(userDetails.getUsername());
+            ResponseCookie cookie = ResponseCookie.from("jwt",token)
+                    .httpOnly(true)
+                    .secure(false)
+                    .path("/")
+                    .maxAge(Duration.ofMinutes(10))
+                    .sameSite("Lax")
+                    .build();
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.SET_COOKIE,cookie.toString())
+                    .body("success");
         }catch (Exception e) {
             e.printStackTrace();
         }
-
-       return null;
+       return ResponseEntity.status(401).build();
 
     }
 
