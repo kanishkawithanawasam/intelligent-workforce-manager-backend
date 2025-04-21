@@ -8,6 +8,7 @@ import com.iwm.schedule_engine.models.HourlyDemand;
 import com.iwm.schedule_engine.models.dtos.SchedEngShiftDTO;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.TreeMap;
@@ -22,8 +23,19 @@ public class DayScheduleService {
         this.shiftService = shiftService;
     }
 
-    public List<ShiftDTO> getTodaySchedule(){
-        return shiftService.findByDate(LocalDate.now());
+    public DayScheduleDTO getTodaySchedule(){
+        DayScheduleDTO dayScheduleDTO = new DayScheduleDTO();
+        List<ShiftDTO> shifts = shiftService.findByDate(LocalDate.now());
+        for (ShiftDTO shift : shifts) {
+            System.out.println(shift.getDate());
+        }
+        dayScheduleDTO.setShifts(shifts);
+        double cost = 0;
+        for (ShiftDTO shift : shifts) {
+            cost+=Duration.between(shift.getStartTime(), shift.getEndTime()).toMinutes()/60.0;
+        }
+        dayScheduleDTO.setCost(cost);
+        return dayScheduleDTO;
     }
 
     public List<ShiftDTO> optimiseDaySchedule(List<ShiftDTO> dtos) {

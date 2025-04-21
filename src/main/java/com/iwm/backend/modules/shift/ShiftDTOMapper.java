@@ -82,6 +82,7 @@ public class ShiftDTOMapper {
         schedEngShiftDTO.setScheduleId(shiftDTO.getScheduleId());
         SchedEngEmpDTO schedEngEmpDTO = new SchedEngEmpDTO();
         schedEngEmpDTO.setId(shiftDTO.getEmployeeId());
+        schedEngEmpDTO.setName(shiftDTO.getEmployeeName());
         schedEngShiftDTO.setEmployee(schedEngEmpDTO);
         return schedEngShiftDTO;
     }
