@@ -19,7 +19,7 @@ public class WeeklyScheduleDTOMapper {
         }
 
         WeeklyScheduleDTO dto = new WeeklyScheduleDTO();
-        List<ShiftDTO> shiftDTOs = ShiftDTOMapper.toShiftDTO(weeklySchedule.getShifts());
+        List<ShiftDTO> shiftDTOs = ShiftDTOMapper.toShiftDTOList(weeklySchedule.getShifts());
         dto.setScheduleStartDate(LocalDate.now());
         dto.setShifts(shiftDTOs);
 

@@ -31,7 +31,7 @@ public class ShiftService {
         return ShiftDTOMapper.toShiftDTOList(shiftRepository.saveAll(shiftEMList));
     }
 
-    public List<ShiftEM> findByDate(LocalDate date) {
-        return shiftRepository.findShiftEMByDate(date);
+    public List<ShiftDTO> findByDate(LocalDate date) {
+        return ShiftDTOMapper.toShiftDTOList(shiftRepository.findShiftEMByDate(date));
     }
 }

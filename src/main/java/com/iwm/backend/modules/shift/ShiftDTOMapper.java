@@ -2,11 +2,13 @@ package com.iwm.backend.modules.shift;
 
 import com.iwm.backend.modules.employee.EmployeeEM;
 import com.iwm.backend.modules.schedules.WeeklyScheduleEM;
+import com.iwm.schedule_engine.models.dtos.SchedEngEmpDTO;
 import com.iwm.schedule_engine.models.dtos.SchedEngShiftDTO;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ShiftDTOMapper {
 
@@ -19,12 +21,11 @@ public class ShiftDTOMapper {
         dto.setDate(shift.getDate());
         dto.setEmployeeId(shift.getEmployee().getId());
         dto.setEmployeeName(shift.getEmployee().getName());
+        dto.setShiftId(shift.getShiftId());
+        dto.setScheduleId(shift.getScheduleId());
         return dto;
     }
 
-    public static List<ShiftDTO> toShiftDTO(List<SchedEngShiftDTO> shifts) {
-        return new ArrayList<>(shifts.stream().map(ShiftDTOMapper::toShiftDTO).toList());
-    }
 
     public static ShiftEM toShiftEM(ShiftDTO shiftDTO) {
 
@@ -67,11 +68,46 @@ public class ShiftDTOMapper {
 
     }
 
+    public static SchedEngShiftDTO toSchedEngShiftDTO(ShiftDTO shiftDTO) {
+        if (shiftDTO == null) {
+            return null;
+        }
+        SchedEngShiftDTO schedEngShiftDTO = new SchedEngShiftDTO();
+        schedEngShiftDTO.setShiftId(shiftDTO.getShiftId());
+        schedEngShiftDTO.setDate(shiftDTO.getDate());
+        schedEngShiftDTO.setStartTimeInMinutes(
+                shiftDTO.getStartTime().getHour()*60+shiftDTO.getStartTime().getMinute()*60);
+        schedEngShiftDTO.setEndTimeInMinutes(
+                shiftDTO.getEndTime().getHour()*60+shiftDTO.getEndTime().getMinute()*60);
+        schedEngShiftDTO.setScheduleId(shiftDTO.getScheduleId());
+        SchedEngEmpDTO schedEngEmpDTO = new SchedEngEmpDTO();
+        schedEngEmpDTO.setId(shiftDTO.getEmployeeId());
+        schedEngShiftDTO.setEmployee(schedEngEmpDTO);
+        return schedEngShiftDTO;
+    }
+
     public static List<ShiftEM> toShiftEMList(List<ShiftDTO> shiftDTOS) {
         return new ArrayList<>(shiftDTOS.stream().map(ShiftDTOMapper::toShiftEM).toList());
     }
 
-    public static List<ShiftDTO> toShiftDTOList(List<ShiftEM> shiftEMList) {
-        return new ArrayList<>(shiftEMList.stream().map(ShiftDTOMapper::toShiftDTO).toList());
+    public static <T> List<ShiftDTO> toShiftDTOList(List<T> list) {
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+
+        return list.stream()
+                .map(obj -> {
+                    if (obj instanceof ShiftEM shift) {
+                        return ShiftDTOMapper.toShiftDTO(shift);
+                    } else if (obj instanceof SchedEngShiftDTO shift) {
+                        return ShiftDTOMapper.toShiftDTO(shift);
+                    }
+                    throw new IllegalArgumentException("Unsupported type: " + obj.getClass());
+                })
+                .collect(Collectors.toList());
+    }
+
+    public static List<SchedEngShiftDTO> toSchedEngShiftDTOList(List<ShiftDTO> dtos) {
+        return new ArrayList<>(dtos.stream().map(ShiftDTOMapper::toSchedEngShiftDTO).toList());
     }
 }
