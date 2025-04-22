@@ -1,7 +1,9 @@
 package com.iwm.backend.modules.day_schedules;
 
+import com.iwm.backend.modules.contract.ContractDataEM;
 import com.iwm.backend.modules.shift.ShiftDTO;
 import com.iwm.backend.modules.shift.ShiftDTOMapper;
+import com.iwm.backend.modules.shift.ShiftEM;
 import com.iwm.backend.modules.shift.ShiftService;
 import com.iwm.schedule_engine.engine.HourlyScheduleOptimiser;
 import com.iwm.schedule_engine.models.HourlyDemand;
@@ -25,16 +27,17 @@ public class DayScheduleService {
 
     public DayScheduleDTO getTodaySchedule(){
         DayScheduleDTO dayScheduleDTO = new DayScheduleDTO();
-        List<ShiftDTO> shifts = shiftService.findByDate(LocalDate.now());
-        for (ShiftDTO shift : shifts) {
-            System.out.println(shift.getDate());
-        }
-        dayScheduleDTO.setShifts(shifts);
+        List<ShiftEM> shifts = shiftService.findByDate(LocalDate.now());
+
         double cost = 0;
-        for (ShiftDTO shift : shifts) {
-            cost+=Duration.between(shift.getStartTime(), shift.getEndTime()).toMinutes()/60.0;
+        for (ShiftEM shift : shifts) {
+            List<ContractDataEM> contracts = shift.getEmployee().getContractData();
+            double rate = contracts.get(contracts.size()-1).getHourlyRate();
+            cost+=(Duration.between(shift.getStartTime(),
+                    shift.getEndTime()).toMinutes()/60.0)*rate;
         }
         dayScheduleDTO.setCost(cost);
+        dayScheduleDTO.setShifts(ShiftDTOMapper.toShiftDTOList(shifts));
         return dayScheduleDTO;
     }
 

@@ -76,9 +76,9 @@ public class ShiftDTOMapper {
         schedEngShiftDTO.setShiftId(shiftDTO.getShiftId());
         schedEngShiftDTO.setDate(shiftDTO.getDate());
         schedEngShiftDTO.setStartTimeInMinutes(
-                shiftDTO.getStartTime().getHour()*60+shiftDTO.getStartTime().getMinute()*60);
+                shiftDTO.getStartTime().getHour()*60+shiftDTO.getStartTime().getMinute());
         schedEngShiftDTO.setEndTimeInMinutes(
-                shiftDTO.getEndTime().getHour()*60+shiftDTO.getEndTime().getMinute()*60);
+                shiftDTO.getEndTime().getHour()*60+shiftDTO.getEndTime().getMinute());
         schedEngShiftDTO.setScheduleId(shiftDTO.getScheduleId());
         SchedEngEmpDTO schedEngEmpDTO = new SchedEngEmpDTO();
         schedEngEmpDTO.setId(shiftDTO.getEmployeeId());
