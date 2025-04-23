@@ -1,0 +1,26 @@
+package com.iwm.backend.modules.schedules;
+
+
+import com.iwm.backend.modules.shift.ShiftDTO;
+import lombok.Data;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@Data
+public class WeeklyScheduleDTO {
+
+    private LocalDate scheduleStartDate;
+
+    private long scheduleId;
+
+    private List<ShiftDTO> shifts;
+
+    public WeeklyScheduleDTO(LocalDate scheduleStartDate, List<ShiftDTO> shifts) {
+        this.scheduleStartDate = scheduleStartDate;
+        this.shifts = shifts;
+    }
+
+    public WeeklyScheduleDTO() {
+    }
+}
