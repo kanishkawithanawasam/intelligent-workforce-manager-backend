@@ -38,6 +38,8 @@ class EmployeeMapper {
         employee.setName(employeeEM.getFirstName()+employeeEM.getLastName());
         employee.setMaxHoursPerWeek(employee.getMaxHoursPerWeek());
         employee.setHoursPreference(employee.getHoursPreference());
+        int prefSide = employeeEM.getPreferences().size();
+        employee.setHoursPreference(employeeEM.getPreferences().get(prefSide-1).getPreferredHours());
         return employee;
     }
 
