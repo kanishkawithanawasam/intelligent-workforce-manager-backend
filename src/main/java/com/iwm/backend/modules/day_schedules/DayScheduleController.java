@@ -24,16 +24,8 @@ public class DayScheduleController{
 
     @PostMapping("/optimise")
     public ResponseEntity<?> optimise(@RequestBody List<ShiftDTO> dtos) {
-        System.out.println("Data received");
-        for (ShiftDTO shiftDTO : dtos) {
-            System.out.println(shiftDTO.getDate());
-        }
-
         List<ShiftDTO> updated = dayScheduleService.optimiseDaySchedule(dtos);
-        for (ShiftDTO shift : updated) {
-            System.out.println(shift.getDate());
-        }
-        return ResponseEntity.ok().body(dayScheduleService.optimiseDaySchedule(dtos));
+        return ResponseEntity.ok().body(updated);
     }
 
 
