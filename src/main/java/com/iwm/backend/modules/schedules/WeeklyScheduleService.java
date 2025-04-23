@@ -1,9 +1,7 @@
 package com.iwm.backend.modules.schedules;
 
 import com.iwm.backend.modules.employee.EmployeeService;
-import com.iwm.backend.modules.shift.ShiftDTO;
-import com.iwm.backend.modules.shift.ShiftDTOMapper;
-import com.iwm.schedule_engine.engine.FuzzGenSchedGenerator;
+import com.iwm.schedule_engine.engine.FGAScheduleGenerator;
 import com.iwm.schedule_engine.models.dtos.SchedEngEmpDTO;
 import com.iwm.schedule_engine.models.dtos.SchedEngShiftDTO;
 import com.iwm.schedule_engine.models.dtos.SchedEngWeklySchedDTO;
@@ -72,7 +70,7 @@ public class WeeklyScheduleService {
 
 
         SchedEngWeklySchedDTO schedule =
-                new FuzzGenSchedGenerator(employees,
+                new FGAScheduleGenerator(employees,
                         DemandReader.getDemand()).genSchedule();
 
         for (SchedEngShiftDTO shiftDTO : schedule.getShifts()) {
