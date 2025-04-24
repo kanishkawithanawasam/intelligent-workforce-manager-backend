@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class ContractDataMapperTest {
 
     @Test
-    @SuppressWarnings("Test ContractDataEM to ContractDataDTO")
+    @DisplayName("Test ContractDataEM to ContractDataDTO")
     void toContractDataDTO() {
         
         LocalDate startDate = LocalDate.of(2023, 1, 1);
@@ -52,7 +52,7 @@ class ContractDataMapperTest {
     }
 
     @Test
-    @SuppressWarnings("Test ContractDataDTO to ContractDataEM")
+    @DisplayName("Test ContractDataDTO to ContractDataEM")
     void toContractDataEM() {
         LocalDate startDate = LocalDate.of(2023, 1, 1);
         LocalDate endDate = LocalDate.of(2023, 12, 31);

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.Duration;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthenticationController {
 
     private final AuthenticationManager authenticationManager;

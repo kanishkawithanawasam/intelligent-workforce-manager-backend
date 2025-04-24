@@ -53,7 +53,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             }
         }catch (Exception e) {
-            System.out.println("Cannot set user authentication: " + e);
+
         }
         filterChain.doFilter(request, response);
     }
@@ -66,7 +66,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 }
             }
         }
-        System.out.println("No jwt cookie found");
         return null;
     }
 }
