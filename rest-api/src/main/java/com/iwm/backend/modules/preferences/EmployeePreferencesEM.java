@@ -21,6 +21,6 @@ public class EmployeePreferencesEM {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id", nullable = false,
     foreignKey = @ForeignKey(name = "fk_preferences_employee"))
-    @JsonBackReference
+    @JsonBackReference(value = "employee-preferences")
     private EmployeeEM employee;
 }

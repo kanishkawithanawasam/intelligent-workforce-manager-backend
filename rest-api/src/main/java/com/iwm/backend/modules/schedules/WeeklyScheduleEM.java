@@ -27,11 +27,9 @@ public class WeeklyScheduleEM {
     private LocalDate scheduleStartDate;
 
     @OneToMany(mappedBy = "weeklySchedule", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "schedule-shifts")
     private List<ShiftEM> shifts = new ArrayList<>();
 
-    public WeeklyScheduleEM(List<ShiftEM> list) {
-    }
 
     public WeeklyScheduleEM() {
 

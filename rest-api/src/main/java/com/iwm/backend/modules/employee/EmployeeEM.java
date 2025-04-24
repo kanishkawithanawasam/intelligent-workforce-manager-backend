@@ -1,9 +1,11 @@
 package com.iwm.backend.modules.employee;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.iwm.backend.modules.contract.ContractDataEM;
 import com.iwm.backend.modules.preferences.EmployeePreferencesEM;
 import com.iwm.backend.modules.shift.ShiftEM;
+import com.iwm.backend.security.UserEM;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -40,14 +42,18 @@ public class EmployeeEM {
     private String contact;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonManagedReference(value = "employee-shifts")
     private List<ShiftEM> shifts = new ArrayList<>();
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonManagedReference(value = "employee-contract")
     private List<ContractDataEM> contractData;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonManagedReference(value = "employee-preferences")
     private List<EmployeePreferencesEM> preferences;
+
+    @OneToOne(mappedBy = "employee")
+    @JsonManagedReference(value = "employee-user")
+    private UserEM user;
 }

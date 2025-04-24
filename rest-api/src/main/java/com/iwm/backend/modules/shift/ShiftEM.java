@@ -31,12 +31,12 @@ public class ShiftEM {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id", nullable = false,
             foreignKey = @ForeignKey(name = "fk_shift_employee"))
-    @JsonBackReference
+    @JsonBackReference(value = "employee-shifts")
     private EmployeeEM employee;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedule_id", nullable = false,
             foreignKey = @ForeignKey(name = "fk_shift_schedule"))
-    @JsonBackReference
+    @JsonBackReference(value = "schedule-shifts")
     private WeeklyScheduleEM weeklySchedule;
 }

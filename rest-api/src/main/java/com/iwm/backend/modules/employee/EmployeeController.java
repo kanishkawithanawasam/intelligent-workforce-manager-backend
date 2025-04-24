@@ -22,7 +22,7 @@ public class EmployeeController{
 
     @GetMapping("/demographics/{id}")
     public ResponseEntity<EmployeeDTO> getEmployeeFile(@PathVariable long id) {
-        EmployeeDTO dto = employeeService.getEmployee(id);
+        EmployeeDTO dto = employeeService.getEmployeeDTObyId(id);
         return ResponseEntity.ok().body(dto);
     }
 

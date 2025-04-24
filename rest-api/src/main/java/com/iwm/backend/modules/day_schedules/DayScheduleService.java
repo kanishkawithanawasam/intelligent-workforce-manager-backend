@@ -19,7 +19,6 @@ import java.util.List;
 @Service
 public class DayScheduleService {
 
-
     private final ShiftService shiftService;
     private final DemandService demandService;
 

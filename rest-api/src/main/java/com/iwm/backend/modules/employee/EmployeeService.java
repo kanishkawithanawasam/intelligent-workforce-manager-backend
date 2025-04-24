@@ -36,12 +36,17 @@ public class EmployeeService {
     }
 
     @Transactional
-    public EmployeeDTO getEmployee(long employeeId) {
+    public EmployeeDTO getEmployeeDTObyId(long employeeId) {
         EmployeeEM employeeEM = employeeRepository.findById(employeeId).orElse(null);
         if (employeeEM != null) {
            return EmployeeMapper.toEmployeeDTO(employeeEM);
         }
         return null;
+    }
+
+    @Transactional
+    public EmployeeEM getEmployeeEMbyId(long employeeId) {
+        return employeeRepository.findById(employeeId).orElse(null);
     }
 
     @Transactional

@@ -40,6 +40,6 @@ public class ContractDataEM {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id", nullable = false,
             foreignKey = @ForeignKey(name = "fk_contract_employee"))
-    @JsonBackReference
+    @JsonBackReference(value = "employee-contract")
     private EmployeeEM employee;
 }
