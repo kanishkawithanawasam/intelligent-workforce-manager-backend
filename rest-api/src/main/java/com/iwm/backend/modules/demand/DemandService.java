@@ -100,6 +100,7 @@ public class DemandService {
             int hour = LocalDateTime.parse(ds, formatter).getHour();
             hourToYhat.put(hour, (int) (demand/preset));
         }
+        System.out.println(hourToYhat);
         return  hourToYhat;
     }
 }
