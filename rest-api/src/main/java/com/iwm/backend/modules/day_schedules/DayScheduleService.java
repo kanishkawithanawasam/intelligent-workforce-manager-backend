@@ -97,7 +97,7 @@ public class DayScheduleService {
         // Prepared the demand
         HourlyDemand demand;
         try {
-            demand= new HourlyDemand(LocalDate.now(),demandService.getWeeklyDemand(10));
+            demand= new HourlyDemand(LocalDate.now(),demandService.getWeeklyDemand(10,3));
         }catch (JsonProcessingException e) {
             throw new RuntimeException("Error retrieving hourly demand");
         }

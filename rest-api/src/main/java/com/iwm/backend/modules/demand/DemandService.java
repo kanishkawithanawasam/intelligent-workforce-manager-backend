@@ -11,54 +11,70 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
+
+/**
+ * Service responsible for handling operations related to demand forecasting and processing.
+ * <p>
+ * This service typically interacts with external forecasting APIs and internal systems
+ * to retrieve, transform, and provide demand data required for schedule optimization and
+ * workforce planning. It includes functionality to:
+ * <ul>
+ *   <li>Request short-term demand forecasts from external services</li>
+ *   <li>Parse and normalize raw forecast data into usable formats</li>
+ *   <li>Provide hourly demand mappings used by scheduling algorithms</li>
+ * </ul>
+ * Designed to support dynamic scheduling and real-time optimization by supplying
+ * up-to-date demand information on an hourly basis.
+ *
+ * <p>Typical usage might involve:
+ * <pre>
+ * {@code
+ * Map<Integer, Integer> hourlyDemand = demandService.getWeeklyDemand(1);
+ * }
+ * </pre>
+ *
+ * @author Kanishka Withanawasam
+ * @version 1.0
+ */
 
 @Service
 public class DemandService {
 
 
     /**
-     * Retrieves and parses hourly demand forecasts from an external forecasting service.
+     * Retrieves hourly demand forecasts from an external forecasting API and maps them to integer values.
      * <p>
-     * This method sends a POST request to a forecasting API endpoint to obtain demand predictions
-     * for a specified duration (currently hardcoded to 5 hours). The response is expected to be
-     * a JSON array where each element contains a timestamp ({@code ds}) and a predicted value
-     * ({@code yhat}). The method processes this response to generate a mapping of hour of the day
-     * to scaled integer demand values.
+     * Sends a POST request to the Prophet-based forecasting service with a configurable forecast period.
+     * Parses the response to extract demand predictions for each hour and scales the predicted values
+     * using the provided preset factor.
      * <p>
-     * Specifically:
+     * The response is expected to be a list of JSON objects containing:
      * <ul>
-     *   <li>The API is called at {@code http://localhost:8000/forecastPeriod} with a JSON body
-     *       containing {@code durationHours = 5}.</li>
-     *   <li>The JSON response is deserialise into a list of maps representing forecast entries.</li>
-     *   <li>Each entry's timestamp ({@code ds}) is parsed to extract the hour of the day (0–23).</li>
-     *   <li>The predicted demand ({@code yhat}) is scaled down by a factor of 10 and rounded to
-     *       the nearest integer.</li>
-     *   <li>The resulting map contains hours as keys and scaled demand values as values.</li>
+     *   <li>{@code ds} - a timestamp in ISO-8601 format (e.g., "2025-04-24T14:00:00")</li>
+     *   <li>{@code yhat} - the predicted demand value</li>
      * </ul>
      *
-     * @param preset an integer indicating a demand preset; currently unused but may support future logic
-     * @return a map of hour of day (0–23) to predicted demand (scaled and rounded)
-     * @throws JsonProcessingException if there is an error parsing the JSON response
+     * The method returns a {@link TreeMap} where each key is the hour of the day (0–23) and the value
+     * is the scaled integer demand.
+     *
+     * @param preset a scaling factor used to reduce the raw predicted demand values (e.g., divide yhat by this value)
+     * @param period the number of hours ahead to forecast (e.g., 24 for a daily forecast)
+     * @return a {@link TreeMap} mapping hours (0–23) to scaled demand values
+     * @throws JsonProcessingException if the JSON response from the forecast API cannot be parsed
      * @see ObjectMapper
      * @see RestTemplate
-     * @see LocalDateTime
      */
-    public TreeMap<Integer,Integer> getWeeklyDemand(int preset) throws JsonProcessingException {
+    public TreeMap<Integer,Integer> getWeeklyDemand(int preset, int period) throws JsonProcessingException {
 
-        String url = "http://localhost:8000/forecastPeriod";
+        String url = "http://127.0.0.1:4000/api/v1/forecast/prophet";
         Map<String, Object> body = Map.of(
-                "durationHours", 5
+                "forecastPeriod", period
         );
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -82,7 +98,7 @@ public class DemandService {
             String ds = (String) forecast.get("ds");
             double demand = ((Number) forecast.get("yhat")).doubleValue();
             int hour = LocalDateTime.parse(ds, formatter).getHour();
-            hourToYhat.put(hour, (int) (demand/10));
+            hourToYhat.put(hour, (int) (demand/preset));
         }
         return  hourToYhat;
     }
