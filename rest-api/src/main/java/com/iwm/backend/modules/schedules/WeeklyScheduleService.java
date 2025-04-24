@@ -14,6 +14,10 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service class for managing weekly employee schedules.
+ * Provides functionality for generating, retrieving and saving weekly schedules.
+ */
 @Service
 public class WeeklyScheduleService {
     private final WeeklyScheduleRepository weeklyScheduleRepository;
@@ -26,6 +30,12 @@ public class WeeklyScheduleService {
     }
 
 
+    /**
+     * Retrieves a weekly schedule for a given start date.
+     *
+     * @param startDate The start date of the week to retrieve the schedule for
+     * @return WeeklyScheduleDTO containing the schedule, or an empty schedule if none exists
+     */
     public WeeklyScheduleDTO getWeekScheduleFromDate(LocalDate startDate){
         WeeklyScheduleDTO weeklyScheduleDTO = WeeklyScheduleDTOMapper.toWeeklyScheduleDTO(
                 weeklyScheduleRepository.findByScheduleStartDate(startDate));
@@ -38,12 +48,18 @@ public class WeeklyScheduleService {
         return weeklyScheduleDTO;
     }
 
+    /**
+     * Gets a list of available week start dates for schedule generation.
+     * Returns the next 8 Mondays that don't have existing schedules.
+     *
+     * @return List of available start dates
+     */
     public List<LocalDate> getWeekStartDates() {
 
         List<LocalDate> weekStartDates = new ArrayList<>();
 
 
-        // Determine the last schedule date
+        // Find the most recent schedule's start date from the database
         LocalDate latestWeekStartDate = weeklyScheduleRepository.findLatestWeekStartDate();
         if (latestWeekStartDate == null) {
             latestWeekStartDate = LocalDate.now();
@@ -51,6 +67,7 @@ public class WeeklyScheduleService {
 
 
         LocalDate dateCounter = LocalDate.now();
+        // Get all dates that already have schedules to exclude them from available dates
         List<LocalDate> unavailableStartDates = weeklyScheduleRepository.findStartDatesBetween(dateCounter, latestWeekStartDate);
         for (int i = 0; i <8; i++) {
             dateCounter = dateCounter.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
@@ -62,6 +79,14 @@ public class WeeklyScheduleService {
         return weekStartDates;
     }
 
+    /**
+     * Generates a new weekly schedule based on the provided request.
+     * Uses FGA algorithm to generate optimal schedule for employees.
+     *
+     * @param requestDTO Request containing schedule generation parameters
+     * @return Generated weekly schedule
+     * @throws IOException If there's an error during schedule generation
+     */
     public WeeklyScheduleDTO generateWeeklySchedule(WeeklyScheduleRequestDTO requestDTO) throws IOException {
 
 
@@ -82,7 +107,11 @@ public class WeeklyScheduleService {
     }
 
 
-
+    /**
+     * Persists a weekly schedule to the database.
+     *
+     * @param weeklyScheduleDTO The schedule to be saved
+     */
     public void saveWeeklySchedule(WeeklyScheduleDTO weeklyScheduleDTO){
         weeklyScheduleRepository.save(
                 WeeklyScheduleDTOMapper.toWeeklyScheduleEM(weeklyScheduleDTO));

@@ -1,8 +1,6 @@
 package com.iwm.backend.security;
 
 import com.iwm.backend.modules.employee.EmployeeService;
-import com.iwm.backend.modules.employee.ExistingUserDTO;
-import com.iwm.backend.modules.employee.NewUserDTO;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;

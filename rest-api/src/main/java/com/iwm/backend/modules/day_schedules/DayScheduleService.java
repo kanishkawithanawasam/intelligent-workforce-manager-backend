@@ -16,12 +16,28 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 
+
+/**
+ * Service class responsible for managing and optimizing daily work schedules.
+ * <p>
+ * This service provides functionality to:
+ * <ul>
+ *   <li>Retrieve and calculate costs for today's work schedule</li>
+ *   <li>Optimise shift schedules based on hourly demand requirements</li>
+ * </ul>
+ */
 @Service
 public class DayScheduleService {
 
     private final ShiftService shiftService;
     private final DemandService demandService;
 
+    /**
+     * Constructs a new DayScheduleService with required dependencies.
+     *
+     * @param shiftService  service for managing employee shifts
+     * @param demandService service for managing staffing demand data
+     */
     public DayScheduleService(ShiftService shiftService, DemandService demandService) {
         this.shiftService = shiftService;
         this.demandService =demandService;

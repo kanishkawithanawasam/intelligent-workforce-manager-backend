@@ -8,10 +8,19 @@ import com.iwm.schedule_engine.models.dtos.interfaces.IScheduleEngineWeklySchedD
 import java.time.LocalDate;
 import java.util.*;
 
+/**
+ * Mapper class responsible for converting between different representations of weekly schedules:
+ * WeeklyScheduleDTO, WeeklyScheduleEM and IScheduleEngineWeklySchedDTO.
+ */
 public class WeeklyScheduleDTOMapper {
 
 
-
+    /**
+     * Converts a schedule engine weekly schedule DTO to WeeklyScheduleDTO.
+     *
+     * @param weeklySchedule The schedule engine weekly schedule to convert
+     * @return A new WeeklyScheduleDTO object, or null if input shifts are null
+     */
     public static WeeklyScheduleDTO toWeeklyScheduleDTO(IScheduleEngineWeklySchedDTO weeklySchedule) {
 
         if (weeklySchedule.getShifts() == null) {
@@ -27,8 +36,13 @@ public class WeeklyScheduleDTOMapper {
     }
 
 
-
-
+    /**
+     * Converts a WeeklyScheduleDTO to a WeeklyScheduleEM entity.
+     * Sets up bidirectional relationships between the schedule and its shifts.
+     *
+     * @param weeklyScheduleDTO The DTO to convert
+     * @return A new WeeklyScheduleEM entity, or null if input is null
+     */
     public static WeeklyScheduleEM toWeeklyScheduleEM(WeeklyScheduleDTO weeklyScheduleDTO) {
 
         if (weeklyScheduleDTO == null) {
@@ -47,7 +61,13 @@ public class WeeklyScheduleDTOMapper {
     }
 
 
-
+    /**
+     * Converts a WeeklyScheduleEM entity to a WeeklyScheduleDTO.
+     * Ensures all shifts reference their parent schedule ID.
+     *
+     * @param weeklyScheduleEM The entity to convert
+     * @return A new WeeklyScheduleDTO object, or null if input is null
+     */
     public static WeeklyScheduleDTO toWeeklyScheduleDTO(WeeklyScheduleEM weeklyScheduleEM) {
 
         if (weeklyScheduleEM == null) {

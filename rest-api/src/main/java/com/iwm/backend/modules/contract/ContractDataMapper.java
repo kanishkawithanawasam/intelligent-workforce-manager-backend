@@ -2,9 +2,19 @@ package com.iwm.backend.modules.contract;
 
 import com.iwm.backend.modules.employee.EmployeeEM;
 
+/**
+ * Mapper class responsible for converting between ContractDataEM (Entity Model)
+ * and ContractDataDTO (Data Transfer Object) objects.
+ */
 public class ContractDataMapper {
 
 
+    /**
+     * Converts a ContractDataEM entity to a ContractDataDTO.
+     *
+     * @param contractDataEM the contract data entity model to convert
+     * @return a ContractDataDTO containing the mapped contract data
+     */
     public static ContractDataDTO toContractDataDTO(ContractDataEM contractDataEM) {
         ContractDataDTO dto=new ContractDataDTO();
         dto.setContractId(contractDataEM.getId());
@@ -20,6 +30,12 @@ public class ContractDataMapper {
         return dto;
     }
 
+    /**
+     * Converts a ContractDataDTO to a ContractDataEM entity.
+     *
+     * @param dto the contract data transfer object to convert
+     * @return a ContractDataEM containing the mapped contract data
+     */
     public static ContractDataEM toContractDataEM(ContractDataDTO dto) {
         ContractDataEM contractDataEM=new ContractDataEM();
         contractDataEM.setId(dto.getContractId());
