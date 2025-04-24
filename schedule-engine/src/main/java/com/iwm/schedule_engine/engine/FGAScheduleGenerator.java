@@ -39,13 +39,13 @@ import java.util.*;
 public class FGAScheduleGenerator {
 
     private final List<Employee> employees;
-    private final Map<LocalDate,Map<Integer,Integer>> demand;
+    private final LocalDate startDate;
     private double MUTATION_RATE;
 
     public FGAScheduleGenerator(List<SchedEngEmpDTO> employeeDTOs,
-                                Map<LocalDate,Map<Integer,Integer>> demand) {
+                                LocalDate startDate) {
         this.employees = EmployeeMapper.toEmployees(employeeDTOs);
-        this.demand = demand;
+        this.startDate=startDate;
     }
 
 
@@ -66,7 +66,7 @@ public class FGAScheduleGenerator {
     public SchedEngWeklySchedDTO genSchedule() throws IOException {
 
         // Generates the initial population
-        Population population = new Population(employees, demand);
+        Population population = new Population(employees, startDate);
 
         // Calculates fitness of each schedule in the population.
         double bestAccOnPopulation = 0;

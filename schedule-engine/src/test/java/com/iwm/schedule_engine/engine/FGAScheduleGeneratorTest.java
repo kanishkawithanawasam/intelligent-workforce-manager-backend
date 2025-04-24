@@ -2,8 +2,8 @@ package com.iwm.schedule_engine.engine;
 
 import com.iwm.schedule_engine.models.dtos.SchedEngEmpDTO;
 import com.iwm.schedule_engine.models.dtos.SchedEngShiftDTO;
-import com.iwm.schedule_engine.trial.DemandReader;
-import com.iwm.schedule_engine.trial.EmloyeesReader;
+import com.iwm.schedule_engine.support.DemandReader;
+import com.iwm.schedule_engine.support.EmloyeesReader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,8 +23,7 @@ class FGAScheduleGeneratorTest {
     void genSchedule() throws IOException {
 
         FGAScheduleGenerator generator = new FGAScheduleGenerator(
-                EmloyeesReader.readEmployees(),
-                DemandReader.getDemand()
+                EmloyeesReader.readEmployees(),LocalDate.now()
         );
 
         List<SchedEngShiftDTO> shifts = generator.genSchedule().getShifts();

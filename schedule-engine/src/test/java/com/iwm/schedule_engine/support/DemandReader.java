@@ -1,4 +1,4 @@
-package com.iwm.schedule_engine.trial;
+package com.iwm.schedule_engine.support;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -8,10 +8,12 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class DemandReader {
     public static Map<LocalDate,Map<Integer,Integer>> getDemand(){
-        String csvFile = DemandReader.class.getResource("/data/demand_schedule.csv").getPath(); // Path to the CSV file
+        String csvFile = Objects.requireNonNull(
+                DemandReader.class.getResource("/data/demand_schedule.csv")).getPath(); // Path to the CSV file
         csvFile = URLDecoder.decode(csvFile, StandardCharsets.UTF_8);
         String line;
         String csvSplitBy = ","; // CSV delimiter

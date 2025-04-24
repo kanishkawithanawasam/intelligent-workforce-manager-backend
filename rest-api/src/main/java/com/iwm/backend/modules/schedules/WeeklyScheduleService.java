@@ -5,7 +5,6 @@ import com.iwm.schedule_engine.engine.FGAScheduleGenerator;
 import com.iwm.schedule_engine.models.dtos.SchedEngEmpDTO;
 import com.iwm.schedule_engine.models.dtos.SchedEngShiftDTO;
 import com.iwm.schedule_engine.models.dtos.SchedEngWeklySchedDTO;
-import com.iwm.schedule_engine.trial.DemandReader;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -71,14 +70,10 @@ public class WeeklyScheduleService {
 
         SchedEngWeklySchedDTO schedule =
                 new FGAScheduleGenerator(employees,
-                        DemandReader.getDemand()).genSchedule();
+                       requestDTO.getStartDate()).genSchedule();
 
         for (SchedEngShiftDTO shiftDTO : schedule.getShifts()) {
             System.out.println(shiftDTO.getDate());
-        }
-
-        if (schedule == null) {
-            throw new WeeklyScheduleNotFoundException();
         }
         WeeklyScheduleDTO dto = WeeklyScheduleDTOMapper.toWeeklyScheduleDTO(schedule);
         assert dto != null;

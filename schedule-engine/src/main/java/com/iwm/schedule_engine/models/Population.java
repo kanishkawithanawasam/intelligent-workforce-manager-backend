@@ -19,12 +19,11 @@ public class Population {
     private final int MINIMUM_HOURS_PER_SHIFT;
     private final int MAXIMUM_HOURS_PER_SHIFT ;
     private final int POPULATION_SIZE ;
-    private List<Employee> employees;
-    Map<LocalDate,Map<Integer,Integer>> demand;
+    private final List<Employee> employees;
+    private final List<LocalDate> dates;
 
 
-    public Population(List<Employee> employees,Map<LocalDate,Map<Integer,Integer>> demand) throws IOException {
-
+    public Population(List<Employee> employees, LocalDate startDate) throws IOException {
 
         ObjectMapper objectMapper = new ObjectMapper();
         InputStream inputStream = getClass().getResourceAsStream("/BusinessConfigs.json");
@@ -36,7 +35,14 @@ public class Population {
         this.POPULATION_SIZE = FGAConfigs.POPULATION_SIZE;
 
         this.employees = employees;
-        this.demand = demand;
+
+        this.dates = new ArrayList<>();
+
+        LocalDate temp = startDate;
+        for(int i=0;i<7;i++){
+            dates.add(temp);
+            temp = temp.plusDays(1);
+        }
 
         this.generatePopulation();
     }
@@ -70,7 +76,7 @@ public class Population {
         String[] shiftType = {"opening","midday","evening","closing"};
 
         // Generate shifts for each day on the demand list
-        for(LocalDate date: demand.keySet()) {
+        for(LocalDate date: dates) {
 
             for (String type: shiftType) {
                 for (int i = 0; i < MINIMUM_EMPLOYEES_PER_SHIFT; i++) {
