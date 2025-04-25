@@ -38,6 +38,7 @@ public class HourlyScheduleOptimiser{
      * @param hourlyDemand   the specific hourly demand window to optimize for
      */
     public HourlyScheduleOptimiser(List<SchedEngShiftDTO> shiftDtos, HourlyDemand hourlyDemand) {
+
         this.shifts = ShiftMapper.toShifts(shiftDtos);
         this.hourlyDemand = hourlyDemand;
 
@@ -119,7 +120,9 @@ public class HourlyScheduleOptimiser{
             // Update the temperature
             T=T*coolingRate;
         }
-        return ShiftMapper.toSchedEngShiftDTO(bestSolution.getShifts());
+
+        List<Shift> shifts = bestSolution.getShifts();
+        return ShiftMapper.toSchedEngShiftDTO(shifts);
 
     }
 

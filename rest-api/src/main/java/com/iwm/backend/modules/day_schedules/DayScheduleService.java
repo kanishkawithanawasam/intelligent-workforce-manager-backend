@@ -65,7 +65,7 @@ public class DayScheduleService {
      */
     public DayScheduleDTO getTodaySchedule(){
         DayScheduleDTO dayScheduleDTO = new DayScheduleDTO();
-        List<ShiftEM> shifts = shiftService.findByDate(LocalDate.now());
+        List<ShiftEM> shifts = shiftService.findByDate(LocalDate.of(2025, 4, 28));
 
         double cost = 0;
         for (ShiftEM shift : shifts) {
@@ -108,10 +108,7 @@ public class DayScheduleService {
      */
     public List<ShiftDTO> optimiseDaySchedule(List<ShiftDTO> dtos){
 
-        System.out.println("Optimising schedule for today");
-        System.out.println("Original schedule: "+dtos);
         List<SchedEngShiftDTO> schedEngInput = ShiftDTOMapper.toSchedEngShiftDTOList(dtos);
-
         // Prepared the demand
         HourlyDemand demand;
         try {
@@ -121,11 +118,7 @@ public class DayScheduleService {
             throw new RuntimeException("Error retrieving hourly demand");
         }
         HourlyScheduleOptimiser optimiser = new HourlyScheduleOptimiser(schedEngInput, demand);
-        System.out.println("Optimised schedule: "+demand.getHourlyDemandMap());
         List<ShiftDTO> shiftDTOS= ShiftDTOMapper.toShiftDTOList(optimiser.getOptimisedRealTimeSchedule());
-        if(shiftDTOS==null) {
-            shiftDTOS = Collections.emptyList();
-        }
         return shiftDTOS;
     }
 }

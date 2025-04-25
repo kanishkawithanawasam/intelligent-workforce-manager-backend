@@ -76,7 +76,6 @@ public class DemandService {
         Map<String, Object> body = Map.of(
                 "forecastPeriod", period
         );
-        System.out.println(body);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
