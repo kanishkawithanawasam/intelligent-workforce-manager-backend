@@ -54,9 +54,8 @@ public class EmployeeController{
      */
     @PostMapping("/demographics")
     public ResponseEntity<EmployeeDTO> updateEmployee(@RequestBody EmployeeDTO dto) {
-        System.out.println(dto.toString());
         EmployeeDTO savedDto = employeeService.saveEmployee(dto);
-        return ResponseEntity.ok().body(dto);
+        return ResponseEntity.ok().body(savedDto);
 
     }
 }

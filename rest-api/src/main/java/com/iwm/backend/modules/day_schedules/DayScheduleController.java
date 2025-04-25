@@ -39,7 +39,7 @@ public class DayScheduleController{
     }
 
     /**
-     * Optimizes the provided day schedule.
+     * Optimises the provided day schedule.
      *
      * @param dtos list of shifts to be optimized
      * @return ResponseEntity containing the optimized list of shifts

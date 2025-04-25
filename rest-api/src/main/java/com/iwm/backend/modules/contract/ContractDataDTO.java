@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 /**
  * Data Transfer Object for Contract information.
- * Used to transfer contract-related data between different layers of the application.
+ * Used to transfer contract-related data between different frontend and controller.
  */
 @Data
 public class ContractDataDTO {

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -117,6 +118,10 @@ public class DayScheduleService {
             throw new RuntimeException("Error retrieving hourly demand");
         }
         HourlyScheduleOptimiser optimiser = new HourlyScheduleOptimiser(schedEngInput, demand);
-        return ShiftDTOMapper.toShiftDTOList(optimiser.getOptimisedRealTimeSchedule());
+        List<ShiftDTO> shiftDTOS= ShiftDTOMapper.toShiftDTOList(optimiser.getOptimisedRealTimeSchedule());
+        if(shiftDTOS==null) {
+            shiftDTOS = Collections.emptyList();
+        }
+        return shiftDTOS;
     }
 }
