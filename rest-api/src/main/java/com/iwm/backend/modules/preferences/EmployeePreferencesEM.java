@@ -3,13 +3,15 @@ package com.iwm.backend.modules.preferences;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.iwm.backend.modules.employee.EmployeeEM;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Entity representing employee preferences in the system.
  * This class stores various preferences and settings associated with an employee.
  */
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "Preferences")
 public class EmployeePreferencesEM {

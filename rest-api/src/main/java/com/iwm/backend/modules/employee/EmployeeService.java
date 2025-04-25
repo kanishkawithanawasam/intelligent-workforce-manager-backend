@@ -87,4 +87,9 @@ public class EmployeeService {
         return EmployeeMapper.toEmployeeDTO(emp);
     }
 
+    @Transactional
+    public EmployeeEM getEmployeeEmByIdem(long id){
+        return employeeRepository.findById(id).orElse(null);
+    }
+
 }

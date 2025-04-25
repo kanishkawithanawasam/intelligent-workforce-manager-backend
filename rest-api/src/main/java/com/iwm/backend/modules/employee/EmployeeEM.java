@@ -1,5 +1,6 @@
 package com.iwm.backend.modules.employee;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.iwm.backend.modules.contract.ContractDataEM;
 import com.iwm.backend.modules.preferences.EmployeePreferencesEM;
@@ -7,6 +8,7 @@ import com.iwm.backend.modules.shift.ShiftEM;
 import com.iwm.backend.security.UserEM;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "Employee")
+@ToString(exclude = {"preferences"})
 public class EmployeeEM {
 
     /**
@@ -83,7 +86,7 @@ public class EmployeeEM {
      * Employee's work preferences
      */
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
-    @JsonManagedReference(value = "employee-preferences")
+    @JsonBackReference(value = "employee-preferences")
     private List<EmployeePreferencesEM> preferences;
 
     /**

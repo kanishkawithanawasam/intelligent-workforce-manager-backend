@@ -1,5 +1,7 @@
 package com.iwm.backend.modules.preferences;
 
+import com.iwm.backend.modules.employee.EmployeeEM;
+import com.iwm.backend.modules.employee.EmployeeService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,14 +17,18 @@ public class EmployeePreferenceService {
      * Repository for accessing and managing employee preferences data in the database.
      */
     private EmployeePreferencesRepository employeePreferencesRepository;
+    private EmployeeService employeeService;
 
     /**
      * Constructs a new EmployeePreferenceService with the required repository.
      *
      * @param employeePreferencesRepository Repository for employee preferences data access
      */
-    public EmployeePreferenceService(EmployeePreferencesRepository employeePreferencesRepository) {
+    public EmployeePreferenceService(EmployeePreferencesRepository employeePreferencesRepository,
+                                     EmployeeService employeeService
+    ) {
         this.employeePreferencesRepository = employeePreferencesRepository;
+        this.employeeService = employeeService;
     }
 
     /**
@@ -43,9 +49,13 @@ public class EmployeePreferenceService {
      * @return EmployeePreferenceDTO The saved employee preferences converted to DTO
      */
     public EmployeePreferenceDTO saveEmployeePreferences(EmployeePreferenceDTO dto) {
-        
-        EmployeePreferencesEM em = employeePreferencesRepository.save(PreferenceMapper.toEM(dto));
-        return PreferenceMapper.toDTO(em);
+
+        System.out.println(dto.getEmployeeId());
+        EmployeeEM empEm = employeeService.getEmployeeEmByIdem(dto.getEmployeeId());
+        System.out.println(empEm.toString());
+        EmployeePreferencesEM em =PreferenceMapper.toEM(dto);
+        em.setEmployee(empEm);
+        return (PreferenceMapper.toDTO(employeePreferencesRepository.save(em)));
     }
     
 }

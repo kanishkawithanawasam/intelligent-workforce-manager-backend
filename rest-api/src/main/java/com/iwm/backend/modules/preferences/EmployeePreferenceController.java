@@ -1,10 +1,7 @@
 package com.iwm.backend.modules.preferences;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 /**
@@ -44,8 +41,8 @@ public class EmployeePreferenceController{
      * @param dto the EmployeePreferenceDTO containing preference data to be saved
      * @return ResponseEntity containing the saved employee preferences
      */
-    @PostMapping("/save")
-    public ResponseEntity<?> savePreferences(EmployeePreferenceDTO dto) {
+    @PostMapping()
+    public ResponseEntity<?> savePreferences(@RequestBody EmployeePreferenceDTO dto) {
         return ResponseEntity.ok(employeePreferenceService.saveEmployeePreferences(dto));
     }
 }

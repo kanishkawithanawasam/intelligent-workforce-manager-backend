@@ -1,10 +1,10 @@
 package com.iwm.backend.modules.contract;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.iwm.backend.modules.employee.EmployeeEM;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
@@ -12,7 +12,8 @@ import java.time.LocalDate;
  * Entity class representing contract data for employees.
  * Maps to the Contract_data table in the database.
  */
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "Contract_data")
 public class ContractDataEM {
@@ -68,6 +69,6 @@ public class ContractDataEM {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id", nullable = false,
             foreignKey = @ForeignKey(name = "fk_contract_employee"))
-    @JsonBackReference(value = "employee-contract")
+    @JsonManagedReference(value = "employee-contract")
     private EmployeeEM employee;
 }
