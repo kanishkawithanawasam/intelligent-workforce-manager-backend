@@ -75,8 +75,9 @@ public class AuthenticationController {
                             user.getPassword()
                     ));
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String role = userRepository.findByEmail(userDetails.getUsername()).getRole();
 
-            String token = jwtUtils.createToken(userDetails.getUsername());
+            String token = jwtUtils.createToken(userDetails.getUsername(), role.toUpperCase());
             ResponseCookie cookie = ResponseCookie.from("jwt",token)
                     .httpOnly(true)
                     .secure(false)
@@ -86,6 +87,7 @@ public class AuthenticationController {
                     .build();
             return ResponseEntity.ok()
                     .header(HttpHeaders.SET_COOKIE,cookie.toString())
+                    .header("X-user-role", role.toUpperCase())
                     .body("success");
         }catch (Exception e) {
             e.printStackTrace();
@@ -102,6 +104,7 @@ public class AuthenticationController {
         userEntity.setEmail(user.getEmail());
         userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
         userEntity.setEmployee(employeeService.getEmployeeEMbyId(user.getEmployeeId()));
+        userEntity.setRole(user.getRole());
         userRepository.save(userEntity);
         return "Success";
     }
