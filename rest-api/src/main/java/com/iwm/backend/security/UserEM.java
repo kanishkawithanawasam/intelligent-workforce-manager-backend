@@ -30,6 +30,8 @@ public class UserEM {
      */
     private String password;
 
+    private String role;
+
     /**
      * Association to Employee
      */

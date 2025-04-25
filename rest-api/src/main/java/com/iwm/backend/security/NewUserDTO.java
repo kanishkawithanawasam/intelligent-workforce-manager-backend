@@ -10,5 +10,6 @@ public class  NewUserDTO{
 
     private String email;
     private String password;
+    private String role;
     private long employeeId;
 }
