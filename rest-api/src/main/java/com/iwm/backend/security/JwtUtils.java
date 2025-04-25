@@ -27,13 +27,22 @@ public class JwtUtils {
     }
 
 
-    public String createToken(String email) {
+    public String createToken(String email, String role) {
         return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(new Date())
+                .claim("role",role )
                 .setExpiration(new Date(new Date().getTime()+expiryInMs))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
+    }
+
+    public String getRoleFromToken(String token) {
+        return Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .getBody()
+                .get("role", String.class);
     }
 
     public String getEmailFromToken(String token) {

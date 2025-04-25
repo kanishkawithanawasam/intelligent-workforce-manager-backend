@@ -108,16 +108,20 @@ public class DayScheduleService {
      */
     public List<ShiftDTO> optimiseDaySchedule(List<ShiftDTO> dtos){
 
+        System.out.println("Optimising schedule for today");
+        System.out.println("Original schedule: "+dtos);
         List<SchedEngShiftDTO> schedEngInput = ShiftDTOMapper.toSchedEngShiftDTOList(dtos);
 
         // Prepared the demand
         HourlyDemand demand;
         try {
-            demand= new HourlyDemand(LocalDate.now(),demandService.getWeeklyDemand(10,3));
+            demand= new HourlyDemand(LocalDate.now(),demandService.getWeeklyDemand(10,5));
+
         }catch (JsonProcessingException e) {
             throw new RuntimeException("Error retrieving hourly demand");
         }
         HourlyScheduleOptimiser optimiser = new HourlyScheduleOptimiser(schedEngInput, demand);
+        System.out.println("Optimised schedule: "+demand.getHourlyDemandMap());
         List<ShiftDTO> shiftDTOS= ShiftDTOMapper.toShiftDTOList(optimiser.getOptimisedRealTimeSchedule());
         if(shiftDTOS==null) {
             shiftDTOS = Collections.emptyList();

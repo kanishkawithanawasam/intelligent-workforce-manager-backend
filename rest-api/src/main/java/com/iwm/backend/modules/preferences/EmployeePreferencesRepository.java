@@ -5,4 +5,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EmployeePreferencesRepository extends JpaRepository<EmployeePreferencesEM, Long> {
+
+    EmployeePreferencesEM findByEmployeeId(Long id);
+
 }
