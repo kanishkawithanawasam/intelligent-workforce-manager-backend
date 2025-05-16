@@ -109,7 +109,6 @@ public class WeeklyScheduleService {
 
     /**
      * Persists a weekly schedule to the database.
-     *
      * @param weeklyScheduleDTO The schedule to be saved
      */
     public void saveWeeklySchedule(WeeklyScheduleDTO weeklyScheduleDTO){

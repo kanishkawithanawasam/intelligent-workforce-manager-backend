@@ -65,7 +65,7 @@ public class DayScheduleService {
      */
     public DayScheduleDTO getTodaySchedule(){
         DayScheduleDTO dayScheduleDTO = new DayScheduleDTO();
-        List<ShiftEM> shifts = shiftService.findByDate(LocalDate.of(2025, 4, 28));
+        List<ShiftEM> shifts = shiftService.findByDate(LocalDate.now());
 
         double cost = 0;
         for (ShiftEM shift : shifts) {

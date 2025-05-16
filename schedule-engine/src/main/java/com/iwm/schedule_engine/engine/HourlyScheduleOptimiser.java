@@ -15,7 +15,7 @@ import java.util.*;
  * Optimizes employee shift schedules in real-time to satisfy hourly demand
  * while minimizing constraint violations and deviations from preferences.
  *
- * <p>The {@code HourlyScheduleOptimiser} uses a meta heuristic optimization technique
+ * <p>The {@code HourlyScheduleOptimiser} uses a meta-heuristic optimization technique
  * (such as Simulated Annealing) to adjust shift start/end times for a specific demand
  * window. It ensures that weekly working hour limits are respected and that employee
  * preferences are taken into account.</p>
@@ -42,7 +42,7 @@ public class HourlyScheduleOptimiser{
         this.shifts = ShiftMapper.toShifts(shiftDtos);
         this.hourlyDemand = hourlyDemand;
 
-        // Precompute total hours each employee has already worked this week.
+        // Precompute the total hours each employee has already worked this week.
         this.totalHoursInWeek = CalculationsUtility.countTotalHours(this.shifts);
     }
 
@@ -75,7 +75,7 @@ public class HourlyScheduleOptimiser{
         double deltaFitness;                                        // Fitness difference or delta fitness.
         Random random = new Random();
 
-        // Initialise the current solution by selecting shifts that starts or ends within demand period.
+        // Initialise the current solution by selecting shifts that starts or ends within a demand period.
         for (Shift shift :this.shifts) {
             if (shift.getDate().equals(hourlyDemand.getDate()) &&
                     (shiftStartOrEndInDmdPeriod(shift) == -1 || shiftStartOrEndInDmdPeriod(shift) == 1)) {
@@ -83,7 +83,7 @@ public class HourlyScheduleOptimiser{
             }
         }
 
-        // Calculate each employee hours in selected schedule before any mutations.
+        // Calculate each employee hour in a selected schedule before any mutations.
         orgRTScheduleHours = CalculationsUtility.countTotalHours(currentSolution.getShifts());
 
 
@@ -96,11 +96,11 @@ public class HourlyScheduleOptimiser{
             // Calculate the fitness difference
             deltaFitness = currentSolution.getFitness()-newSolution.getFitness();
 
-            // Accept the new solution if its better
+            // Accept the new solution if it's better
             if (deltaFitness>0) {
                 currentSolution = newSolution;
             }
-            // Otherwise, accept new solution using probability based on temperature.
+            // Otherwise, accept a new solution using probability based on temperature.
             else if (random.nextDouble(0,1) < Math.exp(deltaFitness/T)) {
                 currentSolution = newSolution;
             }
@@ -159,7 +159,7 @@ public class HourlyScheduleOptimiser{
      *
      * <p>This function measures how well the generated schedule aligns with individual employee
      * preferences, specifically in terms of total hours worked within the week. The penalty is
-     * computed as the absolute difference between actual and preferred hours for each employee,
+     * computed as the absolute difference between actual and preferred hours for each employee
      * and then summed across all employees.</p>
      *
      * <p>This metric helps the optimization algorithm to favor schedules that not only meet demand
@@ -207,7 +207,7 @@ public class HourlyScheduleOptimiser{
         }
 
 
-        //  Initialise demand map for each 15 minutes.
+        //  Initialise a demand map for each 15 minutes.
         for (int i = hourlyDemand.getStartTimeInMinutes(); i < hourlyDemand.getEndTimeInMinutes(); i+=15) {
             _15minWinDmdMap.put(i, hourlyDemand.getHourlyDemandMap().get(i/60));
         }
@@ -218,7 +218,7 @@ public class HourlyScheduleOptimiser{
             _15MinWinEmpMap.put(i,0);
         }
 
-        // Update the employees count
+        // Update the employee's count
         for (Shift shift : realTimeSchedule.getShifts()) {
             int counter;
             switch (shiftStartOrEndInDmdPeriod(shift)){
@@ -354,10 +354,10 @@ public class HourlyScheduleOptimiser{
      *
      * <p>This method randomly adjusts the start or end times of shifts that either start or end within
      * the specified hourly demand period. The goal of this mutation is to explore neighboring solutions
-     * by slightly modifying the timing of shifts, which is useful for meta heuristic algorithms such as
+     * by slightly modifying the timing of shifts, which is useful for meta-heuristic algorithms such as
      * Simulated Annealing or Genetic Algorithms.</p>
      *
-     * <p>The time adjustment is done in 15-minute intervals, and constrained within the bounds of
+     * <p>The time adjustment is done in 15-minute intervals and constrained within the bounds of
      * the demand window. This ensures the resulting schedule still satisfies basic temporal validity.</p>
      *
      * @param realTimeSchedule the original schedule to mutate
@@ -368,16 +368,16 @@ public class HourlyScheduleOptimiser{
 
         Random random = new Random();
 
-        // Define the number of 15-minute adjustment units available within the demand window
+        // Defines the number of 15-minute adjustment units available within the demand window
         int maximumAdjustment = (hourlyDemand.getEndTimeInMinutes() - hourlyDemand.getStartTimeInMinutes()) / 15;
 
-        // Create a new temporary schedule to store mutated shifts
+        // Creates a new temporary schedule to store mutated shifts
         RealTimeSchedule tempSchedule = new RealTimeSchedule();
 
-        // Iterate through each shift in the original schedule
+        // Iterates through each shift in the original schedule
         for (Shift shift : realTimeSchedule.getShifts()) {
 
-            // Clone the shift to avoid modifying the original directly
+            // Clones the shift to avoid modifying the original directly
             Shift temp = shift.clone();
 
             // Case 1: Shift ends within the demand window — mutate its end time
@@ -391,7 +391,7 @@ public class HourlyScheduleOptimiser{
                         hourlyDemand.getEndTimeInMinutes() - random.nextInt(0, maximumAdjustment) * 15);
             }
 
-            // Add the mutated shift to the new schedule
+            // Adds the mutated shift to the new schedule
             tempSchedule.getShifts().add(temp);
         }
         return tempSchedule;

@@ -5,6 +5,7 @@ import com.iwm.backend.modules.employee.EmployeeEM;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Entity representing employee preferences in the system.
@@ -41,5 +42,6 @@ public class EmployeePreferencesEM {
     @JoinColumn(name = "employee_id", nullable = false,
     foreignKey = @ForeignKey(name = "fk_preferences_employee"))
     @JsonBackReference(value = "employee-preferences")
+    @ToString.Exclude
     private EmployeeEM employee;
 }

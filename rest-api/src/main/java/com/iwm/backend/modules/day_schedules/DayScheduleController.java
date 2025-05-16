@@ -19,7 +19,6 @@ public class DayScheduleController{
 
     /**
      * Constructs a new DayScheduleController.
-     *
      * @param dayScheduleService the service for managing day schedule operations
      */
     public DayScheduleController(DayScheduleService dayScheduleService) {
@@ -28,7 +27,6 @@ public class DayScheduleController{
 
     /**
      * Retrieves the schedule for the current day.
-     *
      * @return ResponseEntity containing the today's schedule
      */
     @GetMapping()
@@ -40,7 +38,6 @@ public class DayScheduleController{
 
     /**
      * Optimises the provided day schedule.
-     *
      * @param dtos list of shifts to be optimized
      * @return ResponseEntity containing the optimized list of shifts
      */

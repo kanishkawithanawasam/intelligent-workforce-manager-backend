@@ -21,7 +21,6 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "Employee")
-@ToString(exclude = {"preferences"})
 public class EmployeeEM {
 
     /**
@@ -73,6 +72,7 @@ public class EmployeeEM {
      */
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     @JsonManagedReference(value = "employee-shifts")
+    @ToString.Exclude
     private List<ShiftEM> shifts = new ArrayList<>();
 
     /**
@@ -80,6 +80,7 @@ public class EmployeeEM {
      */
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     @JsonManagedReference(value = "employee-contract")
+    @ToString.Exclude
     private List<ContractDataEM> contractData;
 
     /**
@@ -87,6 +88,7 @@ public class EmployeeEM {
      */
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     @JsonBackReference(value = "employee-preferences")
+    @ToString.Exclude
     private List<EmployeePreferencesEM> preferences;
 
     /**

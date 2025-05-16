@@ -12,12 +12,13 @@
         </processorPath>
         <module name="intelligent-workforce-manager-schedule-engine" />
         <module name="intelligent-workforce-manager-rest-api (1) (org.springframework.boot)" />
+        <module name="intelligent-workforce-manager-rest-api" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="intelligent-workforce-manager-rest-api" options="" />
+      <module name="intelligent-workforce-manager-rest-api" options="-parameters" />
       <module name="intelligent-workforce-manager-rest-api (1) (org.springframework.boot)" options="-parameters" />
     </option>
   </component>
