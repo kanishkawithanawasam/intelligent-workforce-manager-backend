@@ -8,6 +8,7 @@ import com.iwm.schedule_engine.models.dtos.SchedEngShiftDTO;
 import com.iwm.schedule_engine.models.mappers.ShiftMapper;
 import com.iwm.schedule_engine.util.CalculationsUtility;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 
@@ -381,7 +382,8 @@ public class HourlyScheduleOptimiser{
             Shift temp = shift.clone();
 
             // Case 1: Shift ends within the demand window — mutate its end time
-            if (shiftStartOrEndInDmdPeriod(temp) == -1) {
+            if (shiftStartOrEndInDmdPeriod(temp) == -1 && temp.getStartTimeInMinutes()>
+                    LocalDateTime.now().toLocalTime().toSecondOfDay()/60) {
                 temp.setEndTimeInMinutes(
                         hourlyDemand.getStartTimeInMinutes() + random.nextInt(0, maximumAdjustment) * 15);
             }
