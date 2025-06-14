@@ -194,11 +194,11 @@ public class HourlyScheduleOptimiser{
         TreeMap<Integer,Integer> _15MinWinEmpMap = new TreeMap<>();
         TreeMap<Integer,Integer> _15minWinDmdMap = new TreeMap<>();
 
-        // Verify hourly demand is consistent
+        // validates that the demand map contains a continuous sequence of hourly demand keys.
         List<Integer> demandKeyList= new ArrayList<>(hourlyDemand.getHourlyDemandMap().keySet());
         if (demandKeyList.size()<2){throw new DemandNotFoundException();}
         int j=0;
-        int demandKey = demandKeyList.get(j);
+        int demandKey;
         for (int i = j+1; i < demandKeyList.size(); i++) {
             demandKey = demandKeyList.get(j);
             if(demandKey!=demandKeyList.get(i)-1) {
