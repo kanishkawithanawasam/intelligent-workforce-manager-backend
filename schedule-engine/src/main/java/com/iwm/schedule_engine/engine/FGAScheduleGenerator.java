@@ -402,7 +402,7 @@ public class FGAScheduleGenerator {
         double cost = 0;
 
         for (Shift shift : weeklyScheduleChromosome.getShifts()) {
-            cost+=shift.getEmployee().getCost();
+            cost+=shift.getCost();
         }
 
         return cost;
