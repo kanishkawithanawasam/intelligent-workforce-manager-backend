@@ -268,7 +268,8 @@ public class FGAScheduleGenerator {
 
         // Randomly selects `tournamentSize` schedules
         for (int i = 0; i < FGAConfigs.TOURNAMENT_SIZE; i++) {
-            WeeklyScheduleChromosome randomWeeklyScheduleChromosome = population.getPopulation().get(rand.nextInt(population.getPopulation().size()));
+            WeeklyScheduleChromosome randomWeeklyScheduleChromosome =
+                    population.getPopulation().get(rand.nextInt(population.getPopulation().size()));
             tournament.add(randomWeeklyScheduleChromosome);
         }
 

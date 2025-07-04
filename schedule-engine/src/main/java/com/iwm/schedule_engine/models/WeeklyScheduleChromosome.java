@@ -27,6 +27,7 @@ public class WeeklyScheduleChromosome {
 
     private double fitnessScore;
 
+
     public void addShift(Shift shift) {
 
         if (!empDateMap.containsKey(shift.getDate())) {

@@ -17,7 +17,7 @@ public class FGAConfigs {
     /**
      * The number of generations (iterations) the genetic algorithm will evolve through.
      */
-    public static final int NUMBER_OF_ITERATIONS = 50000;
+    public static final int NUMBER_OF_ITERATIONS = 100000;
 
     /**
      * The number of individuals in the population per generation.
