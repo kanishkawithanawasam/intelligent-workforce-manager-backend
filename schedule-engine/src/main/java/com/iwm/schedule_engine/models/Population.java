@@ -3,6 +3,9 @@ package com.iwm.schedule_engine.models;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iwm.schedule_engine.configurations.BusinessConfigs;
 import com.iwm.schedule_engine.configurations.FGAConfigs;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
@@ -14,6 +17,8 @@ import java.util.*;
  */
 public class Population {
 
+    @Setter
+    @Getter
     List<WeeklyScheduleChromosome> population = new ArrayList<>();
     private final int MINIMUM_EMPLOYEES_PER_SHIFT ; // Defines the minimum number of people working at a given time.
     private final int MINIMUM_HOURS_PER_SHIFT;
@@ -45,10 +50,6 @@ public class Population {
         }
 
         this.generatePopulation();
-    }
-
-    public List<WeeklyScheduleChromosome> getPopulation() {
-        return population;
     }
 
     /**
@@ -162,7 +163,4 @@ public class Population {
         return  startTime + endTimeInMinutes;
     }
 
-    public void setPopulation(List<WeeklyScheduleChromosome> population) {
-        this.population = population;
-    }
 }
