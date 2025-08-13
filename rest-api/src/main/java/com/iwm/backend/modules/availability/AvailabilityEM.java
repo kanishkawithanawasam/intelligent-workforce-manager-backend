@@ -1,12 +1,9 @@
 package com.iwm.backend.modules.availability;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
+import com.iwm.backend.modules.employee.EmployeeEM;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.time.LocalTime;
 
@@ -16,18 +13,20 @@ import java.time.LocalTime;
  * @author kanishka withanawasam
  */
 @Entity
-@Getter
-@Setter
-public class Availability {
+@Data
+@Table(name = "Availability")
+public class AvailabilityEM {
 
     @Id
     private long dateId;
-    private long empId;
+
+    @ManyToOne
+    private EmployeeEM empId;
+
     @NotNull
     private LocalTime fromTime;
     @NotNull
     private LocalTime toTime;
-
 
     @PrePersist
     @PreUpdate
