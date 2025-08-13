@@ -2,16 +2,18 @@ package com.iwm.backend.modules.employee;
 
 
 import com.iwm.schedule_engine.models.mappers.EmployeeMapper;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 /**
  * Data Transfer Object representing employee demographic information.
  * Used for transferring employee data between the service layer and REST API endpoints.
- * This class is mapped from and to {@link EmployeeEM} entity using {@link EmployeeMapper}.
+ * This class is mapped from {@link EmployeeEM} using {@link EmployeeMapper}.
  */
-@Data
+@Getter
+@Setter
 public class EmployeeDTO {
     /**
      * Unique identifier of the employee
