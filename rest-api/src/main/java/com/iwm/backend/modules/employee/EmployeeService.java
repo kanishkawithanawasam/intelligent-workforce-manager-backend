@@ -64,17 +64,6 @@ public class EmployeeService {
     }
 
     /**
-     * Retrieves employee entity by ID.
-     *
-     * @param employeeId the ID of the employee to retrieve
-     * @return EmployeeEM entity, or null if not found
-     */
-    @Transactional
-    public EmployeeEM getEmployeeEMbyId(long employeeId) {
-        return employeeRepository.findById(employeeId).orElse(null);
-    }
-
-    /**
      * Saves or updates employee information.
      *
      * @param dto EmployeeDTO containing employee data to save
