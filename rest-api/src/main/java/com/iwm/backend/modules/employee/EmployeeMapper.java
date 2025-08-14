@@ -1,6 +1,9 @@
 package com.iwm.backend.modules.employee;
 
+import com.iwm.schedule_engine.models.Employee;
 import com.iwm.schedule_engine.models.dtos.SchedEngEmpDTO;
+import org.mapstruct.Mapper;
+import org.mapstruct.ReportingPolicy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,44 +12,13 @@ import java.util.List;
  * Mapper class for converting between different employee-related data transfer objects
  * and entity models.
  */
+@Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.ERROR)
+interface EmployeeMapperTest{
+    EmployeeDto toDto(EmployeeEM employeeEM);
+    EmployeeEM toEmployeeEM(EmployeeDto employeeDto);
+}
+
 class EmployeeMapper {
-
-    /**
-     * Converts an EmployeeEM entity to an EmployeeDTO.
-     *
-     * @param employee The employee entity to convert
-     * @return The converted EmployeeDTO object
-     */
-    static EmployeeDTO toEmployeeDTO(EmployeeEM employee) {
-        EmployeeDTO dto = new EmployeeDTO();
-        dto.setId(employee.getId());
-        dto.setFirstName(employee.getFirstName());
-        dto.setLastName(employee.getLastName());
-        dto.setDateOfBirth(employee.getBirthday());
-        dto.setAddress(employee.getAddress());
-        dto.setContact(employee.getContact());
-        dto.setPostalCode(employee.getPostalCode());
-        return dto;
-    }
-
-    /**
-     * Converts an EmployeeDTO to an EmployeeEM entity.
-     *
-     * @param dto The EmployeeDTO to convert
-     * @return The converted EmployeeEM entity
-     */
-    static EmployeeEM toEmployeeEM(EmployeeDTO dto) {
-        EmployeeEM employee = new EmployeeEM();
-        employee.setId(dto.getId());
-        employee.setFirstName(dto.getFirstName());
-        employee.setLastName(dto.getLastName());
-        employee.setBirthday(dto.getDateOfBirth());
-        employee.setAddress(dto.getAddress());
-        employee.setContact(dto.getContact());
-        employee.setPostalCode(dto.getPostalCode());
-        return employee;
-
-    }
 
     /**
      * Converts an EmployeeEM entity to a SchedEngEmpDTO for schedule engine processing.

@@ -53,11 +53,11 @@ public class EmployeeService {
      * Retrieves detailed employee information by ID.
      *
      * @param employeeId the ID of the employee to retrieve
-     * @return {@link EmployeeDTO} containing employee details
+     * @return {@link EmployeeDto} containing employee details
      * @throws EmployeeNotFoundException If an employee is not found with given ID.
      */
     @Transactional
-    public EmployeeDTO getEmployeeDTObyId(long employeeId) {
+    public EmployeeDto getEmployeeDTObyId(long employeeId) {
         EmployeeEM employeeEM = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new EmployeeNotFoundException(employeeId));
         return EmployeeMapper.toEmployeeDTO(employeeEM);
@@ -70,10 +70,11 @@ public class EmployeeService {
      * @return EmployeeDTO containing the saved employee data
      */
     @Transactional
-    public EmployeeDTO saveEmployee(EmployeeDTO dto) {
+    public EmployeeDto saveEmployee(EmployeeDto dto) {
         EmployeeEM emp=employeeRepository.save(EmployeeMapper.toEmployeeEM(dto));
         return EmployeeMapper.toEmployeeDTO(emp);
     }
+
 
     @Transactional
     public EmployeeEM getEmployeeEmByIdem(long id){

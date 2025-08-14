@@ -47,7 +47,7 @@ public class EmployeeEM {
      * Employee's date of birth
      */
     @Column(name = "date_of_birth")
-    private LocalDate birthday;
+    private LocalDate dateOfBirth;
 
     /**
      * Employee's street address

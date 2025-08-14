@@ -41,8 +41,8 @@ public class EmployeeController{
      * @return ResponseEntity containing the employee's demographic information
      */
     @GetMapping("/demographics/{id}")
-    public ResponseEntity<EmployeeDTO> getEmployeeFile(@PathVariable long id) {
-        EmployeeDTO dto = employeeService.getEmployeeDTObyId(id);
+    public ResponseEntity<EmployeeDto> getEmployeeFile(@PathVariable long id) {
+        EmployeeDto dto = employeeService.getEmployeeDTObyId(id);
         return ResponseEntity.ok().body(dto);
     }
 
@@ -53,8 +53,8 @@ public class EmployeeController{
      * @return ResponseEntity containing the updated employee information
      */
     @PostMapping("/demographics")
-    public ResponseEntity<EmployeeDTO> updateEmployee(@RequestBody EmployeeDTO dto) {
-        EmployeeDTO savedDto = employeeService.saveEmployee(dto);
+    public ResponseEntity<EmployeeDto> updateEmployee(@RequestBody EmployeeDto dto) {
+        EmployeeDto savedDto = employeeService.saveEmployee(dto);
         return ResponseEntity.ok().body(savedDto);
 
     }

@@ -27,9 +27,9 @@ class EmployeeMapperTest {
         employeeEM.setAddress("TestAddress");
         employeeEM.setContact("123456789");
         employeeEM.setPostalCode("12345");
-        employeeEM.setBirthday(birthday);
+        employeeEM.setDateOfBirth(birthday);
 
-        EmployeeDTO employeeDTO = EmployeeMapper.toEmployeeDTO(employeeEM);
+        EmployeeDto employeeDTO = EmployeeMapper.toEmployeeDTO(employeeEM);
 
         assertEquals(employeeEM.getId(),employeeDTO.getId());
         assertEquals(employeeEM.getLastName(),employeeDTO.getLastName() );
@@ -37,7 +37,7 @@ class EmployeeMapperTest {
         assertEquals(employeeEM.getAddress(), employeeDTO.getAddress());
         assertEquals(employeeEM.getContact(),employeeDTO.getContact());
         assertEquals(employeeEM.getPostalCode(),employeeDTO.getPostalCode());
-        assertEquals(employeeEM.getBirthday(),birthday);
+        assertEquals(employeeEM.getDateOfBirth(),birthday);
     }
 
     @Test
@@ -46,7 +46,7 @@ class EmployeeMapperTest {
 
         LocalDate birthday = LocalDate.of(1995, 5, 6);
 
-        EmployeeDTO employeeDTO = new EmployeeDTO();
+        EmployeeDto employeeDTO = new EmployeeDto();
         employeeDTO.setId(1);
         employeeDTO.setLastName("John");
         employeeDTO.setFirstName("Test");
@@ -77,7 +77,7 @@ class EmployeeMapperTest {
         employeeEM.setFirstName("Test");
         employeeEM.setContact("123456789");
         employeeEM.setPostalCode("12345");
-        employeeEM.setBirthday(birthday);
+        employeeEM.setDateOfBirth(birthday);
 
         EmployeePreferencesEM employeePreferencesEM = new EmployeePreferencesEM();
         employeePreferencesEM.setPreferredHours(10.5);
@@ -88,7 +88,7 @@ class EmployeeMapperTest {
         assertEquals(employeeEM.getId(), employee.getId());
         assertEquals(employeeEM.getFirstName()+employeeEM.getLastName(),employee.getName());
         assertEquals(employeeEM.getFirstName()+employeeEM.getLastName(),employee.getName());
-        assertEquals(employeeEM.getBirthday(),birthday);
+        assertEquals(employeeEM.getDateOfBirth(),birthday);
         assertEquals(employeePreferencesEM.getPreferredHours(),employee.getHoursPreference());
         
     }

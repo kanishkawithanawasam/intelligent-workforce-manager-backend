@@ -8,7 +8,7 @@ import lombok.Data;
  * Contains only essential identification fields extracted from {@link EmployeeEM}.
  *
  * @see EmployeeEM
- * @see EmployeeDTO
+ * @see EmployeeDto
  * @see EmployeeMapper
  */
 @Data
