@@ -60,6 +60,7 @@ public class EmployeeService {
     public EmployeeDTO getEmployeeDTObyId(long employeeId) {
         EmployeeEM employeeEM = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new EmployeeNotFoundException(employeeId));
+        return EmployeeMapper.toEmployeeDTO(employeeEM);
     }
 
     /**
