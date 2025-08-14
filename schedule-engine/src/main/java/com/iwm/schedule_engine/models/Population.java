@@ -81,7 +81,7 @@ public class Population {
 
             for (String type: shiftType) {
                 for (int i = 0; i < MINIMUM_EMPLOYEES_PER_SHIFT; i++) {
-                    SchedulesEngineShift shift = generateRandomShift(type,date,employeeDateMap);
+                    Shift shift = generateRandomShift(type,date,employeeDateMap);
                     weeklyScheduleChromosome.addShift(shift);
                 }
             }
@@ -99,9 +99,9 @@ public class Population {
      * @param date Date of the shift
      * @return A Shift object with given data.
      */
-    private SchedulesEngineShift generateRandomShift(String type,
-                                                     LocalDate date,
-                                                     Map<Employee, List<LocalDate>> employeeDateMap) {
+    private Shift generateRandomShift(String type,
+                                      LocalDate date,
+                                      Map<Employee, List<LocalDate>> employeeDateMap) {
         Random random = new Random();
 
         // Determine start and end time of the shifts depending on the type
@@ -144,7 +144,7 @@ public class Population {
             throw new RuntimeException("The selected employee is null");
         }
 
-        return new SchedulesEngineShift(date,startTimeInMinutes,endTimeInMinutes,selectedEmployee);
+        return new Shift(date,startTimeInMinutes,endTimeInMinutes,selectedEmployee);
 
     }
 

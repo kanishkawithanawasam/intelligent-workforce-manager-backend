@@ -2,7 +2,7 @@ package com.iwm.schedule_engine.engine;
 
 import com.iwm.schedule_engine.configurations.FGAConfigs;
 import com.iwm.schedule_engine.models.Population;
-import com.iwm.schedule_engine.models.SchedulesEngineShift;
+import com.iwm.schedule_engine.models.Shift;
 import com.iwm.schedule_engine.models.WeeklyScheduleChromosome;
 import com.iwm.schedule_engine.models.mappers.EmployeeMapper;
 import com.iwm.schedule_engine.models.mappers.WeeklyScheduleMapper;
@@ -181,7 +181,7 @@ public class FGAScheduleGenerator {
 
             // Selects a random shift to mutate
             int index = rand.nextInt(weeklyScheduleChromosome.getShifts().size());
-            SchedulesEngineShift shiftToMutate = weeklyScheduleChromosome.getShifts().get(index);
+            Shift shiftToMutate = weeklyScheduleChromosome.getShifts().get(index);
 
             LocalDate date = shiftToMutate.getDate();
             Employee newEmployee;
@@ -399,7 +399,7 @@ public class FGAScheduleGenerator {
 
         double cost = 0;
 
-        for (SchedulesEngineShift shift : weeklyScheduleChromosome.getShifts()) {
+        for (Shift shift : weeklyScheduleChromosome.getShifts()) {
             cost+=shift.getCost();
         }
 
@@ -451,7 +451,7 @@ public class FGAScheduleGenerator {
         Map<Employee, HashMap<LocalDate, Integer>> dateEmployeeMap = new HashMap<>();
 
         // Populates the dateEmployeeMap with shift counts per day per employee
-        for (SchedulesEngineShift shift : weeklyScheduleChromosome.getShifts()) {
+        for (Shift shift : weeklyScheduleChromosome.getShifts()) {
             Employee employee = shift.getEmployee();
 
             // Adds the employee and date count to the map if it doesn't contain already

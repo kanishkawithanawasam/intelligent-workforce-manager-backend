@@ -9,7 +9,7 @@ import java.time.LocalTime;
  * @param start Availability start time
  * @param end availability end time
  */
-public record Availability(
+public record AvailabilityWindow(
         int day,
         LocalTime start,
         LocalTime end

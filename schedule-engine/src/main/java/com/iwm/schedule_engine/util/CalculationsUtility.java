@@ -1,6 +1,6 @@
 package com.iwm.schedule_engine.util;
 
-import com.iwm.schedule_engine.models.SchedulesEngineShift;
+import com.iwm.schedule_engine.models.Shift;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,9 +23,9 @@ public class CalculationsUtility {
      * @param shifts the list of shifts used to calculate hours worked
      * @return a map of employees to their total hours worked
      */
-    public static Map<Employee,Double> countTotalHours(List<SchedulesEngineShift> shifts){
+    public static Map<Employee,Double> countTotalHours(List<Shift> shifts){
         Map<Employee,Double> totalHours = new HashMap<>();
-        for (SchedulesEngineShift shift : shifts) {
+        for (Shift shift : shifts) {
             totalHours.put(shift.getEmployee(),
                     totalHours.getOrDefault(
                             shift.getEmployee(),

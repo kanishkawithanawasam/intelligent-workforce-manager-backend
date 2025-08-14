@@ -25,7 +25,7 @@ import java.util.*;
  */
 public class HourlyScheduleOptimiser{
     // Schedule of the week.
-    private final List<SchedulesEngineShift> shifts;
+    private final List<Shift> shifts;
     private final HourlyDemand hourlyDemand;                    // Hourly demand for a particular period.
     private final Map<Employee,Double> totalHoursInWeek;        // Total Hours in the week.
     private Map<Employee, Double> orgRTScheduleHours;           // Hours of employees in org realtime schedule.
@@ -76,7 +76,7 @@ public class HourlyScheduleOptimiser{
         Random random = new Random();
 
         // Initialise the current solution by selecting shifts that starts or ends within a demand period.
-        for (SchedulesEngineShift shift :this.shifts) {
+        for (Shift shift :this.shifts) {
             if (shift.getDate().equals(hourlyDemand.getDate()) &&
                     (shiftStartOrEndInDmdPeriod(shift) == -1 || shiftStartOrEndInDmdPeriod(shift) == 1)) {
                 currentSolution.getShifts().add(shift);
@@ -121,7 +121,7 @@ public class HourlyScheduleOptimiser{
             T=T*coolingRate;
         }
 
-        List<SchedulesEngineShift> shifts = bestSolution.getShifts();
+        List<Shift> shifts = bestSolution.getShifts();
         return ShiftMapper.toSchedEngShiftDTO(shifts);
 
     }
@@ -219,7 +219,7 @@ public class HourlyScheduleOptimiser{
         }
 
         // Update the employee's count
-        for (SchedulesEngineShift shift : realTimeSchedule.getShifts()) {
+        for (Shift shift : realTimeSchedule.getShifts()) {
             int counter;
             switch (shiftStartOrEndInDmdPeriod(shift)){
 
@@ -283,7 +283,7 @@ public class HourlyScheduleOptimiser{
         double totalViolationPenalty = 0.00;
 
         // Calculate daily hours violations penalty.
-        for (SchedulesEngineShift shift : newRealTimeSchedule.getShifts()) {
+        for (Shift shift : newRealTimeSchedule.getShifts()) {
             if(shift.getShiftLengthInMinutes()/60.0 < HSOConfigs.DAILY_MIN_HOURS ||
                 shift.getShiftLengthInMinutes()/60.0 > HSOConfigs.DAILY_MAX_HOURS) {
                 totalViolationPenalty += HSOConfigs.VIOLATIONS_PENALTY_DAYILY_HOURS;
@@ -330,7 +330,7 @@ public class HourlyScheduleOptimiser{
      * @return an integer code indicating the shift's overlap type:
      *         {@code -1} for end-inside, {@code 1} for start-inside, {@code 0} for no overlap
      */
-    private int shiftStartOrEndInDmdPeriod(SchedulesEngineShift shift) {
+    private int shiftStartOrEndInDmdPeriod(Shift shift) {
 
         // Case 1: The shift ends within the demand period
         if(hourlyDemand.getStartTimeInMinutes()< shift.getEndTimeInMinutes() &&
@@ -375,10 +375,10 @@ public class HourlyScheduleOptimiser{
         RealTimeSchedule tempSchedule = new RealTimeSchedule();
 
         // Iterates through each shift in the original schedule
-        for (SchedulesEngineShift shift : realTimeSchedule.getShifts()) {
+        for (Shift shift : realTimeSchedule.getShifts()) {
 
             // Clones the shift to avoid modifying the original directly
-            SchedulesEngineShift temp = shift.clone();
+            Shift temp = shift.clone();
 
             // Case 1: Shift ends within the demand window — mutate its end time
             if (shiftStartOrEndInDmdPeriod(temp) == -1 && temp.getStartTimeInMinutes()>

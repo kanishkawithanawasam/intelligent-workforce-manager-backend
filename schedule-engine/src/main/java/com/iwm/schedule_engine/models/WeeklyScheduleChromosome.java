@@ -14,12 +14,12 @@ import java.util.Map;
 @Setter
 public class WeeklyScheduleChromosome {
 
-    private List<SchedulesEngineShift> shifts = new ArrayList<>();
+    private List<Shift> shifts = new ArrayList<>();
 
     public WeeklyScheduleChromosome() {}
 
 
-    private final Map<LocalDate, List<SchedulesEngineShift>> shiftDateMap = new HashMap<>();
+    private final Map<LocalDate, List<Shift>> shiftDateMap = new HashMap<>();
 
 
     private final Map<LocalDate, List<Employee>> empDateMap= new HashMap<>();
@@ -28,7 +28,7 @@ public class WeeklyScheduleChromosome {
     private double fitnessScore;
 
 
-    public void addShift(SchedulesEngineShift shift) {
+    public void addShift(Shift shift) {
 
         if (!empDateMap.containsKey(shift.getDate())) {
             List<Employee> tempEmpList = new ArrayList<>();
@@ -40,7 +40,7 @@ public class WeeklyScheduleChromosome {
 
         // Used for JSON bindings
         if(!shiftDateMap.containsKey(shift.getDate())){
-            List<SchedulesEngineShift> shiftList= new ArrayList<>();
+            List<Shift> shiftList= new ArrayList<>();
             shiftList.add(shift);
             shiftDateMap.put(shift.getDate(),shiftList);
         }else {
@@ -54,7 +54,7 @@ public class WeeklyScheduleChromosome {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("Schedule fitnessScore=").append(fitnessScore).append("\n");
-        for (SchedulesEngineShift shift : shifts) {
+        for (Shift shift : shifts) {
             builder.append(shift.toString()).append("\n");
         }
         return builder.toString();

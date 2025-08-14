@@ -1,6 +1,6 @@
 package com.iwm.schedule_engine.models.mappers;
 
-import com.iwm.schedule_engine.models.SchedulesEngineShift;
+import com.iwm.schedule_engine.models.Shift;
 import com.iwm.schedule_engine.models.WeeklyScheduleChromosome;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public class WeeklyScheduleMapper {
 
     public static WeeklyScheduleChromosome toWeeklySchedule(SchedEngWeklySchedDTO dto) {
         WeeklyScheduleChromosome weeklyScheduleChromosome = new WeeklyScheduleChromosome();
-        List<SchedulesEngineShift> shifts = ShiftMapper.toShifts(dto.getShifts());
+        List<Shift> shifts = ShiftMapper.toShifts(dto.getShifts());
         weeklyScheduleChromosome.setShifts(shifts);
         return weeklyScheduleChromosome;
     }
