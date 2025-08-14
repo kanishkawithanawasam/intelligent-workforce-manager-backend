@@ -1,7 +1,6 @@
 package com.iwm.schedule_engine.models.mappers;
 
 import com.iwm.schedule_engine.models.Employee;
-import com.iwm.schedule_engine.models.dtos.SchedEngEmpDTO;
 
 import java.util.ArrayList;
 import java.util.List;

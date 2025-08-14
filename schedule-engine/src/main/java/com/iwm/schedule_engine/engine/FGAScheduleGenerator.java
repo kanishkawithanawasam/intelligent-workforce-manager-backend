@@ -5,8 +5,6 @@ import com.iwm.schedule_engine.models.Employee;
 import com.iwm.schedule_engine.models.Population;
 import com.iwm.schedule_engine.models.Shift;
 import com.iwm.schedule_engine.models.WeeklyScheduleChromosome;
-import com.iwm.schedule_engine.models.dtos.SchedEngEmpDTO;
-import com.iwm.schedule_engine.models.dtos.SchedEngWeklySchedDTO;
 import com.iwm.schedule_engine.models.mappers.EmployeeMapper;
 import com.iwm.schedule_engine.models.mappers.WeeklyScheduleMapper;
 import com.iwm.schedule_engine.util.CalculationsUtility;

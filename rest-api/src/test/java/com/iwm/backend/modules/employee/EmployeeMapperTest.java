@@ -1,7 +1,6 @@
 package com.iwm.backend.modules.employee;
 
 import com.iwm.backend.modules.preferences.EmployeePreferencesEM;
-import com.iwm.schedule_engine.models.dtos.SchedEngEmpDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

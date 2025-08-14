@@ -2,8 +2,6 @@ package com.iwm.backend.modules.shift;
 
 import com.iwm.backend.modules.employee.EmployeeEM;
 import com.iwm.backend.modules.schedules.WeeklyScheduleEM;
-import com.iwm.schedule_engine.models.dtos.SchedEngEmpDTO;
-import com.iwm.schedule_engine.models.dtos.SchedEngShiftDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

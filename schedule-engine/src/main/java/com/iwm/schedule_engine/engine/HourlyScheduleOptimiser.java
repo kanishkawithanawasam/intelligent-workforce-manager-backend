@@ -4,7 +4,6 @@ import com.iwm.schedule_engine.configurations.HSOConfigs;
 import com.iwm.schedule_engine.exceptions.DemandNotFoundException;
 import com.iwm.schedule_engine.exceptions.InvalidDemandMapException;
 import com.iwm.schedule_engine.models.*;
-import com.iwm.schedule_engine.models.dtos.SchedEngShiftDTO;
 import com.iwm.schedule_engine.models.mappers.ShiftMapper;
 import com.iwm.schedule_engine.util.CalculationsUtility;
 

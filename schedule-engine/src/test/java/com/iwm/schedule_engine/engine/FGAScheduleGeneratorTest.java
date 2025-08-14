@@ -1,16 +1,11 @@
 package com.iwm.schedule_engine.engine;
 
-import com.iwm.schedule_engine.models.dtos.SchedEngEmpDTO;
-import com.iwm.schedule_engine.models.dtos.SchedEngShiftDTO;
-import com.iwm.schedule_engine.support.DemandReader;
 import com.iwm.schedule_engine.support.EmloyeesReader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.*;
 

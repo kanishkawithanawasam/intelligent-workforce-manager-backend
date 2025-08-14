@@ -1,6 +1,5 @@
 package com.iwm.backend.modules.employee;
 
-import com.iwm.schedule_engine.models.dtos.SchedEngEmpDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +25,6 @@ public class EmployeeService {
 
     /**
      * Generates a list of employees formatted for schedule engine processing.
-     *
      * @return List of SchedEngEmpDTO containing employee data for scheduling
      */
     @Transactional

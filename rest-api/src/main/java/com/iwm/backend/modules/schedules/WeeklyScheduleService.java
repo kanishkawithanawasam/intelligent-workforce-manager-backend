@@ -2,9 +2,6 @@ package com.iwm.backend.modules.schedules;
 
 import com.iwm.backend.modules.employee.EmployeeService;
 import com.iwm.schedule_engine.engine.FGAScheduleGenerator;
-import com.iwm.schedule_engine.models.dtos.SchedEngEmpDTO;
-import com.iwm.schedule_engine.models.dtos.SchedEngShiftDTO;
-import com.iwm.schedule_engine.models.dtos.SchedEngWeklySchedDTO;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;

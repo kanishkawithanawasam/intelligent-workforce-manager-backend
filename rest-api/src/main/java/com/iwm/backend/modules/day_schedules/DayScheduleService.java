@@ -9,12 +9,10 @@ import com.iwm.backend.modules.shift.ShiftEM;
 import com.iwm.backend.modules.shift.ShiftService;
 import com.iwm.schedule_engine.engine.HourlyScheduleOptimiser;
 import com.iwm.schedule_engine.models.HourlyDemand;
-import com.iwm.schedule_engine.models.dtos.SchedEngShiftDTO;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 
 

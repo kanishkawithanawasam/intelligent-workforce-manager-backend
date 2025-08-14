@@ -2,14 +2,10 @@ package com.iwm.schedule_engine.models.mappers;
 
 import com.iwm.schedule_engine.models.Employee;
 import com.iwm.schedule_engine.models.Shift;
-import com.iwm.schedule_engine.models.dtos.SchedEngEmpDTO;
-import com.iwm.schedule_engine.models.dtos.SchedEngShiftDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 
 @DisplayName("Shift Mapper Test")
