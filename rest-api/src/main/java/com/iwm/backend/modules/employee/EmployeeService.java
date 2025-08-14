@@ -15,9 +15,13 @@ import java.util.List;
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final EmployeeMapper employeeMapper;
 
-    public EmployeeService(EmployeeRepository employeeRepository) {
+    public EmployeeService(EmployeeRepository employeeRepository,
+                           EmployeeMapper employeeMapper) {
+
         this.employeeRepository = employeeRepository;
+        this.employeeMapper = employeeMapper;
     }
 
     /**

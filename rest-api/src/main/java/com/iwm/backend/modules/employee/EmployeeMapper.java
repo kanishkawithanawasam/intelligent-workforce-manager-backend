@@ -7,7 +7,7 @@ import org.mapstruct.ReportingPolicy;
  * Maps data between data transfer objects and entity objects.
  */
 @Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.ERROR)
-interface EmployeeMapperTest{
+public interface EmployeeMapper{
     EmployeeDto toDto(EmployeeEM employeeEM);
     EmployeeEM toEmployeeEM(EmployeeDto employeeDto);
 }
