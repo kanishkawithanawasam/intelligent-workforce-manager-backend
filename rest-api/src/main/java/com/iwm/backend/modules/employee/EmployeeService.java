@@ -53,15 +53,13 @@ public class EmployeeService {
      * Retrieves detailed employee information by ID.
      *
      * @param employeeId the ID of the employee to retrieve
-     * @return EmployeeDTO containing employee details, or null if not found
+     * @return {@link EmployeeDTO} containing employee details
+     * @throws EmployeeNotFoundException If an employee is not found with given ID.
      */
     @Transactional
     public EmployeeDTO getEmployeeDTObyId(long employeeId) {
-        EmployeeEM employeeEM = employeeRepository.findById(employeeId).orElse(null);
-        if (employeeEM != null) {
-           return EmployeeMapper.toEmployeeDTO(employeeEM);
-        }
-        return null;
+        EmployeeEM employeeEM = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new EmployeeNotFoundException(employeeId));
     }
 
     /**
