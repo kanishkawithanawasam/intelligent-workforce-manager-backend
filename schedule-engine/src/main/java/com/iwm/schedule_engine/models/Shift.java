@@ -12,8 +12,6 @@ public class Shift implements Cloneable{
 
     private long shiftId;
 
-    private long scheduleId;
-
     private int startTimeInMinutes;
 
     private int endTimeInMinutes;
@@ -43,7 +41,7 @@ public class Shift implements Cloneable{
     @Override
     public String toString() {
         return String.format("Id: %d| Shift: %d| Schedule: %d |  Date: %s | Start-time: %f | End-time: %f",
-                employee.id(),shiftId,scheduleId, date, startTimeInMinutes/60.0, endTimeInMinutes/60.0);
+                employee.id(),shiftId, date, startTimeInMinutes/60.0, endTimeInMinutes/60.0);
     }
 
 
