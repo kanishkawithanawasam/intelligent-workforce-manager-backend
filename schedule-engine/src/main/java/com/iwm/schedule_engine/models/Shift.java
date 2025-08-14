@@ -30,7 +30,7 @@ public class Shift implements Cloneable{
         this.endTimeInMinutes = endTimeInMinutes;
         this.startTimeInMinutes = startTimeInMinutes;
         this.employee = employee;
-        this.cost = ((endTimeInMinutes - startTimeInMinutes)/60.0)*employee.getCost();
+        this.cost = ((endTimeInMinutes - startTimeInMinutes)/60.0)*employee.cost();
     }
 
     public Shift() {
@@ -42,8 +42,8 @@ public class Shift implements Cloneable{
 
     @Override
     public String toString() {
-        return String.format("Name: %s| Shift: %d| Schedule: %d |  Date: %s | Start-time: %f | End-time: %f",
-                employee.getName(),shiftId,scheduleId, date, startTimeInMinutes/60.0, endTimeInMinutes/60.0);
+        return String.format("Id: %d| Shift: %d| Schedule: %d |  Date: %s | Start-time: %f | End-time: %f",
+                employee.id(),shiftId,scheduleId, date, startTimeInMinutes/60.0, endTimeInMinutes/60.0);
     }
 
 
