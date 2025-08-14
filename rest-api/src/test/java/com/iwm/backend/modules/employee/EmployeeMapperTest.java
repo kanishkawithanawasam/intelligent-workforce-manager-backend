@@ -11,7 +11,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@DisplayName("Employee Mapper Test")
+@DisplayName("EmployeeMapper Test")
 class EmployeeMapperTest {
 
     @Test
@@ -31,20 +31,13 @@ class EmployeeMapperTest {
 
         EmployeeDTO employeeDTO = EmployeeMapper.toEmployeeDTO(employeeEM);
 
-        assertEquals(employeeEM.getId(),
-                employeeDTO.getId(), "Employee Id should be equal");
-        assertEquals(employeeEM.getLastName(),
-                employeeDTO.getLastName(), "Employee Last Name should be equal");
-        assertEquals(employeeEM.getFirstName(),
-                employeeDTO.getFirstName(),"Employee First Name should be equal");
-        assertEquals(employeeEM.getAddress(),
-                employeeDTO.getAddress(), "Employee Address should be equal");
-        assertEquals(employeeEM.getContact(),
-                employeeDTO.getContact(),"Employee Contact should be equal");
-        assertEquals(employeeEM.getPostalCode(),
-                employeeDTO.getPostalCode(),"Employee Postal Code should be equal");
-        assertEquals(employeeEM.getBirthday(),
-                birthday,"Employee Date of Birth should be equal");
+        assertEquals(employeeEM.getId(),employeeDTO.getId());
+        assertEquals(employeeEM.getLastName(),employeeDTO.getLastName() );
+        assertEquals(employeeEM.getFirstName(),employeeDTO.getFirstName());
+        assertEquals(employeeEM.getAddress(), employeeDTO.getAddress());
+        assertEquals(employeeEM.getContact(),employeeDTO.getContact());
+        assertEquals(employeeEM.getPostalCode(),employeeDTO.getPostalCode());
+        assertEquals(employeeEM.getBirthday(),birthday);
     }
 
     @Test
@@ -64,20 +57,13 @@ class EmployeeMapperTest {
 
         EmployeeEM employeeEM = EmployeeMapper.toEmployeeEM(employeeDTO);
 
-        assertEquals(employeeDTO.getId(),
-                employeeEM.getId(), "Employee Id should be equal");
-        assertEquals(employeeDTO.getLastName(),
-                employeeEM.getLastName(), "Employee Last Name should be equal");
-        assertEquals(employeeDTO.getAddress(),
-                employeeEM.getAddress(), "Employee Address should be equal");
-        assertEquals(employeeDTO.getContact(),
-                employeeEM.getContact(),"Employee Contact should be equal");
-        assertEquals(employeeDTO.getPostalCode(),
-                employeeEM.getPostalCode(),"Employee Postal Code should be equal");
-        assertEquals(employeeDTO.getDateOfBirth(),
-                birthday,"Employee Date of Birth should be equal");
-        assertEquals(employeeDTO.getFirstName(),
-                employeeEM.getFirstName(),"Employee First Name should be equal");
+        assertEquals(employeeDTO.getId(),employeeEM.getId());
+        assertEquals(employeeDTO.getLastName(),employeeEM.getLastName());
+        assertEquals(employeeDTO.getAddress(),employeeEM.getAddress());
+        assertEquals(employeeDTO.getContact(), employeeEM.getContact());
+        assertEquals(employeeDTO.getPostalCode(), employeeEM.getPostalCode());
+        assertEquals(employeeDTO.getDateOfBirth(),birthday);
+        assertEquals(employeeDTO.getFirstName(),employeeEM.getFirstName());
     }
 
     @Test
@@ -98,17 +84,12 @@ class EmployeeMapperTest {
         employeeEM.setPreferences(List.of(employeePreferencesEM));
 
         SchedEngEmpDTO employee = EmployeeMapper.toEmployeeForScheduleEngine(employeeEM);
-        assertEquals(employeeEM.getId(),
-                employee.getId(), "Employee Id should be equal");
-        assertEquals(employeeEM.getFirstName()+employeeEM.getLastName(),
-                employee.getName(), "Employee Last Name should be equal");
-        assertEquals(employeeEM.getFirstName()+employeeEM.getLastName(),
-                employee.getName(),"Employee First Name should be equal");
-        assertEquals(employeeEM.getBirthday(),
-                birthday,"Employee Date of Birth should be equal");
 
-        assertEquals(employeePreferencesEM.getPreferredHours(),
-                employee.getHoursPreference(),"Employee Hours Preference should be equal");
+        assertEquals(employeeEM.getId(), employee.getId());
+        assertEquals(employeeEM.getFirstName()+employeeEM.getLastName(),employee.getName());
+        assertEquals(employeeEM.getFirstName()+employeeEM.getLastName(),employee.getName());
+        assertEquals(employeeEM.getBirthday(),birthday);
+        assertEquals(employeePreferencesEM.getPreferredHours(),employee.getHoursPreference());
         
     }
 
