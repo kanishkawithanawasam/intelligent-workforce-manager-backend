@@ -1,7 +1,6 @@
 package com.iwm.schedule_engine.models.mappers;
 
-import com.iwm.schedule_engine.models.Employee;
-import com.iwm.schedule_engine.models.Shift;
+import com.iwm.schedule_engine.models.SchedulesEngineShift;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +8,7 @@ import java.time.LocalDate;
 
 
 @DisplayName("Shift Mapper Test")
-class ShiftMapperTest {
+class SchedulesEngineShiftMapperTest {
 
 
     @Test
@@ -34,7 +33,7 @@ class ShiftMapperTest {
         schedEngShiftDTO.setStartTimeInMinutes(10);
         schedEngShiftDTO.setEndTimeInMinutes(20);
 
-        Shift shift =  ShiftMapper.toShift(schedEngShiftDTO);
+        SchedulesEngineShift shift =  ShiftMapper.toShift(schedEngShiftDTO);
 
         assertEquals(shift.getShiftId(), schedEngShiftDTO.getShiftId(), "Shift ID must match!");
         assertEquals(shift.getDate(), schedEngShiftDTO.getDate(), "Shift Date must match!");
@@ -65,7 +64,7 @@ class ShiftMapperTest {
         employee.setCost(10.0);
 
 
-        Shift shift = new Shift();
+        SchedulesEngineShift shift = new SchedulesEngineShift();
         shift.setShiftId(1);
         shift.setDate(date);
         shift.setStartTimeInMinutes(123);

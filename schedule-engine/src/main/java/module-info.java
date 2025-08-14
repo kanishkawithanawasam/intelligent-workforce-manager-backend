@@ -8,4 +8,5 @@ module com.iwm.schedule_engine {
 
     opens com.iwm.schedule_engine.configurations to com.fasterxml.jackson.databind;
     opens com.iwm.schedule_engine.configurations.businessconfigs to com.fasterxml.jackson.databind;
+    exports com.iwm.schedule_engine.models;
 }

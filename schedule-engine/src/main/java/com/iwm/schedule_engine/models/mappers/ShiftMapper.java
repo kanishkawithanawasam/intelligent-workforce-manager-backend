@@ -1,6 +1,6 @@
 package com.iwm.schedule_engine.models.mappers;
 
-import com.iwm.schedule_engine.models.Shift;
+import com.iwm.schedule_engine.models.SchedulesEngineShift;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 public class ShiftMapper {
 
 
-    static SchedEngShiftDTO toSchedEngShiftDTO(Shift shift) {
+    static SchedEngShiftDTO toSchedEngShiftDTO(SchedulesEngineShift shift) {
         SchedEngShiftDTO shiftDTO = new SchedEngShiftDTO();
         shiftDTO.setShiftId(shift.getShiftId());
         shiftDTO.setScheduleId(shift.getScheduleId());
@@ -19,12 +19,12 @@ public class ShiftMapper {
         return shiftDTO;
     }
 
-    public static List<SchedEngShiftDTO> toSchedEngShiftDTO(List<Shift> shifts) {
+    public static List<SchedEngShiftDTO> toSchedEngShiftDTO(List<SchedulesEngineShift> shifts) {
         return new ArrayList<>(shifts.stream().map(ShiftMapper::toSchedEngShiftDTO).toList());
     }
 
-    static Shift toShift(SchedEngShiftDTO dto) {
-        Shift shift = new Shift();
+    static SchedulesEngineShift toShift(SchedEngShiftDTO dto) {
+        SchedulesEngineShift shift = new SchedulesEngineShift();
         shift.setShiftId(dto.getShiftId());
         shift.setScheduleId(dto.getScheduleId());
         shift.setDate(dto.getDate());
@@ -34,7 +34,7 @@ public class ShiftMapper {
         return shift;
     }
 
-    public static List<Shift> toShifts(List<SchedEngShiftDTO> dtos) {
+    public static List<SchedulesEngineShift> toShifts(List<SchedEngShiftDTO> dtos) {
         return new ArrayList<>(dtos.stream().map(ShiftMapper::toShift).toList());
     }
 }

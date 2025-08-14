@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-public class Shift implements Cloneable{
+public class SchedulesEngineShift implements Cloneable{
 
     private long shiftId;
 
@@ -24,8 +24,8 @@ public class Shift implements Cloneable{
 
     private LocalDate date;
 
-    public Shift(LocalDate date, int startTimeInMinutes, int endTimeInMinutes,
-                 Employee employee) {
+    public SchedulesEngineShift(LocalDate date, int startTimeInMinutes, int endTimeInMinutes,
+                                Employee employee) {
         this.date = date;
         this.endTimeInMinutes = endTimeInMinutes;
         this.startTimeInMinutes = startTimeInMinutes;
@@ -33,7 +33,7 @@ public class Shift implements Cloneable{
         this.cost = ((endTimeInMinutes - startTimeInMinutes)/60.0)*employee.getCost();
     }
 
-    public Shift() {
+    public SchedulesEngineShift() {
     }
 
     public int getShiftLengthInMinutes() {
@@ -48,9 +48,9 @@ public class Shift implements Cloneable{
 
 
     @Override
-    public Shift clone() {
+    public SchedulesEngineShift clone() {
         try {
-            return (Shift) super.clone();
+            return (SchedulesEngineShift) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
