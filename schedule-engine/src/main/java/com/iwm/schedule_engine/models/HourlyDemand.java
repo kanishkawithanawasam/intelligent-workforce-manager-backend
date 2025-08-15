@@ -1,19 +1,27 @@
 package com.iwm.schedule_engine.models;
 
 import com.iwm.schedule_engine.exceptions.DemandNotFoundException;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.util.TreeMap;
 
+
+/**
+ * Represents the hourly demand forecast during a given period
+ */
 public class HourlyDemand {
 
-    private final LocalDate date;
+    @Getter
+    private final LocalDate date; // Date of the demand forecast
 
-    private final int startTimeInMinutes;
+    @Getter
+    private final int startTimeInMinutes; // Start of the period
 
-    private final int endTimeInMinutes;
+    @Getter
+    private final int endTimeInMinutes; // End of the period
 
-    private final TreeMap<Integer,Integer> hourlyDemand;
+    private final TreeMap<Integer,Integer> hourlyDemand; // Demand map for the given period
 
     public HourlyDemand(LocalDate date,TreeMap<Integer,Integer> hourlyDemand) {
         this.date = date;
@@ -23,24 +31,11 @@ public class HourlyDemand {
             throw new DemandNotFoundException();
         }
 
-        // Convert hours into minutes
+        // Converts hours into minutes
         startTimeInMinutes = hourlyDemand.firstKey()*60;
         endTimeInMinutes = (hourlyDemand.lastKey()+1)*60;
     }
 
-
-    public int getStartTimeInMinutes() {
-        return startTimeInMinutes;
-    }
-
-
-    public int getEndTimeInMinutes() {
-        return endTimeInMinutes;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
 
     public TreeMap<Integer,Integer> getHourlyDemandMap() {
         return hourlyDemand;
