@@ -14,6 +14,7 @@ import java.util.*;
 
 /**
  * This class represents a population of schedules required for the genetic algorithm.
+ * @version 1
  */
 public class Population {
 
@@ -28,7 +29,13 @@ public class Population {
     private final List<LocalDate> dates;
 
 
-    public Population(List<Employee> employees, LocalDate startDate) throws IOException {
+    /**
+     * This class represents a population of schedules required for the genetic algorithm.
+     * @param employees List of employees.
+     * @param startDate Start date of the schedule.
+     * @param endDate End date of the schedule
+     */
+    public Population(List<Employee> employees, LocalDate startDate, LocalDate endDate) throws IOException {
 
         ObjectMapper objectMapper = new ObjectMapper();
         InputStream inputStream = getClass().getResourceAsStream("/BusinessConfigs.json");
