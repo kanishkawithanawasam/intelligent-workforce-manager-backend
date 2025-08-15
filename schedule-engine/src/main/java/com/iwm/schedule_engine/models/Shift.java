@@ -5,7 +5,10 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
-
+/**
+ * Represents a shift representation used in the scheduling algorithms
+ * @version 1
+ */
 @Getter
 @Setter
 public class Shift implements Cloneable{
@@ -29,6 +32,10 @@ public class Shift implements Cloneable{
     public Shift() {
     }
 
+    /**
+     *
+     * @return The shift length in minutes
+     */
     public int getShiftLengthInMinutes() {
         return endTimeInMinutes - startTimeInMinutes;
     }
