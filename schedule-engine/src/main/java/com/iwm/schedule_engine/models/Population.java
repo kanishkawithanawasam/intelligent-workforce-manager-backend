@@ -42,12 +42,17 @@ public class Population {
         this.MINIMUM_HOURS_PER_SHIFT = configs.minimumHoursPerShift();
         this.MAXIMUM_HOURS_PER_SHIFT = configs.maximumHoursPerShift();
         this.POPULATION_SIZE = FGAConfigs.POPULATION_SIZE;
-
         this.employees = employees;
         this.dates = getDatesBetween(startDate, endDate);
         this.generatePopulation();
     }
 
+    /**
+     * Generates a list of dates between two given dates
+     * @param startDate Start of the dates range.
+     * @param endDate End of the dates range (to be inclusive in the list)
+     * @return A list of dates.
+     */
      private List<LocalDate> getDatesBetween(LocalDate startDate, LocalDate endDate) {
         List<LocalDate> dateList = new ArrayList<>();
         int numDays = (int) ChronoUnit.DAYS.between(startDate, endDate)+1;
