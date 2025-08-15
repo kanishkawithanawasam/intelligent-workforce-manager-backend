@@ -9,27 +9,32 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * Represents a Weekly schedule chromosome in the schedules pool
+ * @version 2
+ */
 @Getter
 @Setter
 public class WeeklyScheduleChromosome {
 
     private List<Shift> shifts = new ArrayList<>();
 
-    public WeeklyScheduleChromosome() {}
-
-
+    // Refactoring these to other way around
     private final Map<LocalDate, List<Shift>> shiftDateMap = new HashMap<>();
-
-
     private final Map<LocalDate, List<Employee>> empDateMap= new HashMap<>();
-
-
     private double fitnessScore;
 
 
+    public WeeklyScheduleChromosome() {}
+
+
+    /**
+     * Adds a shift to the chromosome.
+     * @param shift A shift
+     */
     public void addShift(Shift shift) {
 
+        // Adds a shift to employee-day mapping.
         if (!empDateMap.containsKey(shift.getDate())) {
             List<Employee> tempEmpList = new ArrayList<>();
             tempEmpList.add(shift.getEmployee());
@@ -38,7 +43,7 @@ public class WeeklyScheduleChromosome {
             empDateMap.get(shift.getDate()).add(shift.getEmployee());
         }
 
-        // Used for JSON bindings
+        // Ads a shift to shift day mapping
         if(!shiftDateMap.containsKey(shift.getDate())){
             List<Shift> shiftList= new ArrayList<>();
             shiftList.add(shift);
