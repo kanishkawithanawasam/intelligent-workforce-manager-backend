@@ -1,7 +1,6 @@
 package com.iwm.schedule_engine.models;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.iwm.schedule_engine.configurations.BusinessConfigs;
 import com.iwm.schedule_engine.configurations.FGAConfigs;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +8,7 @@ import lombok.Setter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 
@@ -22,8 +22,8 @@ public class Population {
     @Getter
     List<WeeklyScheduleChromosome> population = new ArrayList<>();
     private final int MINIMUM_EMPLOYEES_PER_SHIFT ; // Defines the minimum number of people working at a given time.
-    private final int MINIMUM_HOURS_PER_SHIFT;
-    private final int MAXIMUM_HOURS_PER_SHIFT ;
+    private final double MINIMUM_HOURS_PER_SHIFT;
+    private final double MAXIMUM_HOURS_PER_SHIFT ;
     private final int POPULATION_SIZE ;
     private final List<Employee> employees;
     private final List<LocalDate> dates;
@@ -35,28 +35,26 @@ public class Population {
      * @param startDate Start date of the schedule.
      * @param endDate End date of the schedule
      */
-    public Population(List<Employee> employees, LocalDate startDate, LocalDate endDate) throws IOException {
+    public Population(List<Employee> employees, LocalDate startDate,
+                      LocalDate endDate, BusinessConfigs configs) throws IOException {
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        InputStream inputStream = getClass().getResourceAsStream("/BusinessConfigs.json");
-        BusinessConfigs businessConfigs = objectMapper.readValue( inputStream, BusinessConfigs.class);
-
-        this.MINIMUM_EMPLOYEES_PER_SHIFT = businessConfigs.minimum_employees_per_shift;
-        this.MINIMUM_HOURS_PER_SHIFT = businessConfigs.employee_hours_limits.minimum_hours;
-        this.MAXIMUM_HOURS_PER_SHIFT = businessConfigs.employee_hours_limits.maximum_hours;
+        this.MINIMUM_EMPLOYEES_PER_SHIFT = configs.minimumEmployeesPerShift();
+        this.MINIMUM_HOURS_PER_SHIFT = configs.minimumHoursPerShift();
+        this.MAXIMUM_HOURS_PER_SHIFT = configs.maximumHoursPerShift();
         this.POPULATION_SIZE = FGAConfigs.POPULATION_SIZE;
 
         this.employees = employees;
-
-        this.dates = new ArrayList<>();
-
-        LocalDate temp = startDate;
-        for(int i=0;i<7;i++){
-            dates.add(temp);
-            temp = temp.plusDays(1);
-        }
-
+        this.dates = getDatesBetween(startDate, endDate);
         this.generatePopulation();
+    }
+
+     private List<LocalDate> getDatesBetween(LocalDate startDate, LocalDate endDate) {
+        List<LocalDate> dateList = new ArrayList<>();
+        int numDays = (int) ChronoUnit.DAYS.between(startDate, endDate)+1;
+        for (int i = 0; i < numDays; i++) {
+            dateList.add(startDate.plusDays(i));
+        }
+        return dateList;
     }
 
     /**
