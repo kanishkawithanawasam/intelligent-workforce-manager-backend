@@ -118,11 +118,6 @@ public class Population {
         // Generate shifts for each day on the demand list
         for(LocalDate date: SHIFT_DATES) {
             for (int type = 0; type < 4; type++) {
-
-
-                /*
-                    Business
-                 */
                 for (int i = (BUSINESS_START_TIME /6); i < MINIMUM_EMPLOYEES_PER_SHIFT; i++) {
                     Shift shift = generateRandomShift(type,date,employeeDateMap);
                     weeklyScheduleChromosome.addShift(shift);
