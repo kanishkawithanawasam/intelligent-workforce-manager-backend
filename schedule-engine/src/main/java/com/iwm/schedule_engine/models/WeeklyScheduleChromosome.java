@@ -41,6 +41,7 @@ public class WeeklyScheduleChromosome {
      * @return {@code true} if the shift was successfully added,
      *         {@code false} if the shift was rejected due to date mismatch
      * @throws NullPointerException if {@code shift}, its employee, or its date is {@code null}
+     *
      */
     public boolean addShift(Shift shift) {
         if (this.employeeDateMap.containsKey(shift.getEmployee())) {
