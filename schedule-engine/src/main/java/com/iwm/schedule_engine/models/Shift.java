@@ -21,6 +21,8 @@ public class Shift implements Cloneable{
 
     private LocalDate date;
 
+    private double cost;
+
     public Shift(LocalDate date, int startTimeInMinutes, int endTimeInMinutes,
                  Employee employee) {
         this.date = date;
