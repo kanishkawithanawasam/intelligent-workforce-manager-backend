@@ -1,12 +1,15 @@
-package com.iwm.schedule_engine.models;
+package com.iwm.schedule_engine.engine;
 
 import com.iwm.schedule_engine.configurations.FGAConfigs;
+import com.iwm.schedule_engine.models.BusinessConfigs;
+import com.iwm.schedule_engine.models.Employee;
+import com.iwm.schedule_engine.models.Shift;
+import com.iwm.schedule_engine.models.WeeklySchedule;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 
@@ -14,11 +17,11 @@ import java.util.*;
  * This class represents a population of schedules required for the genetic algorithm.
  * @version 1
  */
-public class Population {
+public class PopulationBuilder {
 
     @Setter
     @Getter
-    List<WeeklyScheduleChromosome> population = new ArrayList<>();
+    List<WeeklySchedule> population = new ArrayList<>();
 
     /**
      * Defines size of the population of candidate solutions for HO.
@@ -50,6 +53,8 @@ public class Population {
      */
     private final int MINIMUM_EMPLOYEES_PER_SHIFT;
 
+    private final int MAXIMUM_EMPLOYEES_PER_SHIFT;
+
     private final double MINIMUM_HOURS_PER_SHIFT;
     private final double MAXIMUM_HOURS_PER_SHIFT;
 
@@ -61,42 +66,25 @@ public class Population {
     /**
      * This class represents a population of schedules required for the genetic algorithm.
      * @param employees List of employees.
-     * @param startDate Start date of the schedule.
-     * @param endDate End date of the schedule
+     * @param shiftDates List of dates that shifts need to be generated for.
      */
-    public Population(List<Employee> employees, LocalDate startDate,
-                      LocalDate endDate, BusinessConfigs configs) throws IOException {
+    public PopulationBuilder(List<Employee> employees, List<LocalDate> shiftDates, BusinessConfigs configs) throws IOException {
 
         this.POPULATION_SIZE = FGAConfigs.POPULATION_SIZE;
         this.employees = employees;
-        this.SHIFT_DATES = getDatesBetween(startDate, endDate);
+        this.SHIFT_DATES = shiftDates;
         this.BUSINESS_START_TIME = configs.businessOpeningTime().getMinute();
         this.BUSINESS_END_TIME = configs.businessClosingTime().getMinute();
         this.MINIMUM_EMPLOYEES_PER_SHIFT = configs.minimumEmployeesPerShift();
         this.MINIMUM_HOURS_PER_SHIFT = configs.minimumHoursPerShift();
         this.MAXIMUM_HOURS_PER_SHIFT = configs.maximumHoursPerShift();
-        this.generatePopulation();
-    }
-
-    /**
-     * Generates a list of dates between two given dates
-     * @param startDate Start of the dates range.
-     * @param endDate End of the dates range (to be inclusive in the list)
-     * @return A list of dates.
-     */
-     private List<LocalDate> getDatesBetween(LocalDate startDate, LocalDate endDate) {
-        List<LocalDate> dateList = new ArrayList<>();
-        int numDays = (int) ChronoUnit.DAYS.between(startDate, endDate)+1; // +1 to include end day.
-        for (int i = 0; i < numDays; i++) {
-            dateList.add(startDate.plusDays(i));
-        }
-        return dateList;
+        this.MAXIMUM_EMPLOYEES_PER_SHIFT = configs.maxEmployeesPerShift();
     }
 
     /**
      * This function initialises a pool of randomly generated shifts.
      */
-    private void generatePopulation() {
+    private void build() {
 
         // Until population size if POPULATION_SIZE
         //      1. Generate a random Schedule for the week
@@ -110,16 +98,16 @@ public class Population {
      * This function generates a random schedule.
      * @return A schedule generated randomly.
      */
-    private WeeklyScheduleChromosome generateRandomSchedule() {
+    private WeeklySchedule generateRandomSchedule() {
 
-        WeeklyScheduleChromosome weeklyScheduleChromosome = new WeeklyScheduleChromosome();
-        Map<Employee, List<LocalDate>> employeeDateMap = new HashMap<>();
+        WeeklySchedule weeklyScheduleChromosome = new WeeklySchedule();
 
-        // Generate shifts for each day on the demand list
+        // Generate shifts for each day on the dates list
         for(LocalDate date: SHIFT_DATES) {
-            for (int type = 0; type < 4; type++) {
-                for (int i = (BUSINESS_START_TIME /6); i < MINIMUM_EMPLOYEES_PER_SHIFT; i++) {
-                    Shift shift = generateRandomShift(type,date,employeeDateMap);
+            for (int quarter = 0; quarter < 4; quarter++) {
+                int numEmp = random.nextInt(MINIMUM_EMPLOYEES_PER_SHIFT,MAXIMUM_EMPLOYEES_PER_SHIFT+1);
+                for (int i =0; i < numEmp; i++) {
+                    Shift shift = generateRandomShift(quarter,date);
                     weeklyScheduleChromosome.addShift(shift);
                 }
             }
@@ -143,8 +131,7 @@ public class Population {
      * @return A Shift object with given data.
      */
      public Shift generateRandomShift(int quarter,
-                                      LocalDate date,
-                                      Map<Employee, List<LocalDate>> employeeDateMap) {
+                                      LocalDate date) {
 
         // Determine start and end time of the shifts depending on the type
         int startTimeInMinutes;
@@ -167,7 +154,6 @@ public class Population {
             }
             default -> throw new RuntimeException("Something went wrong");
         };
-
 
         Collections.shuffle(employees);
         Employee selectedEmployee=null;

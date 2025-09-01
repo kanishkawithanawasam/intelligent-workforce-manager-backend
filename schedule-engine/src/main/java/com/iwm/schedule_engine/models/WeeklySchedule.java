@@ -13,7 +13,7 @@ import java.util.Map;
  * Represents a Weekly schedule chromosome in the schedules pool
  * @version 2
  */
-public class WeeklyScheduleChromosome {
+public class WeeklySchedule {
 
     @Getter
     private final List<Shift> shifts = new ArrayList<>();
@@ -23,8 +23,9 @@ public class WeeklyScheduleChromosome {
     private double fitnessScore;
 
     private final Map<Employee,List<LocalDate>> employeeDateMap= new HashMap<>();
+    private final Map<Employee,Integer> employeeHoursMap= new HashMap<>();
 
-    public WeeklyScheduleChromosome() {}
+    public WeeklySchedule() {}
 
 
     /**
@@ -40,14 +41,19 @@ public class WeeklyScheduleChromosome {
      * @param shift the {@link Shift} to be added; must not be {@code null}
      * @return {@code true} if the shift was successfully added,
      *         {@code false} if the shift was rejected due to date mismatch
-     * @throws NullPointerException if {@code shift}, its employee, or its date is {@code null}
      *
      */
     public boolean addShift(Shift shift) {
         if (this.employeeDateMap.containsKey(shift.getEmployee())) {
-            if (!this.employeeDateMap.get(shift.getEmployee()).contains(shift.getDate())) {
+            if (this.employeeDateMap.get(shift.getEmployee()).contains(shift.getDate())) {
                 return false;
             }else{
+                // Verify employee can work in the shift
+                int totalMinutesInWeek = this.employeeHoursMap.getOrDefault(shift.getEmployee(),0);
+                if (totalMinutesInWeek+shift.getShiftLengthInMinutes()>shift.getEmployee().maxHoursPerWeek()*60)
+                    return false;
+                this.employeeDateMap.get(shift.getEmployee()).add(shift.getDate());
+                this.employeeHoursMap.put(shift.getEmployee(),shift.getShiftLengthInMinutes()+totalMinutesInWeek);
                 return this.shifts.add(shift);
             }
         }

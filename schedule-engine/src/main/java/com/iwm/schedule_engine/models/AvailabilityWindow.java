@@ -1,5 +1,6 @@
 package com.iwm.schedule_engine.models;
 
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 
@@ -10,7 +11,7 @@ import java.time.LocalTime;
  * @param end availability end time
  */
 public record AvailabilityWindow(
-        int day,
+        DayOfWeek day,
         LocalTime start,
         LocalTime end
 ){

@@ -1,10 +1,9 @@
 package com.iwm.schedule_engine.engine;
 
 import com.iwm.schedule_engine.configurations.FGAConfigs;
-import com.iwm.schedule_engine.models.Population;
+import com.iwm.schedule_engine.models.Employee;
 import com.iwm.schedule_engine.models.Shift;
-import com.iwm.schedule_engine.models.WeeklyScheduleChromosome;
-import com.iwm.schedule_engine.models.mappers.EmployeeMapper;
+import com.iwm.schedule_engine.models.WeeklySchedule;
 import com.iwm.schedule_engine.models.mappers.WeeklyScheduleMapper;
 import com.iwm.schedule_engine.util.CalculationsUtility;
 import java.io.IOException;
@@ -39,9 +38,9 @@ public class FGAScheduleGenerator {
     private final LocalDate startDate;
     private double MUTATION_RATE;
 
-    public FGAScheduleGenerator(List<SchedEngEmpDTO> employeeDTOs,
+    public FGAScheduleGenerator(List<Employee> employeeList,
                                 LocalDate startDate) {
-        this.employees = EmployeeMapper.toEmployees(employeeDTOs);
+        this.employees = employeeList;
         this.startDate=startDate;
     }
 
@@ -63,11 +62,11 @@ public class FGAScheduleGenerator {
     public SchedEngWeklySchedDTO genSchedule() throws IOException {
 
         // Generates the initial population
-        Population population = new Population(employees, startDate);
+        PopulationBuilder population = new PopulationBuilder(employees, startDate);
 
         // Calculates fitness of each schedule in the population.
         double bestAccOnPopulation = 0;
-        for(WeeklyScheduleChromosome weeklyScheduleChromosome : population.getPopulation()){
+        for(WeeklySchedule weeklyScheduleChromosome : population.getPopulation()){
             weeklyScheduleChromosome.setFitnessScore(this.getFitnessScore(weeklyScheduleChromosome));
             if (weeklyScheduleChromosome.getFitnessScore() > bestAccOnPopulation){
                 bestAccOnPopulation= weeklyScheduleChromosome.getFitnessScore();
@@ -82,19 +81,19 @@ public class FGAScheduleGenerator {
             adjustFuzzyParameters(population);
 
             // Selects parents using tournament selection.
-            WeeklyScheduleChromosome parent1 = tournamentSelection(population);
-            WeeklyScheduleChromosome parent2 = tournamentSelection(population);
+            WeeklySchedule parent1 = tournamentSelection(population);
+            WeeklySchedule parent2 = tournamentSelection(population);
 
             // Performs crossover to produce offspring.
-            List<WeeklyScheduleChromosome> offspringWeeklyScheduleChromosomes = crossover(parent1,parent2);
+            List<WeeklySchedule> offspringWeeklyScheduleChromosomes = crossover(parent1,parent2);
 
             // Mutates offsprings
-            for(WeeklyScheduleChromosome weeklyScheduleChromosome : offspringWeeklyScheduleChromosomes){
+            for(WeeklySchedule weeklyScheduleChromosome : offspringWeeklyScheduleChromosomes){
                 mutate(weeklyScheduleChromosome,employees);
             }
 
             // Calculates fitness scores.
-            for(WeeklyScheduleChromosome weeklyScheduleChromosome : offspringWeeklyScheduleChromosomes){
+            for(WeeklySchedule weeklyScheduleChromosome : offspringWeeklyScheduleChromosomes){
                 weeklyScheduleChromosome.setFitnessScore(this.getFitnessScore(weeklyScheduleChromosome));
                 if (weeklyScheduleChromosome.getFitnessScore() > accuracy){
                     accuracy= weeklyScheduleChromosome.getFitnessScore();
@@ -106,7 +105,7 @@ public class FGAScheduleGenerator {
         }
 
         // Return the best schedule found in the final generation.
-        WeeklyScheduleChromosome bestWeeklyScheduleChromosome = calculateAndConfigure(population.getPopulation());
+        WeeklySchedule bestWeeklyScheduleChromosome = calculateAndConfigure(population.getPopulation());
 
 
         return WeeklyScheduleMapper.toSchedEngWeklySchedDTO(bestWeeklyScheduleChromosome);
@@ -121,8 +120,8 @@ public class FGAScheduleGenerator {
      * @param population the list of candidate weekly schedules
      * @return the schedule with the highest fitness score
      */
-    private WeeklyScheduleChromosome calculateAndConfigure(List<WeeklyScheduleChromosome> population) {
-        return Collections.max(population, Comparator.comparingDouble(WeeklyScheduleChromosome::getFitnessScore));
+    private WeeklySchedule calculateAndConfigure(List<WeeklySchedule> population) {
+        return Collections.max(population, Comparator.comparingDouble(WeeklySchedule::getFitnessScore));
     }
 
 
@@ -140,13 +139,13 @@ public class FGAScheduleGenerator {
      * @return the new population consisting of the top survivors and new offspring
      * @throws RuntimeException if the resulting population size does not match the original
      */
-    private List<WeeklyScheduleChromosome> selectSurvivors(List<WeeklyScheduleChromosome> oldPopulation, List<WeeklyScheduleChromosome> offspring) {
+    private List<WeeklySchedule> selectSurvivors(List<WeeklySchedule> oldPopulation, List<WeeklySchedule> offspring) {
 
         // Sorts both old and new populations by descending fitness
         oldPopulation.sort(Comparator.comparingDouble(s -> -s.getFitnessScore()));
         offspring.sort(Comparator.comparingDouble(s -> -s.getFitnessScore()));
 
-        List<WeeklyScheduleChromosome> newPopulation = new ArrayList<>();
+        List<WeeklySchedule> newPopulation = new ArrayList<>();
 
         // Retains top individuals from old population (excluding last 2)
         newPopulation.addAll(oldPopulation.subList(0, oldPopulation.size()-2));
@@ -173,7 +172,7 @@ public class FGAScheduleGenerator {
      * @param weeklyScheduleChromosome the schedule to mutate
      * @param employees the list of all available employees
      */
-    private void mutate(WeeklyScheduleChromosome weeklyScheduleChromosome, List<Employee> employees) {
+    private void mutate(WeeklySchedule weeklyScheduleChromosome, List<Employee> employees) {
         Random rand = new Random();
 
         // Performs mutation based on mutation rate
@@ -217,15 +216,15 @@ public class FGAScheduleGenerator {
      * @param parent2 the second parent schedule
      * @return a list containing two offspring schedules
      */
-    private List<WeeklyScheduleChromosome> crossover(WeeklyScheduleChromosome parent1, WeeklyScheduleChromosome parent2){
+    private List<WeeklySchedule> crossover(WeeklySchedule parent1, WeeklySchedule parent2){
         Random random = new Random();
         int crossoverIndex = random.nextInt(parent1.getShifts().size());
 
-        List<WeeklyScheduleChromosome> offspringWeeklyScheduleChromosomes = new ArrayList<>();
+        List<WeeklySchedule> offspringWeeklyScheduleChromosomes = new ArrayList<>();
 
         // Defines offsprings
-        WeeklyScheduleChromosome offspring1 = new WeeklyScheduleChromosome();
-        WeeklyScheduleChromosome offspring2 = new WeeklyScheduleChromosome();
+        WeeklySchedule offspring1 = new WeeklySchedule();
+        WeeklySchedule offspring2 = new WeeklySchedule();
 
         // Copies first part from each parent to respective offspring
         for (int i = 0; i < crossoverIndex; i++) {
@@ -259,19 +258,19 @@ public class FGAScheduleGenerator {
      * @param population the population of schedules to select from
      * @return the best schedule among the randomly selected tournament participants
      */
-    private WeeklyScheduleChromosome tournamentSelection(Population population) {
+    private WeeklySchedule tournamentSelection(PopulationBuilder population) {
         Random rand = new Random();
-        List<WeeklyScheduleChromosome> tournament = new ArrayList<>();
+        List<WeeklySchedule> tournament = new ArrayList<>();
 
         // Randomly selects `tournamentSize` schedules
         for (int i = 0; i < FGAConfigs.TOURNAMENT_SIZE; i++) {
-            WeeklyScheduleChromosome randomWeeklyScheduleChromosome =
+            WeeklySchedule randomWeeklyScheduleChromosome =
                     population.getPopulation().get(rand.nextInt(population.getPopulation().size()));
             tournament.add(randomWeeklyScheduleChromosome);
         }
 
         // Returns the best schedule from the tournament
-        return Collections.max(tournament, Comparator.comparing(WeeklyScheduleChromosome::getFitnessScore));
+        return Collections.max(tournament, Comparator.comparing(WeeklySchedule::getFitnessScore));
     }
 
 
@@ -290,7 +289,7 @@ public class FGAScheduleGenerator {
      *
      * @param population the current population used to assess diversity and variance
      */
-    private void adjustFuzzyParameters(Population population) {
+    private void adjustFuzzyParameters(PopulationBuilder population) {
         double diversity = calculateDiversity(population);
         double fitnessVariance = calculateFitnessVariance(population);
 
@@ -322,10 +321,10 @@ public class FGAScheduleGenerator {
      * @param population the population of weekly schedules to evaluate
      * @return the average absolute deviation of fitness scores from the population mean
      */
-    private double calculateDiversity(Population population) {
+    private double calculateDiversity(PopulationBuilder population) {
 
         // Calculate average fitness
-        double avgFitness = population.getPopulation().stream().mapToDouble(WeeklyScheduleChromosome::getFitnessScore)
+        double avgFitness = population.getPopulation().stream().mapToDouble(WeeklySchedule::getFitnessScore)
                 .average().orElse(1);
 
         // Calculates average absolute deviation
@@ -345,11 +344,11 @@ public class FGAScheduleGenerator {
      * @param population the population of weekly schedules to analyse
      * @return the standard deviation of fitness scores in the population
      */
-    private double calculateFitnessVariance(Population population) {
+    private double calculateFitnessVariance(PopulationBuilder population) {
 
         // Calculate average fitness
         double avgFitness = population.getPopulation().stream()
-                .mapToDouble(WeeklyScheduleChromosome::getFitnessScore).average().orElse(1);
+                .mapToDouble(WeeklySchedule::getFitnessScore).average().orElse(1);
 
         // Compute variance
         double variance = population.getPopulation().stream()
@@ -377,7 +376,7 @@ public class FGAScheduleGenerator {
      * @param weeklyScheduleChromosome the schedule to evaluate
      * @return a fitness score where higher values indicate better quality
      */
-    private double getFitnessScore(WeeklyScheduleChromosome weeklyScheduleChromosome){
+    private double getFitnessScore(WeeklySchedule weeklyScheduleChromosome){
 
         // Calculates total penalties
         double totalPenalty = (getTotalCost(weeklyScheduleChromosome)+getTotalViolation(weeklyScheduleChromosome)+
@@ -395,14 +394,11 @@ public class FGAScheduleGenerator {
      * @param weeklyScheduleChromosome the weekly schedule containing all shifts
      * @return the total cost of the schedule
      */
-    private double getTotalCost(WeeklyScheduleChromosome weeklyScheduleChromosome){
-
+    private double getTotalCost(WeeklySchedule weeklyScheduleChromosome){
         double cost = 0;
-
         for (Shift shift : weeklyScheduleChromosome.getShifts()) {
             cost+=shift.getCost();
         }
-
         return cost;
     }
 
@@ -417,7 +413,7 @@ public class FGAScheduleGenerator {
      * @param weeklyScheduleChromosome the weekly schedule containing all employee shifts
      * @return the total deviation across all employees
      */
-    private double getTotalDeviation(WeeklyScheduleChromosome weeklyScheduleChromosome){
+    private double getTotalDeviation(WeeklySchedule weeklyScheduleChromosome){
         double deviation = 0;
 
         // Get total hours worked by each employee in the schedule
@@ -426,7 +422,7 @@ public class FGAScheduleGenerator {
 
         // Sum the absolute deviation from each employee's hour preference
         for (Employee employee : totalWeeklyHours.keySet()) {
-            deviation+=Math.abs(totalWeeklyHours.get(employee)-employee.getHoursPreference());
+            deviation+=Math.abs(totalWeeklyHours.get(employee)-employee.prefWeeklyHours());
         }
         return deviation;
     }
@@ -443,7 +439,7 @@ public class FGAScheduleGenerator {
      * @param weeklyScheduleChromosome the schedule for the week
      * @return the total violation penalty score
      */
-    private int getTotalViolation(WeeklyScheduleChromosome weeklyScheduleChromosome){
+    private int getTotalViolation(WeeklySchedule weeklyScheduleChromosome){
 
         int violation = 0;
 
@@ -478,7 +474,7 @@ public class FGAScheduleGenerator {
         // Checks for employees exceeding their weekly hours limit.
         Map<Employee,Double> totalWeeklyHours = CalculationsUtility.countTotalHours(weeklyScheduleChromosome.getShifts());
         for (Employee employee : totalWeeklyHours.keySet()) {
-            if (totalWeeklyHours.get(employee)>employee.getMaxHoursPerWeek()) {
+            if (totalWeeklyHours.get(employee)> employee.maxHoursPerWeek()) {
                 violation+=FGAConfigs.WEEKLY_HOURS_VIOLATION_PENALTY;
             }
         }

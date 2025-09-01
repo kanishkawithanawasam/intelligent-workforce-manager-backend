@@ -33,6 +33,7 @@ import java.util.Set;
  */
 public record BusinessConfigs(
         int minimumEmployeesPerShift,
+        int maxEmployeesPerShift,
         double maximumHoursPerShift,
         double minimumHoursPerShift,
         List<Employee> employeeList,
